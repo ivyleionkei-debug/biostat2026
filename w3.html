@@ -1,0 +1,1215 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>From Sample to Population</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#EDF0F1; --card:#F8FAFA; --sunk:#E2E8E9;
+  --ink:#15252A; --ink2:#3C5257; --muted:#6C8084; --line:#C7D4D6;
+  --accent:#0E6E6E; --accent-soft:#D2E5E3; --signal:#C2503E; --signal-soft:#F1DAD4;
+  --gold:#A87718; --gold-soft:#F0E4C8;
+  --r:10px; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#0E1518; --card:#162125; --sunk:#101A1D;
+  --ink:#E1EAEC; --ink2:#B4C6C9; --muted:#83979C; --line:#28383D;
+  --accent:#5CC6C0; --accent-soft:#123330; --signal:#F08E79; --signal-soft:#3B2019;
+  --gold:#D6A23F; --gold-soft:#332813; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#0E1518; --card:#162125; --sunk:#101A1D;
+  --ink:#E1EAEC; --ink2:#B4C6C9; --muted:#83979C; --line:#28383D;
+  --accent:#5CC6C0; --accent-soft:#123330; --signal:#F08E79; --signal-soft:#3B2019;
+  --gold:#D6A23F; --gold-soft:#332813; color-scheme:dark; }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans","Noto Sans TC",system-ui,-apple-system,sans-serif;
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;}
+.zh{font-family:"Noto Sans TC","IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-weight:600; text-wrap:balance; margin:0}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:16px; padding-block:0 44px}
+
+header.top{position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
+  background:var(--paper); background:color-mix(in srgb, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px; margin:0 auto; padding:10px 16px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap}
+.brand{font-family:"Newsreader",Georgia,serif; font-size:17px; font-weight:600}
+.brand small{display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:400}
+.rail{display:flex; gap:4px; margin-left:auto; flex-wrap:wrap}
+.rail button{font:inherit; font-size:12.5px; cursor:pointer; background:transparent; color:var(--muted);
+  border:1px solid transparent; border-radius:99px; padding:5px 11px; display:flex; align-items:center; gap:7px}
+.rail button .n{font-family:"IBM Plex Mono",monospace; font-size:11px; opacity:.75}
+.rail button:hover{color:var(--ink); background:var(--sunk)}
+.rail button[aria-current="true"]{background:var(--accent); color:#fff; border-color:var(--accent)}
+.rail .lbl{display:none}
+@media(min-width:920px){ .rail .lbl{display:flex; flex-direction:column; line-height:1.14; text-align:left} }
+.rail .lbl b{font-weight:500; font-size:11.5px}
+.rail .lbl i{font-style:normal; font-size:9.5px; opacity:.8}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+
+.panel{padding-block:26px 0}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--accent); display:flex; gap:10px; align-items:center}
+.eyebrow::after{content:""; flex:1; height:1px; background:var(--line)}
+h2.title{font-size:clamp(25px,4.4vw,36px); line-height:1.15; margin:.35em 0 .1em}
+.title-zh{font-size:clamp(17px,2.6vw,21px); color:var(--ink2); font-weight:500; margin-bottom:14px}
+.cols{display:grid; grid-template-columns:1fr; gap:22px; align-items:start}
+@media(min-width:920px){ .cols{grid-template-columns:minmax(290px,.82fr) 1.18fr; gap:30px} }
+.arg p{margin:0 0 .85em}
+.arg .zh{color:var(--ink)}
+.arg .en{color:var(--ink2); font-size:14px}
+.arg .en em{font-style:normal; color:var(--ink); font-weight:500}
+.arg .zh b{font-weight:700; color:var(--accent)}
+.formula{font-family:"IBM Plex Mono",monospace; background:var(--sunk); border:1px solid var(--line);
+  border-radius:8px; padding:10px 12px; margin:12px 0; font-size:14px}
+.formula .say{display:block; font-family:"IBM Plex Sans",sans-serif; font-size:12.5px;
+  color:var(--muted); margin-top:5px; font-style:italic}
+.callout{border-left:3px solid var(--gold); background:var(--gold-soft);
+  padding:12px 14px; border-radius:0 var(--r) var(--r) 0; margin:16px 0 0}
+.callout .k{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--gold); display:block; margin-bottom:5px}
+.callout p{margin:0 0 .5em; font-size:14px}
+.callout p:last-child{margin:0}
+
+.rig{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:16px}
+.rig + .rig{margin-top:14px}
+.rig h3{font-size:14px; font-family:"IBM Plex Sans",sans-serif; font-weight:600; margin-bottom:10px}
+canvas{display:block; width:100%; height:auto; max-width:100%; border-radius:6px; touch-action:auto; scroll-margin-top:104px}
+canvas.grab{cursor:ew-resize; touch-action:pan-y}
+
+.ctrls{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:12px}
+button.act{font:inherit; font-size:13px; font-weight:500; cursor:pointer; background:var(--accent);
+  color:#fff; border:1px solid var(--accent); border-radius:7px; padding:7px 13px}
+button.act:hover{filter:brightness(1.08)}
+button.act.ghost{background:transparent; color:var(--accent)}
+button.act.ghost:hover{background:var(--accent-soft); filter:none}
+.slider{display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--muted); flex:1 1 200px; min-width:180px}
+.slider input[type=range]{flex:1; min-width:90px; accent-color:var(--accent)}
+.slider .v{font-family:"IBM Plex Mono",monospace; color:var(--ink); font-weight:500; min-width:3.2em; text-align:right}
+.seg{display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; flex-wrap:wrap}
+.seg button{font:inherit; font-size:12.5px; cursor:pointer; background:var(--card); color:var(--muted);
+  border:0; border-right:1px solid var(--line); padding:6px 11px}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent); color:#fff}
+
+.readout{display:grid; grid-template-columns:repeat(auto-fit,minmax(102px,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-top:12px}
+.readout div{background:var(--card); padding:9px 11px}
+.readout .k{display:block; font-size:10.5px; letter-spacing:.06em; color:var(--muted); margin-bottom:3px}
+.readout .v{font-family:"IBM Plex Mono",monospace; font-size:19px; font-weight:500; line-height:1.15; font-variant-numeric:tabular-nums}
+.readout .v.sig{color:var(--signal)}
+.readout .v.acc{color:var(--accent)}
+.readout .sub{display:block; font-size:11px; color:var(--muted); margin-top:2px}
+.verdict{margin-top:12px; font-size:14px; padding:11px 13px; border-radius:8px;
+  background:var(--sunk); border:1px solid var(--line); min-height:3.1em}
+.verdict b{color:var(--signal)}
+.verdict .zh{display:block}
+.verdict .en{display:block; color:var(--muted); font-size:12.5px; margin-top:3px}
+.legend{display:flex; gap:14px; flex-wrap:wrap; font-size:11.5px; color:var(--muted); margin-top:9px}
+.legend span{display:flex; align-items:center; gap:5px}
+.legend i{width:11px; height:11px; border-radius:3px; display:inline-block}
+.src{font-size:11.5px; color:var(--muted); margin-top:10px; line-height:1.5}
+footer.foot{margin-top:34px; padding-top:16px; border-top:1px solid var(--line);
+  font-size:12px; color:var(--muted); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.nav{display:flex; gap:8px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+/* ---- v6 teaching-flow additions ---- */
+.flow{display:flex; flex-direction:column; align-items:flex-start; gap:4px; margin:6px 0 16px}
+.flow .node{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 14px; min-width:190px}
+.flow .node .k{display:block; font-size:10.5px; letter-spacing:.08em; color:var(--muted)}
+.flow .node b{display:block; font-family:"IBM Plex Mono",monospace; font-size:20px; font-weight:500; color:var(--ink)}
+.flow .node.pop b{color:var(--accent)}
+.flow .node.smp b{color:var(--signal)}
+.flow .node i{font-style:normal; font-size:11.5px; color:var(--muted)}
+.flow .arrow{font-size:18px; color:var(--muted); padding-left:80px; line-height:1}
+.key{border-left:3px solid var(--accent); background:var(--accent-soft); padding:10px 14px; border-radius:0 var(--r) var(--r) 0; margin:14px 0}
+.key p{margin:0 0 .4em; font-size:14.5px}
+.key p:last-child{margin:0}
+.key .zh{color:var(--ink)}
+.next{margin-top:16px; font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.06em; color:var(--accent); border-top:1px dashed var(--line); padding-top:10px}
+.formula.big{font-size:18px; padding:12px 14px}
+.formula .def{display:block; font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:12.5px; color:var(--ink2); margin-top:6px; font-style:normal}
+.formula .def:first-of-type{margin-top:9px}
+.warn{font-size:13px; color:var(--signal); background:var(--signal-soft); border-radius:7px; padding:8px 12px; margin:10px 0}
+.arg .note{font-size:12.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:8px; margin-top:10px}
+.steps{display:grid; gap:5px; margin:8px 0 12px}
+.steps div{display:flex; gap:10px; align-items:baseline; font-size:14px}
+.steps b{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:#fff; background:var(--accent); border-radius:99px; min-width:20px; height:20px; display:inline-flex; align-items:center; justify-content:center; font-weight:500}
+.logic{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12.5px; color:var(--ink2); margin:0 0 10px; padding:9px 12px; background:var(--sunk); border-radius:8px; border:1px solid var(--line)}
+.logic b{font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--ink)}
+.logic .sig{color:var(--signal)}
+.logic .acc{color:var(--accent)}
+.pdef{font-size:13px; margin:8px 0 0; padding:9px 12px; border-radius:8px; background:var(--card); border:1px dashed var(--line); color:var(--ink2)}
+.pdef b{color:var(--signal)}
+.cikey{margin:8px 0 12px; font-size:12px; color:var(--muted)}
+.cikey svg{display:block; width:100%; max-width:380px; height:auto}
+.rtab{width:100%; border-collapse:collapse; font-size:13px; margin-top:8px}
+.rtab th,.rtab td{padding:5px 8px; border-bottom:1px solid var(--line); text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.rtab th{font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:11px; letter-spacing:.06em; color:var(--muted); font-weight:500}
+.rtab th:first-child,.rtab td:first-child{text-align:left; font-family:"IBM Plex Sans","Noto Sans TC",sans-serif}
+.rtab td.bad{color:var(--signal); font-weight:600}
+.rtab td.iffy{color:var(--gold); font-weight:600}
+.rtab .tag{font-size:10.5px; letter-spacing:.06em; margin-left:6px; font-family:"IBM Plex Sans",sans-serif}
+details.how{margin-top:10px; font-size:12.5px; color:var(--muted)}
+details.how summary{cursor:pointer; color:var(--accent); font-weight:500}
+details.how p{margin:6px 0 0}
+.q{font-size:15px; color:var(--ink2); margin:2px 0 0; font-weight:500}
+.q.zh{color:var(--muted); font-weight:400; margin-bottom:14px}
+.trans{margin-top:18px; padding:12px 14px; border-radius:var(--r); background:var(--gold-soft); border:1px solid var(--line)}
+.trans p{margin:0 0 .35em; font-size:14.5px; font-weight:500}
+.trans p.zh{font-weight:400}
+.trans .to{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.08em; color:var(--accent); margin-top:8px}
+.pq{margin:12px 0; padding:14px 16px; border-radius:var(--r); background:var(--accent-soft); border-left:3px solid var(--accent); font-size:16px; line-height:1.45}
+.pq .zh{display:block; margin-top:8px; font-size:15px}
+.eqv{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0}
+.eqv div{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:9px 11px; font-size:12.5px; color:var(--ink2)}
+.eqv b{display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink); margin-bottom:3px}
+.eqv .r{font-family:"IBM Plex Mono",monospace; color:var(--accent); font-weight:500}
+.equiv{margin:12px 0 0; font-size:13px}
+.equiv div{display:flex; gap:10px; align-items:baseline; padding:6px 0; border-top:1px solid var(--line)}
+.equiv div:last-child{border-bottom:1px solid var(--line)}
+.equiv b{font-family:"IBM Plex Mono",monospace; font-weight:500; min-width:150px}
+.equiv .ok{color:var(--accent)} .equiv .no{color:var(--signal)}
+.tree{display:block; width:100%; max-width:420px; height:auto; margin:8px 0}
+.cmap{margin-top:34px; border-top:1px solid var(--line); padding-top:22px}
+.cmap h3{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-size:22px; margin-bottom:12px}
+.cmap .chain{display:flex; flex-wrap:wrap; gap:10px; align-items:stretch}
+.cmap .box{flex:1 1 160px; background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; font-size:13px; color:var(--ink2); position:relative}
+.cmap .box b{display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.06em; color:var(--accent); margin-bottom:4px}
+.cmap .box .zh{display:block; margin-top:4px; color:var(--muted)}
+.cmap .box.two{flex:2 1 340px}
+.cmap .box.two .pair{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px}
+.cmap .box.two .pair div{background:var(--sunk); border-radius:7px; padding:8px 10px}
+.cmap .arrow{align-self:center; color:var(--muted); font-size:18px}
+@media(max-width:700px){ .eqv{grid-template-columns:1fr} .cmap .arrow{display:none} }
+/* stage 2 · two-distribution layout */
+.clab{display:flex; flex-wrap:wrap; gap:2px 12px; align-items:baseline; font-size:12.5px; color:var(--ink2); margin:8px 0 2px}
+.clab b{font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--ink); font-size:12.5px}
+.clab .w{font-family:"IBM Plex Mono",monospace; font-weight:500}
+.clab .w.sd{color:var(--muted)} .clab .w.se{color:var(--accent)}
+.clab .zh{color:var(--muted)}
+.clab .expl{flex-basis:100%; font-size:11.5px; color:var(--muted); margin-top:-3px}
+.hub{margin:4px 0 2px; padding:8px 12px 6px; border-radius:8px; background:var(--sunk); border:1px dashed var(--line)}
+.xform{display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:center; gap:0 8px; text-align:center; font-size:12.5px; color:var(--ink2); line-height:1.3}
+.xform>span .zh{display:block; font-size:11px}
+@media(max-width:700px){ .xform{grid-template-columns:1fr} .xform .ar{transform:rotate(90deg)} }
+.xform .ar{color:var(--accent); font-size:15px; line-height:1}
+.hub .ctrls.hubrow{margin-top:8px; gap:6px 10px}
+.hub .slider{flex:1 1 150px; min-width:140px}
+.hub .fx{margin-top:5px}
+.xform b{font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--accent)}
+.xform .zh{color:var(--muted)}
+.fx{min-height:18px; font-size:12px; color:var(--muted); margin-top:6px; font-family:"IBM Plex Mono",monospace}
+.fx b{color:var(--signal); font-weight:500}
+.fx .zh{font-family:"Noto Sans TC","IBM Plex Sans",sans-serif; margin-left:8px}
+.eqv.three{grid-template-columns:1fr 1fr 1fr; margin-top:12px}
+.eqv.three div b{color:var(--accent)}
+.eqv.three div b.sd{color:var(--muted)} .eqv.three div b.p{color:var(--signal)}
+@media(max-width:700px){ .eqv.three{grid-template-columns:1fr} }
+h4.sub{font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:13px; letter-spacing:.04em; color:var(--accent); margin:16px 0 6px; font-weight:600}
+
+/* ---- phone layout (added v8.2) ---- */
+html{scroll-padding-top:104px}
+@media(max-width:919px){
+  .cols{display:flex; flex-direction:column}
+  .cols>div:not(.arg){order:-1}
+  .panel{scroll-margin-top:104px}
+}
+@media(max-width:700px){
+  body{font-size:14.5px}
+  .top-in{padding:7px 14px; gap:6px 10px}
+  .brand{font-size:15px}
+  .brand small{font-size:9.5px; letter-spacing:.10em}
+  .rail{gap:2px}
+  .rail button{padding:4px 10px; font-size:12px}
+  .wrap{padding-inline:12px}
+  .panel{padding-block:16px 0}
+  .rig{padding:12px 11px}
+  .rig h3{font-size:13.5px}
+  .arg .en{font-size:13.5px}
+  .readout{grid-template-columns:repeat(auto-fit,minmax(138px,1fr))}
+  .readout .v{font-size:17px}
+  .readout .k,.readout .sub{font-size:10.5px}
+  .hub{padding:8px 10px 6px}
+  .hub .slider{flex:1 1 100%; min-width:0}
+  .ctrls .act{flex:1 1 auto}
+  .legend{gap:5px 12px; font-size:11px}
+  .pq{font-size:15px; padding:12px 13px}
+  .formula.big{font-size:16px}
+  .equiv b{min-width:0; flex:0 0 46%}
+  .cmap .chain{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">統計怎麼運作？<small>Week 3 · how statistics works</small></div>
+    <nav class="rail" id="rail" aria-label="stages"></nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ================= 1 ================= -->
+<section class="panel" id="p1">
+  <div class="eyebrow">stage 1 · the starting problem 起點</div>
+  <h2 class="title">From sample to population</h2>
+  <div class="q">How do we describe the uncertainty?</div>
+  <div class="title-zh zh" style="margin-bottom:0">樣本 → 母體</div>
+  <div class="q zh">我們如何描述其中的不確定性？</div>
+  <div class="cols">
+    <div class="arg">
+      <div class="flow">
+        <div class="node smp"><span class="k">Sample 樣本</span><b>x̄ = 176 cm</b><i>n = 13</i></div>
+        <div class="arrow">↓</div>
+        <div class="node pop"><span class="k">Population 母體</span><b>μ = ?</b><i>what we want to estimate 真正想估計的</i></div>
+      </div>
+      <p class="en">We observe a sample, but we want to estimate the population.</p>
+      <p class="zh">我們觀察到的是樣本，但真正想估計的是母體。</p>
+      <p class="en">The sample mean x̄ will usually not be exactly equal to the population mean μ. Press <em>Draw</em> and watch x̄ move.</p>
+      <p class="zh">樣本平均數 x̄ 通常不會剛好等於母體平均數 μ。按「抽一次」，看 x̄ 怎麼動。</p>
+      <div class="key">
+        <p class="en">The distance between the sample estimate and the population value is <em>sampling uncertainty</em>. Statistics gives us tools to describe that uncertainty.</p>
+        <p class="zh">樣本估計與母體真值之間的差距，就是抽樣帶來的<b>不確定性</b>。統計方法讓我們可以描述這個不確定性。</p>
+      </div>
+      <div class="trans">
+        <p class="en">How can we describe this uncertainty mathematically?</p>
+        <p class="zh">我們可以怎樣用數學描述這個不確定性？</p>
+        <div class="to">↓ Tool 1 · Probability 工具一：機率</div>
+      </div>
+    </div>
+    <div class="rig">
+      <h3>Draw one sample from the population <span class="zh" style="color:var(--muted);font-weight:400">· 從母體抽一個樣本</span></h3>
+      <canvas id="c1" height="250" aria-label="population of heights with one sample drawn" data-hm="210"></canvas>
+      <div class="legend">
+        <span><i style="background:var(--accent)"></i>population mean μ 母體平均數</span>
+        <span><i style="background:var(--signal)"></i>this sample x̄ 這次樣本平均數</span>
+        <span><i style="background:var(--muted);opacity:.5"></i>who got drawn 被抽中的人</span>
+      </div>
+      <div class="ctrls">
+        <button class="act" id="b1draw">Draw 抽一次</button>
+        <button class="act ghost" id="b1ten">Draw ×10 抽十次</button>
+        <button class="act ghost" id="b1reset">Reset 重設</button>
+        <label class="slider">n <input type="range" id="s1n" min="5" max="60" value="13" step="1"><span class="v" id="v1n">13</span></label>
+      </div>
+      <div class="readout">
+        <div><span class="k">μ population 母體</span><span class="v acc" id="r1mu">—</span></div>
+        <div><span class="k">x̄ this sample 這次樣本</span><span class="v sig" id="r1xb">—</span></div>
+        <div><span class="k">|x̄ − μ| gap 差距</span><span class="v" id="r1miss">—</span></div>
+        <div><span class="k">draws · exact hits 抽了 · 剛好等於</span><span class="v" id="r1hit">0 · 0</span></div>
+      </div>
+      <p class="src">For teaching, this page builds a population of 3,000 from the demonstration mean and SD (176.0, 5.4) so that μ can be shown. In real research μ is never visible.<br><span class="zh">為了教學，本頁用示範資料的平均數與標準差（176.0、5.4）造出 3,000 人的母體，這樣才能把 μ 畫出來。真實研究裡 μ 是看不到的。</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2 ================= -->
+<section class="panel" id="p2" hidden>
+  <div class="eyebrow">stage 2 · tool 1 工具一</div>
+  <h2 class="title">Tool 1 — Probability &amp; p-value</h2>
+  <div class="q">If μ₀ were true, how unusual is our sample?</div>
+  <div class="title-zh zh" style="margin-bottom:0">工具一：機率與 p 值</div>
+  <div class="q zh">如果 μ₀ 真的成立，我們的樣本有多極端？</div>
+  <div class="cols">
+    <div class="arg">
+      <p class="en">Probability gives us a mathematical language for describing sampling uncertainty.</p>
+      <p class="zh">機率讓我們可以用數學語言描述抽樣的不確定性。</p>
+      <p class="en">Different random samples give slightly different sample means. How much the sample mean typically varies is described by the <em>standard error</em>.</p>
+      <p class="zh">不同的隨機樣本會得到稍微不同的樣本平均數。樣本平均數通常會晃動多少，可以用<b>標準誤</b>描述。</p>
+      <div class="formula big">SE = SD / √n
+        <span class="def"><b>SD</b> = spread of individual observations　個體數值有多分散</span>
+        <span class="def"><b>SE</b> = spread of sample means　樣本平均數有多分散</span>
+      </div>
+      <p class="en">“SD describes how spread out individual people or observations are.” “SE describes how much the sample mean would vary across repeated samples.”</p>
+      <p class="zh">「SD 描述個體數值之間有多分散。」「SE 描述如果重複抽樣，樣本平均數會晃動多少。」</p>
+      <p class="en">Larger n → smaller SE → a more stable sample mean. Changing n does <em>not</em> change SD.</p>
+      <p class="zh">n 越大 → SE 越小 → 樣本平均數越穩定。改變 n <b>不會</b>改變 SD。</p>
+      <h4 class="sub">p-value　p 值</h4>
+      <p class="en">Now introduce a reference value for the population and test it:</p>
+      <p class="zh">現在引入一個母體的參考值，拿來檢驗：</p>
+      <div class="formula">H₀ : μ = μ₀
+        <span class="def"><b>μ₀</b> = hypothesised population mean　假設的母體平均數</span>
+        <span class="def"><b>x̄</b> = observed sample mean　觀察到的樣本平均數　·　distance = |x̄ − μ₀|</span>
+      </div>
+      <div class="pq">If μ really equalled μ₀,<br>how often would we obtain a <em>sample mean</em><br><b>this far from μ₀ or farther</b>?
+        <span class="zh">如果 μ 真的等於 μ₀，<br>我們有多常會得到離 μ₀<br><b>這麼遠、甚至更遠</b>的樣本平均數？</span></div>
+      <div class="eqv">
+        <div><b>Repeated sampling 重複抽樣</b>extreme samples ÷ all samples <span class="r">≈ p-value</span><br><span class="zh">極端樣本數 ÷ 全部樣本數 ≈ p 值</span></div>
+        <div><b>Mathematical model 數學模型</b>area in the extreme tails <span class="r">= probability</span><br><span class="zh">兩端尾巴的面積 = 機率</span></div>
+      </div>
+      <p class="note">Counts in the simulation and area under the model are two ways of representing the same probability.<br><span class="zh">模擬中的次數比例，和數學模型中的曲線下面積，是表達同一個機率的兩種方式。</span></p>
+      <p class="warn">p-value ≠ probability that H₀ is true　　p 值 ≠ H₀ 為真的機率</p>
+      <p class="warn">The p-value is computed on the sampling distribution of x̄ (width SE), never on the individual-value curve (width SD).<br><span class="zh">p 值是在樣本平均數的抽樣分布（寬度 SE）上計算，不是在個別數值的分布（寬度 SD）上計算。</span></p>
+      <div class="trans">
+        <p class="en">A p-value tests <em>one</em> hypothesised population value μ₀. Instead of testing one value at a time, can we estimate a <em>range</em> of population values compatible with our sample?</p>
+        <p class="zh">p 值一次檢驗一個假設的母體值 μ₀。我們可不可以不只檢驗一個值，而是估計一整個與資料相容的母體範圍？</p>
+        <div class="to">↓ Tool 2 · Confidence interval 工具二：信賴區間</div>
+      </div>
+    </div>
+    <div class="rig">
+      <h3>If the population mean really were μ₀, what would we get? <span class="zh" style="color:var(--muted);font-weight:400">· 如果母體平均數真的是 μ₀</span></h3>
+      <div class="logic">
+        <span><b class="acc">μ₀</b> = hypothesised population mean 假設的母體平均數</span>
+        <span><b class="sig">x̄</b> = observed sample mean 觀察到的樣本平均數</span>
+        <span><b>distance</b> = |x̄ − μ₀| = <b id="l2gap">1.0</b></span>
+        <span>equally extreme 一樣極端 = <b id="l2ext">x̄ ≥ 176.0 or x̄ ≤ 174.0</b></span>
+      </div>
+
+      <div class="clab"><b>A · Individual values</b> <span>spread = <span class="w sd">SD</span></span> <span class="zh">個別數值的分布 · 寬度 = SD</span>
+        <span class="expl">SD describes how spread out individual people or observations are. <span class="zh">SD 描述個體數值之間有多分散。</span></span></div>
+      <canvas id="c2a" height="132" aria-label="individual-value distribution under the null hypothesis, width SD" data-hm="140"></canvas>
+
+      <div class="hub">
+        <div class="xform"><span>Individual observations · <b>SD</b><span class="zh">個別數值 · 寬度 SD</span></span>
+          <span class="ar">→</span>
+          <span>sample n = <b id="x2n">13</b>, calculate x̄<span class="zh">每次抽 <b id="x2n2">13</b> 個，計算 x̄</span></span>
+          <span class="ar">→</span>
+          <span>Sample means · <b>SE = SD/√n = <span id="x2se">1.50</span></b><span class="zh">樣本平均數 · 寬度 SE</span></span></div>
+        <div class="ctrls hubrow">
+          <button class="act" id="b2run">Run 200 studies 跑 200 次</button>
+          <button class="act ghost" id="b2one">Run once 跑一次</button>
+          <button class="act ghost" id="b2reset">Reset 重設</button>
+          <label class="slider">SD <input type="range" id="s2sd" min="2" max="8" value="5.4" step="0.2"><span class="v" id="v2sd">5.40</span></label>
+          <label class="slider">n <input type="range" id="s2n" min="5" max="60" value="13" step="1"><span class="v" id="v2n">13</span></label>
+          <label class="slider">μ₀ <input type="range" id="s2mu" min="170" max="181" value="175" step="0.5"><span class="v" id="v2mu">175.0</span></label>
+        </div>
+        <div class="fx" id="r2fx">move a slider · 拉動滑桿：SD 會同時改變兩張圖，n 只改變 B 圖</div>
+      </div>
+      <div class="clab"><b>B · Sampling distribution of x̄</b> <span>spread = <span class="w se">SE</span></span> <span class="zh">樣本平均數 x̄ 的抽樣分布 · 寬度 = SE</span>
+        <span class="expl">SE describes how much the sample mean would vary across repeated samples. The p-value lives here. <span class="zh">SE 描述如果重複抽樣，樣本平均數會晃動多少。p 值在這一張圖上計算。</span></span></div>
+      <canvas id="c2" height="236" aria-label="sampling distribution of the sample mean under the null hypothesis, both tails shaded" data-hm="286"></canvas>
+      <div class="legend">
+        <span><i style="background:var(--muted);opacity:.5"></i>individual values (SD) 個別數值</span>
+        <span><i style="background:var(--accent)"></i>sample means (SE) 樣本平均數 · μ₀</span>
+        <span><i style="background:var(--signal)"></i>x̄ observed 我們的樣本</span>
+        <span><i style="background:var(--signal);opacity:.45"></i>this far or farther, both tails = p 一樣遠或更遠（兩邊）</span>
+      </div>
+      <div class="pdef"><b>p-value</b> = proportion of repeated sample means <b>this far or farther</b> from μ₀, if H₀ were true — the shaded tails of chart B.<br><span class="zh">p 值 = 假設 H₀ 為真，重複抽樣的樣本平均數離 μ₀ <b>一樣遠或更遠</b>的比例，也就是 B 圖兩邊塗色的尾巴。</span></div>
+      <div class="readout">
+        <div><span class="k">SD 標準差</span><span class="v" id="r2sd">5.40</span><span class="sub">between people 人與人 · chart A</span></div>
+        <div><span class="k">n per sample 每個樣本</span><span class="v" id="r2n">13</span><span class="sub">people 人</span></div>
+        <div><span class="k">SE = SD/√n predicted 預測</span><span class="v acc" id="r2se">1.50</span><span class="sub" id="r2sesub">5.40 ÷ √13 · chart B</span></div>
+        <div><span class="k">SD of x̄ observed 實測</span><span class="v" id="r2obs">—</span><span class="sub">of these means 這些平均數</span></div>
+      </div>
+      <div class="readout">
+        <div><span class="k">studies run 研究次數</span><span class="v" id="r2k">0</span></div>
+        <div><span class="k">mean of the x̄ 平均數的平均</span><span class="v" id="r2mm">—</span><span class="sub">should sit on μ₀ 應貼近 μ₀</span></div>
+        <div><span class="k">|x̄ − μ₀| distance 差距</span><span class="v sig" id="r2gap">1.0</span><span class="sub">our sample 我們的樣本</span></div>
+        <div><span class="k">p-value p 值 (simulation 模擬)</span><span class="v sig" id="r2p">—</span><span class="sub" id="r2psub">this far or farther 一樣遠或更遠</span></div>
+        <div><span class="k">tail area (model) 曲線尾巴面積</span><span class="v sig" id="r2pm">.504</span><span class="sub">both tails of chart B 兩邊</span></div>
+      </div>
+      <div class="verdict" id="v2">
+        <span class="zh">按「跑一次」看一個研究怎麼從 A 圖變成 B 圖上的一個點；再按「跑 200 次研究」。</span>
+        <span class="en">Press “Run once” to see one study travel from chart A to one point on chart B, then run 200 studies.</span>
+      </div>
+      <div class="eqv three">
+        <div><b class="sd">SD</b>= spread of individual observations<br><span class="zh">= 個體數值有多分散</span></div>
+        <div><b>SE</b>= spread of sample means<br><span class="zh">= 樣本平均數有多分散</span></div>
+        <div><b class="p">p-value</b>= tail probability in the sampling distribution of x̄<br><span class="zh">= 樣本平均數抽樣分布中的極端機率</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3 ================= -->
+<section class="panel" id="p3" hidden>
+  <div class="eyebrow">stage 3 · tool 2 工具二</div>
+  <h2 class="title">Tool 2 — Confidence interval</h2>
+  <div class="q">Which population values are compatible with our sample?</div>
+  <div class="title-zh zh" style="margin-bottom:0">工具二：信賴區間</div>
+  <div class="q zh">哪些母體數值與我們的樣本相容？</div>
+  <div class="cols">
+    <div class="arg">
+      <h4 class="sub">A · One sample → one CI　一次抽樣 → 一條信賴區間</h4>
+      <p class="en">Press <em>Step</em> in the first panel. Each press draws one sample and computes its x̄, its SE and its 95% CI.</p>
+      <p class="zh">在第一個面板按「Step」。每按一次：抽一個樣本，算出它的 x̄、SE 和 95% 信賴區間。</p>
+      <div class="formula big">95% CI = x̄ ± t* × SE
+        <span class="def">SE = SD / √n</span>
+      </div>
+      <div class="cikey">
+        <svg viewBox="0 0 380 66" aria-label="one confidence interval: lower CI, sample mean, upper CI">
+          <line x1="70" y1="30" x2="310" y2="30" stroke="currentColor" stroke-width="3" opacity=".7"/>
+          <line x1="70" y1="20" x2="70" y2="40" stroke="currentColor" stroke-width="3" opacity=".7"/>
+          <line x1="310" y1="20" x2="310" y2="40" stroke="currentColor" stroke-width="3" opacity=".7"/>
+          <circle cx="190" cy="30" r="6" fill="var(--signal)"/>
+          <text x="70" y="58" font-size="11" text-anchor="middle" fill="currentColor">Lower CI 下限</text>
+          <text x="190" y="12" font-size="12" text-anchor="middle" fill="var(--signal)" font-weight="600">Sample mean x̄</text>
+          <text x="310" y="58" font-size="11" text-anchor="middle" fill="currentColor">Upper CI 上限</text>
+        </svg>
+      </div>
+      <p class="en">The CI endpoints are <em>not</em> the minimum and maximum observations. One sample → one x̄ → one confidence interval.</p>
+      <p class="zh">CI 的兩端<b>不是</b>樣本中的最小值與最大值。一次抽樣 → 一個 x̄ → 一條信賴區間。</p>
+
+      <h4 class="sub">B · CI and p-value are the same uncertainty　CI 與 p 值是同一個不確定性</h4>
+      <p class="en">Second panel: a fixed reference value μ₀ = 50 (a national norm) and a team mean x̄ = 52, SD = 6. Move n and watch the interval and the verdict.</p>
+      <p class="zh">第二個面板：固定參考值 μ₀ = 50（全國常模），球隊平均 x̄ = 52，SD = 6。拉動 n，看區間和結論怎麼變。</p>
+      <svg class="tree" viewBox="0 0 420 118" aria-label="same data give SE, which gives both the p-value and the confidence interval">
+        <rect x="150" y="4" width="120" height="26" rx="6" fill="var(--sunk)" stroke="var(--line)"/>
+        <text x="210" y="22" font-size="12" text-anchor="middle" fill="currentColor" font-weight="600">SAME DATA 同一組資料</text>
+        <line x1="210" y1="30" x2="210" y2="44" stroke="var(--line)" stroke-width="1.5"/>
+        <rect x="120" y="44" width="180" height="26" rx="6" fill="var(--sunk)" stroke="var(--line)"/>
+        <text x="210" y="62" font-size="12" text-anchor="middle" fill="currentColor" font-family="IBM Plex Mono, monospace">x̄, SD, n  →  SE = SD/√n</text>
+        <line x1="180" y1="70" x2="110" y2="88" stroke="var(--line)" stroke-width="1.5"/>
+        <line x1="240" y1="70" x2="310" y2="88" stroke="var(--line)" stroke-width="1.5"/>
+        <rect x="40" y="88" width="140" height="26" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="110" y="106" font-size="12" text-anchor="middle" fill="currentColor" font-weight="600">p-value  p 值</text>
+        <rect x="240" y="88" width="140" height="26" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="310" y="106" font-size="12" text-anchor="middle" fill="currentColor" font-weight="600">95% CI  信賴區間</text>
+      </svg>
+      <div class="key">
+        <p class="en">P-value and confidence interval are two views of the same sampling uncertainty.</p>
+        <p class="zh">p 值與信賴區間，是同一個抽樣不確定性的兩種看法。</p>
+      </div>
+      <div class="equiv">
+        <div><b class="ok">95% CI includes μ₀</b><span>→ two-sided p ≥ .05 → not statistically significant　區間包含 μ₀ → p ≥ .05 → 不顯著</span></div>
+        <div><b class="no">95% CI excludes μ₀</b><span>→ two-sided p &lt; .05 → statistically significant　區間不含 μ₀ → p &lt; .05 → 顯著</span></div>
+      </div>
+      <p class="note">Instructor note: this equivalence assumes the CI and the test use the same model, standard error and significance level.<br><span class="zh">教師註：這個對應關係假設 CI 與檢定用同一個模型、同一個標準誤、同一個顯著水準。</span></p>
+
+      <h4 class="sub">C · What does “95%” mean?　「95%」是什麼意思？</h4>
+      <p class="en">Back in the first panel, press <em>Run 100 studies</em>. This is a simulation, so the true μ is deliberately known and drawn as a line.</p>
+      <p class="zh">回到第一個面板按「跑 100 次」。這是模擬，所以真正的 μ 是刻意已知的，畫成一條線。</p>
+      <div class="key">
+        <p class="en">If we repeated the same sampling procedure many times and calculated a 95% CI each time, about 95% of those intervals would cover the true μ.</p>
+        <p class="zh">如果用同一個方法重複抽樣很多次，而且每次都計一條 95% CI，理論上大約 95% 的區間會覆蓋真正的 μ。</p>
+      </div>
+      <p class="en">100 studies → 100 sample means → 100 different confidence intervals. They are <em>not</em> averaged into one final CI; “mean width” is the average width of the 100 intervals, not a new interval.</p>
+      <p class="zh">100 次研究 → 100 個樣本平均數 → 100 條不同的信賴區間。它們<b>不會</b>合併成一條新的 CI；「平均寬度」是這 100 條的平均寬度，不是一條新的區間。</p>
+      <p class="warn">95% does NOT mean “a 95% probability that μ is inside this realised interval”. The 95% describes the long-run performance of the method.<br><span class="zh">95% 不是「μ 有 95% 機率在這一條區間裡」。95% 描述的是這個方法長期的表現。</span></p>
+      <div class="next">→ Stage 4 · The normal model 常態模型</div>
+    </div>
+    <div>
+      <div class="rig">
+        <h3>A &amp; C · One study, then 100 studies <span class="zh" style="color:var(--muted);font-weight:400">· 先看一次研究，再看 100 次</span></h3>
+        <canvas id="c3" height="290" aria-label="confidence intervals against the true population mean; each line is one study" data-hm="300"></canvas>
+        <div class="legend">
+          <span><i style="background:var(--accent)"></i>covers μ 蓋住 μ</span>
+          <span><i style="background:var(--signal)"></i>misses μ 錯過 μ</span>
+          <span>● = x̄ of that study　|—| = its 95% CI</span>
+        </div>
+        <div class="ctrls">
+          <button class="act" id="b3step">Step 一次一次跑</button>
+          <button class="act ghost" id="b3run">Run 100 studies 跑 100 次</button>
+          <button class="act ghost" id="b3reset">Reset 重設</button>
+          <label class="slider">n <input type="range" id="s3n" min="5" max="60" value="13" step="1"><span class="v" id="v3n">13</span></label>
+        </div>
+        <div class="readout">
+          <div><span class="k">latest study x̄ 最新一次的 x̄</span><span class="v sig" id="r3x">—</span></div>
+          <div><span class="k">its SE = SD/√n</span><span class="v" id="r3se">—</span></div>
+          <div><span class="k">its 95% CI 它的區間</span><span class="v" id="r3ci">—</span><span class="sub" id="r3cisub">x̄ ± t* × SE</span></div>
+          <div><span class="k">covers true μ? 蓋住真正的 μ？</span><span class="v" id="r3cov">—</span></div>
+        </div>
+        <div class="readout">
+          <div><span class="k">studies run 已跑研究</span><span class="v" id="r3k">0</span></div>
+          <div><span class="k">covered μ 蓋住 μ</span><span class="v acc" id="r3hit">0</span></div>
+          <div><span class="k">missed μ 錯過 μ</span><span class="v sig" id="r3miss">0</span></div>
+          <div><span class="k">mean width of the 100 intervals 平均寬度</span><span class="v" id="r3w">—</span><span class="sub">not a new CI 不是新的 CI</span></div>
+        </div>
+        <div class="verdict" id="v3"><span class="zh">先按 Step 看一次研究怎麼算出一條區間。</span><span class="en">Press Step to see one study produce one interval.</span></div>
+      </div>
+      <div class="rig">
+        <h3>B · Does the CI include the reference value μ₀? <span class="zh" style="color:var(--muted);font-weight:400">· 區間包不包含參考值 μ₀？</span></h3>
+        <canvas id="c3b" height="170" aria-label="one confidence interval for a team mean of 52 against the reference value 50" data-hm="182"></canvas>
+        <div class="ctrls">
+          <button class="act ghost" id="b3b8">n = 8</button>
+          <button class="act ghost" id="b3b20">n = 20</button>
+          <button class="act ghost" id="b3b80">n = 80</button>
+          <label class="slider">n <input type="range" id="s3bn" min="4" max="120" value="8" step="1"><span class="v" id="v3bn">8</span></label>
+        </div>
+        <div class="readout">
+          <div><span class="k">x̄ team mean 球隊平均</span><span class="v sig">52.0</span><span class="sub">fixed 固定</span></div>
+          <div><span class="k">μ₀ national norm 全國常模</span><span class="v acc">50.0</span><span class="sub">reference value 參考值</span></div>
+          <div><span class="k">SD 標準差</span><span class="v">6.0</span><span class="sub">fixed 固定</span></div>
+          <div><span class="k">SE = 6 / √n</span><span class="v" id="r3bse">2.12</span></div>
+        </div>
+        <div class="readout">
+          <div><span class="k">95% CI = 52 ± t* × SE</span><span class="v" id="r3bci">[47.0, 57.0]</span></div>
+          <div><span class="k">CI includes μ₀? 包含 μ₀？</span><span class="v" id="r3binc">yes 是</span></div>
+          <div><span class="k">two-sided p 雙尾 p 值</span><span class="v" id="r3bp">.35</span><span class="sub">t = (52 − 50) / SE</span></div>
+          <div><span class="k">verdict 結論</span><span class="v" id="r3bv" style="font-size:14px">not significant 不顯著</span></div>
+        </div>
+        <div class="verdict" id="v3b"></div>
+        <p class="src">Here the comparison is with the reference value μ₀, not with the unknown true μ — this is how a real study reads its interval.<br><span class="zh">這裡比較的是參考值 μ₀，不是未知的真正 μ——真實研究就是這樣讀自己的區間。</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4 ================= -->
+<section class="panel" id="p4" hidden>
+  <div class="eyebrow">stage 4 · a ruler 一把尺</div>
+  <h2 class="title">The normal model</h2>
+  <div class="q">68–95–99.7: SD as a ruler</div>
+  <div class="title-zh zh" style="margin-bottom:0">常態模型</div>
+  <div class="q zh">68–95–99.7：用 SD 當一把尺</div>
+  <div class="cols">
+    <div class="arg">
+      <p class="en">If a variable is approximately normally distributed, SD becomes a ruler.</p>
+      <p class="zh">如果一個變項大致符合常態分配，SD 就可以當成一把尺。</p>
+      <div class="formula big">Mean ± 1 SD　≈ 68%<br>Mean ± 2 SD　≈ 95%<br>Mean ± 3 SD　≈ 99.7%
+        <span class="def">大約 68% 的數值在平均數 ±1 SD 內；大約 95% 在 ±2 SD 內；大約 99.7% 在 ±3 SD 內。</span>
+      </div>
+      <p class="en">This gives a very quick way to judge whether the values implied by mean ± SD are plausible.</p>
+      <p class="zh">所以，只看 mean 和 SD，我們已經可以快速檢查這組數據所暗示的範圍是否合理。</p>
+      <h4 class="sub">Body fat = 18.5 ± 9.2 %　體脂率</h4>
+      <p class="en">Press <em>Body fat</em> on the right. The table computes the ruler: 18.5 − 9.2 = 9.3 %; 18.5 − 18.4 = 0.1 %; 18.5 − 27.6 = <b>−9.1 %</b> — physiologically impossible.</p>
+      <p class="zh">按右邊的「Body fat 體脂」。表格算出這把尺：18.5 − 9.2 = 9.3%；18.5 − 18.4 = 0.1%；18.5 − 27.6 = <b>−9.1%</b>——生理上不可能。</p>
+      <div class="key">
+        <p class="en">If this variable really followed a symmetric normal model, does this implied distribution make sense?</p>
+        <p class="zh">如果這個變項真的符合左右對稱的常態模型，它所暗示的分配合理嗎？</p>
+      </div>
+      <p class="en">This is a warning that a symmetric normal model may not describe the variable well. Inspect the distribution: is it skewed? is there a floor? are different groups mixed together? If it is strongly skewed, mean ± SD may not be the most informative summary — consider median + IQR.</p>
+      <p class="zh">這是在警告：左右對稱的常態模型可能不適合這個變項。檢查分配：有沒有偏態？有沒有下限？有沒有把不同群體混在一起？如果明顯偏態，mean ± SD 可能不是最有資訊量的摘要——可以考慮 median + IQR。</p>
+      <p class="note">An impossible implied value does not by itself prove skewness; it tells you to look.<br><span class="zh">暗示出不可能的數值本身不能證明偏態；它是叫你去檢查。</span></p>
+      <div class="next">→ Open Question 3　第三題</div>
+      <div class="trans" style="margin-top:12px">
+        <p class="en">The ruler assumes a normal shape. But much real data is not normal — so why do so many methods still work?</p>
+        <p class="zh">這把尺假設常態。但很多真實資料並不常態——為什麼很多方法仍然可用？</p>
+        <div class="to">↓ Stage 5 · Central Limit Theorem 中央極限定理</div>
+      </div>
+    </div>
+    <div class="rig">
+      <h3>Mean ± 1, 2, 3 SD for the chosen variable <span class="zh" style="color:var(--muted);font-weight:400">· 選一個變項，看 ±1、2、3 個 SD 落在哪</span></h3>
+      <div class="seg" id="seg4" role="group" aria-label="variable">
+        <button data-v="0" aria-pressed="true">Height 身高 cm</button>
+        <button data-v="1" aria-pressed="false">VO₂max</button>
+        <button data-v="2" aria-pressed="false">Resting HR 靜息心率 bpm</button>
+        <button data-v="3" aria-pressed="false">1RM squat 深蹲 kg</button>
+        <button data-v="4" aria-pressed="false">Body fat 體脂 %</button>
+      </div>
+      <canvas id="c4" height="300" style="margin-top:12px" aria-label="normal curve with three nested regions: plus or minus one, two and three SD, labelled 68, 95 and 99.7 percent" data-hm="320"></canvas>
+      <div class="readout">
+        <div><span class="k">mean 平均數</span><span class="v acc" id="r4mu">176.0</span></div>
+        <div><span class="k">SD 標準差</span><span class="v" id="r4sd">5.4</span></div>
+        <div><span class="k">unit 單位</span><span class="v" id="r4u" style="font-size:15px">cm</span></div>
+        <div><span class="k">lowest possible value 最低可能值</span><span class="v" id="r4floor" style="font-size:15px">—</span><span class="sub" id="r4floorsub"></span></div>
+      </div>
+      <table class="rtab" aria-label="ruler arithmetic">
+        <thead><tr><th>ruler 尺</th><th>below 往下減</th><th>above 往上加</th></tr></thead>
+        <tbody>
+          <tr><td>Mean ± 1 SD　≈ 68%</td><td id="t4m1">—</td><td id="t4p1">—</td></tr>
+          <tr><td>Mean ± 2 SD　≈ 95%</td><td id="t4m2">—</td><td id="t4p2">—</td></tr>
+          <tr><td>Mean ± 3 SD　≈ 99.7%</td><td id="t4m3">—</td><td id="t4p3">—</td></tr>
+        </tbody>
+      </table>
+      <div class="verdict" id="v4"></div>
+      <p class="src">Means and SDs are realistic sport-science magnitudes for classroom use. The body-fat case is Open Question 3.<br><span class="zh">平均數與 SD 為運動科學常見量級，供課堂用。體脂那一行就是第三題。</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5 ================= -->
+<section class="panel" id="p5" hidden>
+  <div class="eyebrow">stage 5 · the theorem 定理</div>
+  <h2 class="title">Central Limit Theorem</h2>
+  <div class="q">Why can sample means become normal even when raw data are not?</div>
+  <div class="title-zh zh" style="margin-bottom:0">中央極限定理</div>
+  <div class="q zh">為什麼原始資料不是常態，平均數仍可以接近常態？</div>
+  <div class="cols">
+    <div class="arg">
+      <p class="en">Raw observations may be strongly skewed. Now imagine repeatedly taking samples from this population.</p>
+      <p class="zh">原始資料可以非常偏態。現在想像我們不斷從這個母體抽樣。</p>
+      <div class="steps">
+        <div><b>1</b>Each sample has 1 person → the distribution looks like the raw data　每個樣本只有 1 個人 → 看到的就是原始資料</div>
+        <div><b>2</b>Each sample has 2 people → take the mean of those 2　每個樣本 2 個人 → 取這 2 人的平均</div>
+        <div><b>3</b>Each sample has 3 people → take the mean of those 3　每個樣本 3 個人 → 取 3 人的平均</div>
+        <div><b>5</b>Each sample has 5 people → take the mean of those 5　每個樣本 5 個人 → 取 5 人的平均</div>
+      </div>
+      <p class="en">As the number of observations in <em>each sample</em> increases:</p>
+      <p class="zh">當<b>每個樣本</b>包含的人愈多：</p>
+      <div class="key">
+        <p class="en">1. the centre stays near the population mean<br>2. the distribution of sample means becomes narrower<br>3. the distribution of sample means becomes more symmetric and more normal-shaped</p>
+        <p class="zh">1. 樣本平均數的中心仍然接近母體平均數<br>2. 樣本平均數的分布愈來愈窄<br>3. 樣本平均數的分布愈來愈對稱、愈接近鐘形</p>
+      </div>
+      <p class="en">As n within each sample increases, the sampling distribution of x̄ becomes narrower and more approximately normal. This is the Central Limit Theorem.</p>
+      <p class="zh">當每一個樣本內的 n 增加，樣本平均數 x̄ 的抽樣分配會變窄，而且愈來愈接近常態。這就是中央極限定理。</p>
+      <div class="key">
+        <p class="en">THE RAW DATA DID NOT BECOME NORMAL.<br>THE DISTRIBUTION OF SAMPLE MEANS BECAME MORE NORMAL.</p>
+        <p class="zh">不是原始資料變成常態。<br>是樣本平均數的抽樣分配愈來愈接近常態。</p>
+      </div>
+      <p class="warn">“n = 5” means five people INSIDE each sample — not repeating the study five times.<br><span class="zh">「n = 5」是指每個樣本裡面有五個人，不是把研究重複做五次。</span></p>
+      <p class="note">Once the sampling distribution becomes regular, we can ask what proportion of possible sample means fall above a threshold — probability as a proportion, as in Stage 2.<br><span class="zh">當抽樣分布變得規則之後，我們可以問：有多大比例的樣本平均數會落在某個門檻以上——這又是把機率看成比例，和 Stage 2 一樣。</span></p>
+    </div>
+    <div class="rig">
+      <h3>Distribution of sample means as n inside each sample grows <span class="zh" style="color:var(--muted);font-weight:400">· 每個樣本的人數變多，樣本平均數的分布怎麼變</span></h3>
+      <div class="seg" id="seg5" role="group" aria-label="sample size inside each sample">
+        <button data-n="1" aria-pressed="true">n = 1 · raw values 原始數值</button>
+        <button data-n="2" aria-pressed="false">n = 2 · mean of each 2-person sample 每個樣本平均 2 人</button>
+        <button data-n="3" aria-pressed="false">n = 3 · mean of each 3-person sample 每個樣本平均 3 人</button>
+        <button data-n="5" aria-pressed="false">n = 5 · mean of each 5-person sample 每個樣本平均 5 人</button>
+      </div>
+      <canvas id="c5" class="grab" height="260" style="margin-top:12px" aria-label="distribution of sample means with a normal overlay and a draggable cut-off" data-hm="292"></canvas>
+      <div class="legend">
+        <span><i style="background:var(--accent);opacity:.62"></i>sample means 樣本平均數</span>
+        <span><i style="background:var(--gold)"></i>normal model 常態模型</span>
+        <span><i style="background:var(--signal)"></i>cut-off 門檻</span>
+      </div>
+      <div class="ctrls">
+        <label class="slider">cut-off 門檻 <input type="range" id="s5x" min="45" max="150" value="78" step="0.5"><span class="v" id="v5x">78.0</span></label>
+        <button class="act ghost" id="b5reset">Back to the mean 回到平均數</button>
+      </div>
+      <div class="readout">
+        <div><span class="k">1 · centre 中心 (mean 平均數)</span><span class="v acc" id="r5m">70.2</span><span class="sub">stays near μ 仍接近母體平均數</span></div>
+        <div><span class="k">2 · spread SD 散開程度</span><span class="v" id="r5sd">19.18</span><span class="sub">seconds 秒 · narrower 愈窄</span></div>
+        <div><span class="k">3 · skewness 偏態</span><span class="v sig" id="r5sk">3.29</span><span class="sub">→ 0 = symmetric 對稱</span></div>
+        <div><span class="k">sample means ≥ cut-off 樣本平均數 ≥ 門檻</span><span class="v" id="r5ge">—</span><span class="sub" id="r5gesub">drag the red line 拖紅線</span></div>
+      </div>
+      <div class="readout">
+        <div><span class="k">possible samples 可能的樣本數</span><span class="v" id="r5k">17</span><span class="sub" id="r5ksub">17 選 1</span></div>
+        <div><span class="k">samples containing the 142 s athlete 含 142 秒那位</span><span class="v" id="r5c">1</span><span class="sub" id="r5csub">5.9% of them</span></div>
+        <div><span class="k">most extreme sample mean 最極端的樣本平均數</span><span class="v sig" id="r5mx">142.0</span><span class="sub">seconds 秒</span></div>
+      </div>
+      <div class="verdict" id="v5"></div>
+      <details class="how">
+        <summary>How is the number of possible samples calculated? 這個數字怎麼算？</summary>
+        <p>Because this demonstration contains only 17 values, the page can list every possible 2-person, 3-person or 5-person sample. Choosing 5 people from 17: 17 × 16 × 15 × 14 × 13 ÷ (5 × 4 × 3 × 2 × 1) = 6,188. In R: <code>choose(17, 5)</code>. Understanding the CLT does not require this arithmetic.</p>
+        <p class="zh">因為示範資料只有 17 個數值，本頁可以把每一種 2 人、3 人、5 人的樣本全部列出來。從 17 人選 5 人：17 × 16 × 15 × 14 × 13 ÷ (5 × 4 × 3 × 2 × 1) = 6,188。R：<code>choose(17, 5)</code>。理解 CLT 不需要這個算式。</p>
+      </details>
+      <p class="src">This demo contains a finite teaching population of 17 observations, so the computer can enumerate every possible sample.<br><span class="zh">這個示範只有 17 個觀察值的有限教學母體，所以電腦可以把每一個可能的樣本都列出來。</span></p>
+    </div>
+  </div>
+  <div class="cmap">
+    <h3>The whole story in one line　整個故事一條線</h3>
+    <div class="chain">
+      <div class="box"><b>SAMPLE 樣本</b>x̄ = what we observe<span class="zh">我們觀察到的</span></div>
+      <div class="arrow">→</div>
+      <div class="box"><b>POPULATION 母體</b>μ = what we want to learn<span class="zh">我們想知道的</span></div>
+      <div class="arrow">→</div>
+      <div class="box"><b>UNCERTAINTY 不確定性</b>sampling makes x̄ ≠ μ<span class="zh">抽樣令 x̄ 不等於 μ</span></div>
+      <div class="arrow">→</div>
+      <div class="box two"><b>TWO TOOLS · both depend on SE = SD / √n　兩個工具，都建立在 SE 上</b>
+        <div class="pair">
+          <div><b style="color:var(--ink)">1 · p-value p 值</b>“How unusual is x̄ if μ = μ₀?”<span class="zh">如果 μ = μ₀，x̄ 有多極端？</span></div>
+          <div><b style="color:var(--ink)">2 · Confidence interval 信賴區間</b>“Which μ values are compatible with x̄?”<span class="zh">哪些 μ 與 x̄ 相容？</span></div>
+        </div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="box"><b>NORMAL MODEL 常態模型</b>68–95–99.7 gives us a ruler<span class="zh">給我們一把尺</span></div>
+      <div class="arrow">→</div>
+      <div class="box"><b>CLT 中央極限定理</b>why the sampling distribution of the mean can become approximately normal<span class="zh">為什麼平均數的抽樣分配可以接近常態</span></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div>Fall 2026 生物統計與實驗設計 · Week 3 · NTNU</div>
+  <div class="nav">
+    <button class="act ghost" id="prev">← Back 上一步</button>
+    <button class="act" id="next">Next 下一步 →</button>
+  </div>
+</footer>
+</div>
+
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);
+  t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+var rnd=mulberry32(20260920);
+function gauss(r,m,s){var u=1-r(),v=r();return m+s*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+function mean(a){for(var i=0,s=0;i<a.length;i++)s+=a[i];return s/a.length}
+function sd(a){if(a.length<2)return 0;var m=mean(a),s=0;for(var i=0;i<a.length;i++)s+=(a[i]-m)*(a[i]-m);
+  return Math.sqrt(s/(a.length-1))}
+function erf(x){var s=x<0?-1:1;x=Math.abs(x);
+  var a1=.254829592,a2=-.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=.3275911;
+  var t=1/(1+p*x);var y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);return s*y}
+function Phi(z){return .5*(1+erf(z/Math.SQRT2))}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+var T={};
+function theme(){T={ink:css('--ink'),ink2:css('--ink2'),muted:css('--muted'),line:css('--line'),
+  acc:css('--accent'),accs:css('--accent-soft'),sig:css('--signal'),sigs:css('--signal-soft'),
+  gold:css('--gold'),card:css('--card'),sunk:css('--sunk')}}
+theme();
+var CW=600, FS=1, NARROW=false;
+function SH(long,short){return NARROW?short:long}
+function fit(cv){if(!cv.dataset.h)cv.dataset.h=cv.getAttribute('height');
+  var d=window.devicePixelRatio||1,w=cv.clientWidth||600;
+  NARROW = w<560; CW = w; FS = w<420 ? 0.92 : 1;
+  var h=parseInt((NARROW&&cv.dataset.hm)?cv.dataset.hm:cv.dataset.h,10);
+  cv.width=Math.round(w*d);cv.height=Math.round(h*d);
+  var g=cv.getContext('2d');g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,w,h);return{g:g,w:w,h:h}}
+function lbl(g,t,x,y,c,sz,al){g.fillStyle=c;g.font=((sz||11)*FS).toFixed(1)+'px "IBM Plex Mono", monospace';
+  al=al||'center';g.textAlign=al;
+  var m=g.measureText(t).width, L=(al==='left')?x:(al==='right')?x-m:x-m/2;
+  if(L+m>CW-2)x-=(L+m-(CW-2));
+  if(L<2)x+=(2-L);
+  g.fillText(t,x,y)}
+
+/* ---------- data ---------- */
+var MU=176.0, SIG=5.40, POP=[];
+for(var i=0;i<3000;i++)POP.push(Math.round(gauss(rnd,MU,SIG)*10)/10);
+var POPMU=mean(POP), POPSD=sd(POP);
+var OBS=176.0;                       /* the demonstration sample mean */
+var REC=[54,57,58,60,61,62,63,65,66,67,68,69,72,74,76,80,142];
+function pick(n,shift){var s=[],ix=[];for(var i=0;i<n;i++){var k=(Math.random()*POP.length)|0;
+  ix.push(k);s.push(POP[k]+(shift||0))}return{v:s,i:ix}}
+
+/* ---------- rail ---------- */
+var STAGES=[{n:"1",e:"Sample → Population",z:"樣本 → 母體"},
+            {n:"2",e:"Tool 1 · p-value",z:"工具一：機率與 p 值"},
+            {n:"3",e:"Tool 2 · Confidence interval",z:"工具二：信賴區間"},
+            {n:"4",e:"Normal model",z:"常態模型"},
+            {n:"5",e:"Central Limit Theorem",z:"中央極限定理"}];
+var cur=0, rail=document.getElementById('rail');
+STAGES.forEach(function(s,k){var b=document.createElement('button');b.type='button';
+  b.innerHTML='<span class="n">'+s.n+'</span><span class="lbl"><b>'+s.e+'</b><i class="zh">'+s.z+'</i></span>';
+  b.setAttribute('aria-current',k===0?'true':'false');b.onclick=function(){go(k)};rail.appendChild(b)});
+function go(k){cur=Math.max(0,Math.min(4,k));
+  for(var j=0;j<5;j++){document.getElementById('p'+(j+1)).hidden=(j!==cur);
+    rail.children[j].setAttribute('aria-current',j===cur?'true':'false')}
+  document.getElementById('prev').disabled=(cur===0);
+  document.getElementById('next').disabled=(cur===4);
+  redraw();window.scrollTo({top:0,behavior:'instant'})}
+document.getElementById('prev').onclick=function(){go(cur-1)};
+document.getElementById('next').onclick=function(){go(cur+1)};
+document.addEventListener('keydown',function(e){if(e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);
+  else if(/^[1-5]$/.test(e.key))go(+e.key-1)});
+
+/* ---------- stage 1 ---------- */
+var S1={n:13,draws:0,hits:0,last:null};
+function d1(){var cv=document.getElementById('c1');if(!cv.clientWidth)return;
+  var o=fit(cv),g=o.g,w=o.w,h=o.h,padL=10,padR=10,base=h-30,top=30,iw=w-padL-padR;
+  var lo=POPMU-4.1*POPSD,hi=POPMU+4.1*POPSD;
+  function X(v){return padL+(v-lo)/(hi-lo)*iw}
+  var bins=54,cnt=new Array(bins).fill(0),hit=new Array(bins).fill(0);
+  function bi(v){return Math.max(0,Math.min(bins-1,Math.floor((v-lo)/(hi-lo)*bins)))}
+  for(var i=0;i<POP.length;i++)cnt[bi(POP[i])]++;
+  if(S1.last)for(var j=0;j<S1.last.i.length;j++)hit[bi(POP[S1.last.i[j]])]++;
+  var mx=Math.max.apply(null,cnt),bw=iw/bins;
+  for(var b=0;b<bins;b++){var bh=(cnt[b]/mx)*(base-top);
+    g.fillStyle=T.sunk;g.fillRect(padL+b*bw+.5,base-bh,bw-1,bh);
+    if(hit[b]){var hh=Math.min(bh,Math.max(4,(hit[b]/mx)*(base-top)*6));
+      g.fillStyle=T.muted;g.globalAlpha=.55;g.fillRect(padL+b*bw+.5,base-hh,bw-1,hh);g.globalAlpha=1}}
+  g.strokeStyle=T.line;g.lineWidth=1;g.beginPath();g.moveTo(padL,base+.5);g.lineTo(w-padR,base+.5);g.stroke();
+  [165,170,175,180,185].forEach(function(t){lbl(g,t,X(t),h-10,T.muted,10.5)});
+  g.strokeStyle=T.acc;g.lineWidth=2;g.beginPath();g.moveTo(X(POPMU),top-10);g.lineTo(X(POPMU),base);g.stroke();
+  lbl(g,'μ '+POPMU.toFixed(1),X(POPMU),top-14,T.acc,11.5);
+  if(S1.last){var xb=mean(S1.last.v);
+    g.strokeStyle=T.sig;g.lineWidth=2;g.setLineDash([4,3]);
+    g.beginPath();g.moveTo(X(xb),top-10);g.lineTo(X(xb),base);g.stroke();g.setLineDash([]);
+    lbl(g,'x̄ '+xb.toFixed(1),X(xb),base+16,T.sig,11.5)}}
+function pull1(){S1.last=pick(S1.n);S1.draws++;
+  var xb=mean(S1.last.v),d=Math.abs(xb-POPMU);if(d<0.05)S1.hits++;
+  document.getElementById('r1mu').textContent=POPMU.toFixed(1);
+  document.getElementById('r1xb').textContent=xb.toFixed(1);
+  document.getElementById('r1miss').textContent=d.toFixed(2);
+  document.getElementById('r1hit').textContent=S1.draws+' · '+S1.hits;d1()}
+document.getElementById('b1draw').onclick=pull1;
+document.getElementById('b1ten').onclick=function(){for(var i=0;i<10;i++)pull1()};
+document.getElementById('b1reset').onclick=function(){S1={n:S1.n,draws:0,hits:0,last:null};
+  document.getElementById('r1xb').textContent='—';document.getElementById('r1miss').textContent='—';
+  document.getElementById('r1hit').textContent='0 · 0';d1()};
+document.getElementById('s1n').oninput=function(){S1.n=+this.value;document.getElementById('v1n').textContent=this.value};
+
+/* ---------- stage 2 : two distributions (SD vs SE) + p-value ---------- */
+var S2={n:13,mu0:175,sd:5.4,xs:[],obs:null,dsd:5.4,dse:5.4/Math.sqrt(13)};
+var RM2=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function gap2(){return Math.abs(OBS-S2.mu0)}
+function se2(){return S2.sd/Math.sqrt(S2.n)}
+var LO2=152,HI2=200;                           /* shared x-axis for charts A and B */
+function X2(v,padL,iw){return padL+(v-LO2)/(HI2-LO2)*iw}
+function curve2(g,X,mu,s,top,base,fill,stroke,alpha){var pk=base-top-8,steps=220;
+  g.beginPath();g.moveTo(X(LO2),base);
+  for(var i=0;i<=steps;i++){var v=LO2+(HI2-LO2)*i/steps,z=(v-mu)/s;g.lineTo(X(v),base-pk*Math.exp(-.5*z*z))}
+  g.lineTo(X(HI2),base);g.closePath();g.fillStyle=fill;g.globalAlpha=alpha;g.fill();g.globalAlpha=1;
+  g.strokeStyle=stroke;g.lineWidth=1.6;g.stroke();return pk}
+function widthBar2(g,X,mu,s,base,pk,col,txt){var y=base-pk*Math.exp(-.5);
+  g.strokeStyle=col;g.lineWidth=1.4;g.beginPath();g.moveTo(X(mu-s),y);g.lineTo(X(mu+s),y);g.stroke();
+  g.beginPath();g.moveTo(X(mu-s),y-4);g.lineTo(X(mu-s),y+4);g.moveTo(X(mu+s),y-4);g.lineTo(X(mu+s),y+4);g.stroke();
+  lbl(g,txt,X(mu+s)+6,y+4,col,11,'left')}
+function d2a(){var cv=document.getElementById('c2a');if(!cv.clientWidth)return;
+  var o=fit(cv),g=o.g,w=o.w,h=o.h,padL=10,padR=10,base=h-26,top=22,iw=w-padL-padR;
+  var X=function(v){return X2(v,padL,iw)};
+  var pk=curve2(g,X,S2.mu0,S2.dsd,top,base,T.muted,T.muted,.22);
+  widthBar2(g,X,S2.mu0,S2.dsd,base,pk,T.muted,'SD '+S2.sd.toFixed(1));
+  g.strokeStyle=T.line;g.beginPath();g.moveTo(padL,base+.5);g.lineTo(w-padR,base+.5);g.stroke();
+  for(var t=155;t<=195;t+=(NARROW?10:5))lbl(g,t.toFixed(0),X(t),h-8,T.muted,10.5);
+  g.strokeStyle=T.acc;g.lineWidth=2;g.beginPath();g.moveTo(X(S2.mu0),top-8);g.lineTo(X(S2.mu0),base);g.stroke();
+  lbl(g,'μ₀ '+S2.mu0.toFixed(1),X(S2.mu0),top-10,T.acc,11);
+  if(S2.obs){var bins=96,st=new Array(bins).fill(0);
+    for(var i=0;i<S2.obs.length;i++){var v=S2.obs[i],bi=Math.max(0,Math.min(bins-1,Math.floor((v-LO2)/(HI2-LO2)*bins)));
+      var y=base-6-st[bi]*7;st[bi]++;g.fillStyle=T.ink;g.globalAlpha=.85;g.beginPath();g.arc(X(v),y,3,0,6.2832);g.fill();g.globalAlpha=1}
+    var m=mean(S2.obs);g.fillStyle=T.sig;g.beginPath();g.moveTo(X(m),base-1);g.lineTo(X(m)-6,base-11);g.lineTo(X(m)+6,base-11);g.closePath();g.fill();
+    var L=m<S2.mu0;lbl(g,(L?'':'↓ ')+'x̄ of this study '+m.toFixed(1)+(L?' ↓':''),X(m)+(L?-5:5),top+4,T.sig,11,L?'right':'left')}
+  else lbl(g,SH('Run once → dots 跑一次 → 黑點','跑一次 → 黑點'),w-padR-4,top-10,T.muted,10.5,'right')}
+function d2(){d2a();var cv=document.getElementById('c2');if(!cv.clientWidth)return;
+  var o=fit(cv),g=o.g,w=o.w,h=o.h,padL=10,padR=10,base=h-46,top=30,iw=w-padL-padR;
+  var X=function(v){return X2(v,padL,iw)},se=S2.dse,gp=gap2(),pk=base-top-8;
+  /* model curve + shaded tails */
+  curve2(g,X,S2.mu0,se,top,base,T.accs,T.acc,.9);
+  g.save();g.beginPath();g.rect(padL,0,Math.max(0,X(S2.mu0-gp)-padL),h);g.rect(X(S2.mu0+gp),0,Math.max(0,w-padR-X(S2.mu0+gp)),h);g.clip();
+  curve2(g,X,S2.mu0,se,top,base,T.sig,T.sig,.35);g.restore();
+  widthBar2(g,X,S2.mu0,se,base,pk,T.acc,'SE '+se2().toFixed(2));
+  /* histogram of sample means, aligned to the model */
+  if(S2.xs.length){var bwv=Math.max(se2()/2.5,.05),nb=Math.ceil((HI2-LO2)/bwv),cnt=new Array(nb).fill(0);
+    for(var i=0;i<S2.xs.length;i++){var b=Math.max(0,Math.min(nb-1,Math.floor((S2.xs[i]-LO2)/bwv)));cnt[b]++}
+    var K=S2.xs.length,peak=1/(se2()*Math.sqrt(2*Math.PI)),scale=pk/(K*bwv*peak),mx=Math.max.apply(null,cnt);
+    if(mx*scale>base-top)scale=(base-top)/mx;
+    var bwp=bwv/(HI2-LO2)*iw;
+    for(var j=0;j<nb;j++){if(!cnt[j])continue;var bc=LO2+(j+.5)*bwv,ext=Math.abs(bc-S2.mu0)>=gp-1e-9,bh=cnt[j]*scale;
+      g.fillStyle=ext?T.sig:T.acc;g.globalAlpha=ext?.7:.55;g.fillRect(X(LO2+j*bwv)+.5,base-bh,Math.max(1.5,bwp-1),bh);g.globalAlpha=1}}
+  g.strokeStyle=T.line;g.lineWidth=1;g.beginPath();g.moveTo(padL,base+.5);g.lineTo(w-padR,base+.5);g.stroke();
+  for(var t=155;t<=195;t+=(NARROW?10:5))lbl(g,t.toFixed(0),X(t),base+13,T.muted,10.5);
+  /* μ₀ and observed x̄ */
+  var muL=S2.mu0<=OBS;                       /* which line is on the left */
+  g.strokeStyle=T.acc;g.lineWidth=2;g.beginPath();g.moveTo(X(S2.mu0),top-10);g.lineTo(X(S2.mu0),base);g.stroke();
+  lbl(g,'μ₀ '+S2.mu0.toFixed(1),X(S2.mu0)+(muL?-5:5),top-14,T.acc,11.5,muL?'right':'left');
+  g.strokeStyle=T.sig;g.lineWidth=2;g.setLineDash([4,3]);
+  g.beginPath();g.moveTo(X(OBS),top-10);g.lineTo(X(OBS),base);g.stroke();g.setLineDash([]);
+  lbl(g,'我們 x̄ '+OBS.toFixed(1),X(OBS)+(muL?5:-5),top-14,T.sig,11.5,muL?'left':'right');
+  /* distance bracket below the axis */
+  var yb=base+27,xa=X(S2.mu0),xb=X(OBS);g.strokeStyle=T.sig;g.lineWidth=1.2;g.beginPath();g.moveTo(xa,yb);g.lineTo(xb,yb);
+  g.moveTo(xa,yb-4);g.lineTo(xa,yb+4);g.moveTo(xb,yb-4);g.lineTo(xb,yb+4);g.stroke();
+  lbl(g,'|x̄ − μ₀| = '+gp.toFixed(1)+SH('  ·  this far or farther, both sides 兩邊','  ·  兩邊'),(xa+xb)/2,yb+14,T.sig,10.5);
+  /* newest single study */
+  if(S2.obs){var m=mean(S2.obs);g.fillStyle=T.ink;g.strokeStyle=T.sig;g.lineWidth=1.5;g.beginPath();g.arc(X(m),base-5,4,0,6.2832);g.fill();g.stroke()}
+  if(!S2.xs.length)lbl(g,SH('one bar per study · 每跑一次研究，這裡多一條','每跑一次，這裡多一條'),w/2,base-pk*.35,T.muted,12)}
+var A2=null;
+function anim2(){if(A2)cancelAnimationFrame(A2);var from={sd:S2.dsd,se:S2.dse},to={sd:S2.sd,se:se2()};
+  if(RM2){S2.dsd=to.sd;S2.dse=to.se;d2();return}
+  var t0=null;function step(t){if(t0===null)t0=t;var k=Math.min(1,(t-t0)/420);k=1-Math.pow(1-k,3);
+    S2.dsd=from.sd+(to.sd-from.sd)*k;S2.dse=from.se+(to.se-from.se)*k;d2();if(k<1)A2=requestAnimationFrame(step)}
+  A2=requestAnimationFrame(step)}
+function upd2(){var se=se2(),gp=gap2(),tail=0;
+  for(var i=0;i<S2.xs.length;i++)if(Math.abs(S2.xs[i]-S2.mu0)>=gp-1e-9)tail++;
+  document.getElementById('r2sd').textContent=S2.sd.toFixed(2);
+  document.getElementById('r2n').textContent=S2.n;
+  document.getElementById('x2n').textContent=S2.n;document.getElementById('x2n2').textContent=S2.n;
+  document.getElementById('x2se').textContent=se.toFixed(2);
+  document.getElementById('r2se').textContent=se.toFixed(2);
+  document.getElementById('r2sesub').textContent=S2.sd.toFixed(2)+' ÷ √'+S2.n+' · chart B';
+  document.getElementById('r2obs').textContent=S2.xs.length>1?sd(S2.xs).toFixed(2):'—';
+  document.getElementById('r2mm').textContent=S2.xs.length?mean(S2.xs).toFixed(2):'—';
+  document.getElementById('r2k').textContent=S2.xs.length;
+  document.getElementById('r2gap').textContent=gp.toFixed(1);
+  document.getElementById('l2gap').textContent=gp.toFixed(1);
+  document.getElementById('l2ext').textContent='x̄ ≥ '+(S2.mu0+gp).toFixed(1)+' or x̄ ≤ '+(S2.mu0-gp).toFixed(1);
+  var pm=2*(1-Phi(gp/se));document.getElementById('r2pm').textContent=pm<.001?'< .001':pm.toFixed(3).replace(/^0/,'');
+  var p=S2.xs.length?tail/S2.xs.length:null;
+  document.getElementById('r2p').textContent=p===null?'—':p.toFixed(3);
+  document.getElementById('r2psub').textContent=S2.xs.length?(tail+' / '+S2.xs.length+' 次'):'一樣遠或更遠的次數';
+  var v=document.getElementById('v2');
+  if(S2.xs.length>=50){
+    var per=Math.round(p*100);
+    var judged=p>=0.05
+      ? '如果母體平均數真的是 '+S2.mu0.toFixed(1)+'，抽到像我們這麼遠的樣本平均數是常有的事。我們沒有理由說母體不是 '+S2.mu0.toFixed(1)+'。'
+      : '如果母體平均數真的是 '+S2.mu0.toFixed(1)+'，我們這個樣本平均數會很奇怪。所以這個假設難以相信。';
+    v.innerHTML='<span class="zh">每 100 次研究大約有 <b>'+per+' 次</b>的樣本平均數會離 μ₀ 這麼遠或更遠（B 圖塗色的尾巴）。'+judged+'</span>'+
+      '<span class="en">About '+per+' sample means in 100 land at least this far from μ₀ (shaded tails of chart B) &nbsp;·&nbsp; p = '+p.toFixed(3)+' &nbsp;·&nbsp; model area = '+pm.toFixed(3)+'</span>'}
+  else if(S2.obs){var m=mean(S2.obs);
+    v.innerHTML='<span class="zh">這一次研究：從 A 圖抽了 <b>'+S2.n+'</b> 個人（黑點，散開程度 = SD）→ 取平均 → 得到一個 x̄ = <b>'+m.toFixed(1)+'</b>，放到 B 圖。B 圖上每一條都是這樣來的一個平均數。</span>'+
+      '<span class="en">This study: '+S2.n+' people drawn from chart A (dots, spread = SD) → averaged → one x̄ = '+m.toFixed(1)+' placed on chart B. Every bar in chart B is one such mean.</span>'}
+  d2()}
+function draw2(){var raw=pick(S2.n).v,k=S2.sd/POPSD,s=[];for(var i=0;i<raw.length;i++)s.push(S2.mu0+(raw[i]-POPMU)*k);return s}
+function run2(k){for(var i=0;i<k;i++){var s=draw2();S2.xs.push(mean(s));S2.obs=(k===1)?s:null}upd2()}
+document.getElementById('b2run').onclick=function(){run2(200)};
+document.getElementById('b2one').onclick=function(){run2(1)};
+function reset2(){S2.xs=[];S2.obs=null;
+  document.getElementById('v2').innerHTML='<span class="zh">按「跑一次」看一個研究怎麼從 A 圖變成 B 圖上的一個點；再按「跑 200 次研究」。</span><span class="en">Press “Run once” to see one study travel from chart A to one point on chart B, then run 200 studies.</span>'}
+document.getElementById('b2reset').onclick=function(){reset2();upd2()};
+function fx2(html){document.getElementById('r2fx').innerHTML=html}
+document.getElementById('s2sd').oninput=function(){S2.sd=+this.value;document.getElementById('v2sd').textContent=S2.sd.toFixed(2);
+  reset2();fx2('SD changed → chart A <b>and</b> chart B both change width · SE = '+se2().toFixed(2)+'<span class="zh">SD 改變 → A 圖和 B 圖一起變寬／變窄</span>');upd2();anim2()};
+document.getElementById('s2n').oninput=function(){S2.n=+this.value;document.getElementById('v2n').textContent=this.value;
+  reset2();fx2('n changed → chart A <b>unchanged</b> · only chart B changes width · SE = '+se2().toFixed(2)+'<span class="zh">n 改變 → A 圖不變，只有 B 圖變寬／變窄</span>');upd2();anim2()};
+document.getElementById('s2mu').oninput=function(){S2.mu0=+this.value;document.getElementById('v2mu').textContent=S2.mu0.toFixed(1);
+  reset2();fx2('μ₀ moved → both curves re-centre on μ₀ · distance |x̄ − μ₀| = '+gap2().toFixed(1)+'<span class="zh">μ₀ 移動 → 兩張圖的中心一起移到 μ₀</span>');upd2()};
+
+/* ---------- stage 3 : CI coverage ---------- */
+var TC={4:2.776,5:2.571,6:2.447,7:2.365,8:2.306,9:2.262,10:2.228,11:2.201,12:2.179,13:2.160,
+ 14:2.145,15:2.131,16:2.120,17:2.110,18:2.101,19:2.093,20:2.086,24:2.064,29:2.045,34:2.032,
+ 39:2.023,44:2.017,49:2.010,59:2.001};
+function tcrit(df){if(TC[df])return TC[df];var k=Object.keys(TC).map(Number).sort(function(a,b){return a-b});
+  for(var i=0;i<k.length;i++)if(df<=k[i])return TC[k[i]];return 1.96}
+var S3={n:13,list:[]};
+function study3(){var s=pick(S3.n).v,m=mean(s),sv=sd(s),se=sv/Math.sqrt(S3.n),t=tcrit(S3.n-1);
+  return{m:m,se:se,t:t,lo:m-t*se,hi:m+t*se,cov:(m-t*se<=POPMU&&m+t*se>=POPMU)}}
+function d3(){var cv=document.getElementById('c3');if(!cv.clientWidth)return;
+  var o=fit(cv),g=o.g,w=o.w,h=o.h,padL=10,padR=10,top=30,bot=h-26,iw=w-padL-padR;
+  var sp=4.8*POPSD/Math.sqrt(S3.n)+2, lo=POPMU-sp, hi=POPMU+sp;
+  function X(v){return padL+(v-lo)/(hi-lo)*iw}
+  g.strokeStyle=T.acc;g.lineWidth=2;g.beginPath();g.moveTo(X(POPMU),top-12);g.lineTo(X(POPMU),bot+4);g.stroke();
+  lbl(g,'μ = '+POPMU.toFixed(1),X(POPMU),top-16,T.acc,11.5);
+  var rows=S3.list.length<100?Math.max(12,S3.list.length):100,rh=(bot-top)/rows;
+  var last=S3.list.length-1;
+  for(var i=0;i<S3.list.length;i++){var c=S3.list[i],y=top+i*rh+rh/2,isLast=(i===last);
+    g.strokeStyle=c.cov?T.acc:T.sig;g.globalAlpha=isLast?1:(c.cov?.5:.95);g.lineWidth=isLast?Math.max(2.2,rh):Math.max(1.2,rh-.9);
+    g.beginPath();g.moveTo(Math.max(padL,X(c.lo)),y);g.lineTo(Math.min(w-padR,X(c.hi)),y);g.stroke();
+    /* centre dot = x̄ of that study */
+    g.fillStyle=T.ink;g.beginPath();g.arc(X(c.m),y,isLast?3.2:Math.max(1,rh*.45),0,6.2832);g.fill();g.globalAlpha=1;
+    if(isLast&&S3.list.length<12){lbl(g,'x̄ '+c.m.toFixed(1),X(c.m),y+15,T.ink,10.5);
+      lbl(g,'Lower CI 下限',X(c.lo),y+15,T.muted,9.5,'left');lbl(g,'Upper CI 上限',X(c.hi),y+15,T.muted,9.5,'right')}}
+  g.strokeStyle=T.line;g.lineWidth=1;g.beginPath();g.moveTo(padL,bot+.5);g.lineTo(w-padR,bot+.5);g.stroke();
+  [Math.round(lo)+1,Math.round(POPMU),Math.round(hi)-1].forEach(function(t){lbl(g,t,X(t),h-8,T.muted,10.5)});
+  if(!S3.list.length)lbl(g,'each line = one study\u2019s 95% CI · dot = its x̄ · 每條線 = 一次研究的信賴區間，點 = 它的 x̄',w/2,h/2,T.muted,11.5)}
+function run3(k){for(var i=0;i<k&&S3.list.length<100;i++)S3.list.push(study3());
+  var hit=0,ws=0;for(var j=0;j<S3.list.length;j++){if(S3.list[j].cov)hit++;ws+=S3.list[j].hi-S3.list[j].lo}
+  var L=S3.list[S3.list.length-1];
+  if(L){document.getElementById('r3x').textContent=L.m.toFixed(1);
+    document.getElementById('r3se').textContent=L.se.toFixed(2);
+    document.getElementById('r3ci').textContent='['+L.lo.toFixed(1)+', '+L.hi.toFixed(1)+']';
+    document.getElementById('r3cisub').textContent=L.m.toFixed(1)+' ± '+L.t.toFixed(2)+' × '+L.se.toFixed(2);
+    var cv=document.getElementById('r3cov');cv.textContent=L.cov?'yes 是':'no 否';cv.className='v '+(L.cov?'acc':'sig')}
+  document.getElementById('r3k').textContent=S3.list.length;
+  document.getElementById('r3hit').textContent=hit;
+  document.getElementById('r3miss').textContent=S3.list.length-hit;
+  document.getElementById('r3w').textContent=S3.list.length?(ws/S3.list.length).toFixed(1):'—';
+  var v=document.getElementById('v3');
+  if(S3.list.length===0){}
+  else if(S3.list.length<100){v.innerHTML=
+    '<span class="zh">第 '+S3.list.length+' 次研究：抽 '+S3.n+' 個人，x̄ = '+L.m.toFixed(1)+'，SE = '+L.se.toFixed(2)+'，區間 ['+L.lo.toFixed(1)+', '+L.hi.toFixed(1)+']。線的兩端是信賴界限，點是 x̄。'+(L.cov?'這一條蓋住了 μ。':'這一條錯過了 μ——做法沒錯，只是運氣。')+'</span>'+
+    '<span class="en">Study '+S3.list.length+': n = '+S3.n+', x̄ = '+L.m.toFixed(1)+', SE = '+L.se.toFixed(2)+', CI ['+L.lo.toFixed(1)+', '+L.hi.toFixed(1)+']. '+(L.cov?'This one covers μ.':'This one misses μ — correct procedure, unlucky sample.')+'</span>'}
+  else{v.innerHTML=
+    '<span class="zh">100 次研究裡有 <b>'+hit+' 條</b>蓋住 μ、'+(100-hit)+' 條錯過。這只是一次模擬的結果；再跑一次可能是 94、96、97。理論上的長期目標大約是 95%。這 100 條不會合併成一條新的區間。</span>'+
+    '<span class="en">'+hit+' of 100 intervals covered μ; '+(100-hit)+' missed. One simulation result — run again and it may be 94, 96, 97. The long-run target is about 95%. These 100 are not combined into one CI.</span>'}
+  d3()}
+document.getElementById('b3run').onclick=function(){run3(100)};
+document.getElementById('b3step').onclick=function(){run3(1)};
+document.getElementById('b3reset').onclick=function(){S3.list=[];
+  ['r3k','r3hit','r3miss'].forEach(function(id){document.getElementById(id).textContent='0'});
+  ['r3w','r3x','r3se','r3ci','r3cov'].forEach(function(id){document.getElementById(id).textContent='—'});
+  document.getElementById('r3cisub').textContent='x̄ ± t* × SE';document.getElementById('r3cov').className='v';
+  document.getElementById('v3').innerHTML='<span class="zh">先按 Step 看一次研究怎麼算出一條區間。</span><span class="en">Press Step to see one study produce one interval.</span>';d3()};
+document.getElementById('s3n').oninput=function(){S3.n=+this.value;
+  document.getElementById('v3n').textContent=this.value;S3.list=[];run3(0)};
+
+/* ---------- stage 3B : CI vs reference value μ₀ ---------- */
+function lgam(x){var c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,
+  12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  if(x<0.5)return Math.log(Math.PI/Math.sin(Math.PI*x))-lgam(1-x);
+  x-=1;var a=c[0],t=x+7.5;for(var i=1;i<9;i++)a+=c[i]/(x+i);
+  return 0.5*Math.log(2*Math.PI)+(x+0.5)*Math.log(t)-t+Math.log(a)}
+function betacf(a,b,x){var FP=1e-300,qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<FP)d=FP;d=1/d;var h=d;
+  for(var m=1;m<=300;m++){var m2=2*m,aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<FP)d=FP;c=1+aa/c;if(Math.abs(c)<FP)c=FP;d=1/d;h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<FP)d=FP;c=1+aa/c;if(Math.abs(c)<FP)c=FP;d=1/d;var del=d*c;h*=del;if(Math.abs(del-1)<3e-14)break}
+  return h}
+function betai(a,b,x){if(x<=0)return 0;if(x>=1)return 1;
+  var bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b}
+function pTwo(t,df){return betai(df/2,0.5,df/(df+t*t))}
+var B3={n:8,xb:52,mu0:50,sd:6};
+function calc3b(){var se=B3.sd/Math.sqrt(B3.n),t=tcrit(B3.n-1),lo=B3.xb-t*se,hi=B3.xb+t*se;
+  return{se:se,t:t,lo:lo,hi:hi,inc:(lo<=B3.mu0&&B3.mu0<=hi),p:pTwo((B3.xb-B3.mu0)/se,B3.n-1)}}
+function d3b(){var cv=document.getElementById('c3b');if(!cv.clientWidth)return;
+  var o=fit(cv),g=o.g,w=o.w,h=o.h,padL=14,padR=14,top=34,base=h-30,iw=w-padL-padR,lo=43,hi=61,R=calc3b();
+  function X(v){return padL+(v-lo)/(hi-lo)*iw}
+  var y=(top+base)/2+6;
+  g.strokeStyle=T.line;g.lineWidth=1;g.beginPath();g.moveTo(padL,base+.5);g.lineTo(w-padR,base+.5);g.stroke();
+  [44,46,48,50,52,54,56,58,60].forEach(function(t){lbl(g,t,X(t),h-10,T.muted,10.5)});
+  /* μ0 reference line */
+  g.strokeStyle=T.acc;g.lineWidth=2;g.beginPath();g.moveTo(X(B3.mu0),top-12);g.lineTo(X(B3.mu0),base);g.stroke();
+  lbl(g,'μ₀ = 50  national norm 全國常模',X(B3.mu0),top-16,T.acc,11);
+  /* CI */
+  var col=R.inc?T.acc:T.sig;
+  g.strokeStyle=col;g.lineWidth=4;g.globalAlpha=.85;g.beginPath();g.moveTo(X(R.lo),y);g.lineTo(X(R.hi),y);g.stroke();
+  g.beginPath();g.moveTo(X(R.lo),y-9);g.lineTo(X(R.lo),y+9);g.moveTo(X(R.hi),y-9);g.lineTo(X(R.hi),y+9);g.stroke();g.globalAlpha=1;
+  g.fillStyle=T.sig;g.beginPath();g.arc(X(B3.xb),y,6,0,6.2832);g.fill();
+  lbl(g,'x̄ = 52  team 球隊',X(B3.xb),y-16,T.sig,11);
+  lbl(g,R.lo.toFixed(1),X(R.lo),y+24,T.ink2,10.5);lbl(g,R.hi.toFixed(1),X(R.hi),y+24,T.ink2,10.5);
+  lbl(g,'lower',X(R.lo),y+36,T.muted,9.5);lbl(g,'upper',X(R.hi),y+36,T.muted,9.5);
+  lbl(g,R.inc?'CI includes μ₀ 區間包含 μ₀':'CI excludes μ₀ 區間不含 μ₀',w-padR,top-16,col,11,'right')}
+function upd3b(){var R=calc3b();
+  document.getElementById('v3bn').textContent=B3.n;document.getElementById('s3bn').value=B3.n;
+  document.getElementById('r3bse').textContent=R.se.toFixed(2);
+  document.getElementById('r3bci').textContent='['+R.lo.toFixed(1)+', '+R.hi.toFixed(1)+']';
+  var inc=document.getElementById('r3binc');inc.textContent=R.inc?'yes 是':'no 否';inc.className='v '+(R.inc?'acc':'sig');
+  var ps=R.p<.001?'< .001':('.'+Math.round(R.p*1000).toString().padStart(3,'0')).replace(/0+$/,'').replace(/\.$/,'.0');
+  var pe=document.getElementById('r3bp');pe.textContent=ps;pe.className='v '+(R.p<.05?'sig':'acc');
+  var vv=document.getElementById('r3bv');vv.textContent=R.p<.05?'significant 顯著':'not significant 不顯著';vv.className='v '+(R.p<.05?'sig':'acc');
+  document.getElementById('v3b').innerHTML=R.inc
+    ?'<span class="zh">n = '+B3.n+'：SE = '+R.se.toFixed(2)+'，區間 ['+R.lo.toFixed(1)+', '+R.hi.toFixed(1)+'] 包含 50。同一個資料算出來的雙尾 p = '+ps+' ≥ .05。兩者說的是同一件事：這個差距在抽樣不確定性之內。</span>'+
+     '<span class="en">n = '+B3.n+': the CI includes μ₀ = 50 and the two-sided p = '+ps+' ≥ .05 — two views of the same uncertainty. The 2-point difference is within sampling noise.</span>'
+    :'<span class="zh">n = '+B3.n+'：SE = '+R.se.toFixed(2)+'，區間 ['+R.lo.toFixed(1)+', '+R.hi.toFixed(1)+'] 不包含 50。同一個資料算出來的雙尾 p = '+ps+' &lt; .05。兩者一致：這個差距超出了抽樣不確定性。</span>'+
+     '<span class="en">n = '+B3.n+': the CI excludes μ₀ = 50 and the two-sided p = '+ps+' &lt; .05 — the same verdict from both tools. The 2-point difference exceeds sampling noise.</span>';
+  d3b()}
+document.getElementById('s3bn').oninput=function(){B3.n=+this.value;upd3b()};
+document.getElementById('b3b8').onclick=function(){B3.n=8;upd3b()};
+document.getElementById('b3b20').onclick=function(){B3.n=20;upd3b()};
+document.getElementById('b3b80').onclick=function(){B3.n=80;upd3b()};
+
+/* ---------- stage 4 : normal model as a ruler ---------- */
+var VARS=[{lab:"Height 身高",u:"cm",mu:176,sg:5.4,dp:1,floor:0,floorTxt:"0 cm"},
+          {lab:"VO₂max",u:"ml/kg/min",mu:48,sg:6.0,dp:1,floor:0,floorTxt:"0"},
+          {lab:"Resting HR 靜息心率",u:"bpm",mu:62,sg:8,dp:0,floor:0,floorTxt:"0 bpm"},
+          {lab:"1RM squat 深蹲",u:"kg",mu:120,sg:20,dp:0,floor:0,floorTxt:"0 kg"},
+          {lab:"Body fat 體脂",u:"%",mu:18.5,sg:9.2,dp:1,floor:0,floorTxt:"0 %",floorSub:"essential fat 必需脂肪 ≈ 3–5 % ♂ · 10–13 % ♀",iffy:3}];
+var S4={v:0};
+function v4(){return VARS[S4.v]}
+function d4(){var cv=document.getElementById('c4');if(!cv.clientWidth)return;
+  var o=fit(cv),g=o.g,w=o.w,h=o.h,padL=18,padR=18,base=h-84,top=42,iw=w-padL-padR;
+  var V=v4(),mu=V.mu,sg=V.sg,lo=mu-3.8*sg,hi=mu+3.8*sg;
+  function X(v){return padL+(v-lo)/(hi-lo)*iw}
+  function Y(v){return base-Math.exp(-((v-mu)*(v-mu))/(2*sg*sg))*(base-top)}
+  /* three nested regions */
+  [[3,T.sunk,.55],[2,T.accs,.5],[1,T.accs,.8]].forEach(function(bd){var k=bd[0];
+    g.beginPath();g.moveTo(X(mu-k*sg),base);
+    for(var px=X(mu-k*sg);px<=X(mu+k*sg);px++){var v=lo+((px-padL)/iw)*(hi-lo);g.lineTo(px,Y(v))}
+    g.lineTo(X(mu+k*sg),base);g.closePath();g.fillStyle=bd[1];g.globalAlpha=bd[2];g.fill();g.globalAlpha=1});
+  /* impossible region below the floor */
+  if(lo<V.floor){var xf=X(V.floor);
+    g.fillStyle=T.sigs;g.globalAlpha=.9;g.fillRect(padL,top-10,Math.max(0,xf-padL),base-top+10);g.globalAlpha=1;
+    g.strokeStyle=T.sig;g.lineWidth=1.5;g.setLineDash([4,3]);g.beginPath();g.moveTo(xf,top-14);g.lineTo(xf,base);g.stroke();g.setLineDash([]);
+    lbl(g,'impossible 不可能',(padL+xf)/2,top+8,T.sig,11)}
+  /* curve */
+  g.strokeStyle=T.acc;g.lineWidth=1.8;g.beginPath();
+  for(var px2=0;px2<=iw;px2++){var v2=lo+(px2/iw)*(hi-lo);if(px2===0)g.moveTo(padL,Y(v2));else g.lineTo(padL+px2,Y(v2))}
+  g.stroke();
+  /* markers */
+  for(var k=-3;k<=3;k++){var xv=mu+k*sg,x=X(xv);
+    g.strokeStyle=k===0?T.acc:T.line;g.lineWidth=k===0?2:1;g.setLineDash(k===0?[]:[3,3]);
+    g.beginPath();g.moveTo(x,top-6);g.lineTo(x,base);g.stroke();g.setLineDash([]);
+    lbl(g,k===0?'μ':((k>0?'+':'−')+Math.abs(k)+' SD'),x,top-10,k===0?T.acc:T.muted,10.5);
+    lbl(g,xv.toFixed(V.dp),x,base+15,(xv<V.floor)?T.sig:T.ink2,10.5)}
+  g.strokeStyle=T.line;g.lineWidth=1;g.beginPath();g.moveTo(padL,base+.5);g.lineTo(w-padR,base+.5);g.stroke();
+  /* 68 / 95 / 99.7 brackets under the axis */
+  [[1,'±1 SD  ≈ 68%',T.acc,34],[2,'±2 SD  ≈ 95%',T.ink2,52],[3,'±3 SD  ≈ 99.7%',T.muted,70]].forEach(function(r){
+    var k=r[0],yy=base+r[3],x1=X(mu-k*sg),x2=X(mu+k*sg);
+    g.strokeStyle=r[2];g.lineWidth=1.4;g.beginPath();g.moveTo(x1,yy);g.lineTo(x2,yy);g.moveTo(x1,yy-4);g.lineTo(x1,yy+4);g.moveTo(x2,yy-4);g.lineTo(x2,yy+4);g.stroke();
+    var tw=g.measureText(r[1]).width+14;g.fillStyle=T.card;g.fillRect((x1+x2)/2-tw/2,yy-7,tw,14);
+    lbl(g,r[1],(x1+x2)/2,yy+4,r[2],10.5)});
+  lbl(g,V.u,w-padR,h-6,T.muted,10,'right')}
+function upd4(){var V=v4();
+  document.getElementById('r4mu').textContent=V.mu.toFixed(V.dp);
+  document.getElementById('r4sd').textContent=V.sg.toFixed(1);
+  document.getElementById('r4u').textContent=V.u;
+  document.getElementById('r4floor').textContent=V.floorTxt;
+  document.getElementById('r4floorsub').textContent=V.floorSub||'';
+  var anyBad=false,anyIffy=false;
+  [1,2,3].forEach(function(k){
+    var m=V.mu-k*V.sg,pl=V.mu+k*V.sg;
+    var tm=document.getElementById('t4m'+k),tp=document.getElementById('t4p'+k);
+    var eq=V.mu.toFixed(V.dp)+' − '+(k*V.sg).toFixed(1)+' = ';
+    tm.className='';tm.innerHTML=eq+'<b>'+m.toFixed(V.dp)+'</b>';
+    if(m<V.floor){tm.className='bad';tm.innerHTML+='<span class="tag">IMPOSSIBLE 不可能</span>';anyBad=true}
+    else if(V.iffy!==undefined&&m<V.iffy){tm.className='iffy';tm.innerHTML+='<span class="tag">≈ 0 · implausible 不合理</span>';anyIffy=true}
+    tp.className='';tp.innerHTML=V.mu.toFixed(V.dp)+' + '+(k*V.sg).toFixed(1)+' = <b>'+pl.toFixed(V.dp)+'</b>'});
+  var v=document.getElementById('v4');
+  if(anyBad)v.innerHTML='<span class="zh">往下減到 3 個 SD 出現了不可能的數值。這是一個警告：左右對稱的常態模型可能不適合這個變項。應該檢查分配是否偏態或有下限；描述時可以考慮 median 和 IQR。</span>'+
+    '<span class="en">Mean − 3 SD implies an impossible value. This warns that a symmetric normal model may not suit this variable: inspect the distribution for skewness or a bound, and consider median and IQR as the descriptive summary.</span>';
+  else if(anyIffy)v.innerHTML='<span class="zh">往下減出現了不太合理的數值。值得檢查分配的形狀。</span><span class="en">The downward ruler reaches an implausible value; the shape of the distribution deserves a look.</span>';
+  else v.innerHTML='<span class="zh">往上加、往下減，三個 SD 之內的數值對這個變項都說得通。這把尺沒有發出警告。</span>'+
+    '<span class="en">All values within ± 3 SD make sense for this variable. The ruler raises no warning.</span>';
+  d4()}
+Array.prototype.forEach.call(document.querySelectorAll('#seg4 button'),function(b){
+  b.onclick=function(){Array.prototype.forEach.call(document.querySelectorAll('#seg4 button'),
+    function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');S4.v=+b.dataset.v;upd4()}});
+
+/* ---------- stage 5 : CLT ---------- */
+function combos(n,k){var out=[],c=[];(function rec(st){if(c.length===k){out.push(c.slice());return}
+  for(var i=st;i<n;i++){c.push(i);rec(i+1);c.pop()}})(0);return out}
+var S5={n:1,cut:78,cache:{}};
+function setOf(k){
+  if(S5.cache[k])return S5.cache[k];
+  var vals,with142,mx;
+  if(k===1){vals=REC.slice();with142=1}
+  else{var cs=combos(17,k);vals=[];with142=0;
+    for(var i=0;i<cs.length;i++){var s2=0,has=false;
+      for(var j=0;j<k;j++){s2+=REC[cs[i][j]];if(REC[cs[i][j]]===142)has=true}
+      vals.push(s2/k);if(has)with142++}}
+  mx=Math.max.apply(null,vals);
+  var m=mean(vals),kk=vals.length,v=0,c3=0;
+  for(var q=0;q<kk;q++){v+=Math.pow(vals[q]-m,2);c3+=Math.pow(vals[q]-m,3)}
+  var sdp=Math.sqrt(v/kk), g1=(c3/kk)/Math.pow(sdp,3);
+  var G1=kk>2?g1*Math.sqrt(kk*(kk-1))/(kk-2):g1;      /* Excel SKEW / SPSS definition */
+  var num=1,den=1;for(var t=0;t<k;t++){num*=(17-t);den*=(t+1)}
+  var o={vals:vals,k:kk,mean:m,sd:sdp,skew:G1,with142:with142,max:mx,
+         count:(k===1?'17 選 1':'17×'+Array.from({length:k-1},function(_,z){return 16-z}).join('×')+' ÷ '+den)};
+  S5.cache[k]=o;return o}
+function d5(){var cv=document.getElementById('c5');if(!cv.clientWidth)return;
+  var D=setOf(S5.n),o=fit(cv),g=o.g,w=o.w,h=o.h;
+  var padL=14,padR=14,base=h-32,top=32,iw=w-padL-padR,lo=45,hi=150;
+  function X(v){return padL+(v-lo)/(hi-lo)*iw}
+  var bins=60,bw=iw/bins,binW=(hi-lo)/bins,cnt=new Array(bins).fill(0);
+  for(var i=0;i<D.vals.length;i++){var b=Math.max(0,Math.min(bins-1,Math.floor((D.vals[i]-lo)/binW)));cnt[b]++}
+  /* normal model expected counts, same scale */
+  var exp=[];for(var e=0;e<bins;e++){var c0=lo+(e+.5)*binW;
+    exp.push(D.k*binW*Math.exp(-Math.pow(c0-D.mean,2)/(2*D.sd*D.sd))/(D.sd*Math.sqrt(2*Math.PI)))}
+  var mx=Math.max(Math.max.apply(null,cnt),Math.max.apply(null,exp));
+  for(var b2=0;b2<bins;b2++){if(!cnt[b2])continue;var bh=(cnt[b2]/mx)*(base-top);
+    var bc=lo+(b2+.5)*binW, hot=bc>=S5.cut;
+    g.fillStyle=hot?T.sig:T.acc;g.globalAlpha=hot?.55:.62;
+    g.fillRect(padL+b2*bw+.5,base-bh,Math.max(1.6,bw-1),bh);g.globalAlpha=1}
+  /* normal overlay */
+  g.strokeStyle=T.gold;g.lineWidth=1.8;g.beginPath();
+  for(var px=0;px<=iw;px++){var v3=lo+(px/iw)*(hi-lo);
+    var y=base-(D.k*binW*Math.exp(-Math.pow(v3-D.mean,2)/(2*D.sd*D.sd))/(D.sd*Math.sqrt(2*Math.PI)))/mx*(base-top);
+    if(px===0)g.moveTo(padL,y);else g.lineTo(padL+px,y)}
+  g.stroke();
+  g.strokeStyle=T.line;g.lineWidth=1;g.beginPath();g.moveTo(padL,base+.5);g.lineTo(w-padR,base+.5);g.stroke();
+  [60,80,100,120].forEach(function(t){if(Math.abs(X(t)-X(S5.cut))<(NARROW?50:32))return;
+    lbl(g,t,X(t),h-11,T.muted,10.5)});
+  lbl(g,SH('seconds 秒','秒'),w-padR-2,h-11,T.muted,10,'right');
+  /* mean line - fixed */
+  g.strokeStyle=T.acc;g.lineWidth=2;g.setLineDash([5,3]);
+  g.beginPath();g.moveTo(X(D.mean),top-12);g.lineTo(X(D.mean),base);g.stroke();g.setLineDash([]);
+  lbl(g,'mean 平均 '+D.mean.toFixed(1),X(D.mean),top-17,T.acc,11);
+  /* cut-off marker */
+  g.strokeStyle=T.sig;g.lineWidth=2.5;g.beginPath();g.moveTo(X(S5.cut),top-12);g.lineTo(X(S5.cut),base);g.stroke();
+  g.fillStyle=T.sig;g.beginPath();g.arc(X(S5.cut),base,5,0,6.2832);g.fill();
+  g.beginPath();g.moveTo(X(S5.cut)-6,base+4);g.lineTo(X(S5.cut)+6,base+4);g.lineTo(X(S5.cut),base-4);g.closePath();g.fill();
+  lbl(g,'cut-off '+S5.cut.toFixed(1),X(S5.cut),base+17,T.sig,11.5);
+  if(S5.n===1)lbl(g,SH('142 s is here \u2192','142 s \u2192'),X(142)-(NARROW?26:58),base-(NARROW?86:52),T.muted,11,'right');
+  if(!NARROW)lbl(g,'\u2190 drag the red line 拖紅線',padL+2,top-17,T.muted,10,'left')}
+function upd5(){var D=setOf(S5.n),ge=0;
+  for(var i=0;i<D.vals.length;i++)if(D.vals[i]>=S5.cut-1e-9)ge++;
+  document.getElementById('r5k').textContent=D.k.toLocaleString();
+  document.getElementById('r5ksub').textContent=D.count;
+  document.getElementById('r5sk').textContent=D.skew.toFixed(2);
+  document.getElementById('r5sd').textContent=D.sd.toFixed(2);
+  document.getElementById('r5m').textContent=D.mean.toFixed(1);
+  document.getElementById('r5c').textContent=D.with142.toLocaleString();
+  document.getElementById('r5csub').textContent=(100*D.with142/D.k).toFixed(1)+'% of them 佔比';
+  document.getElementById('r5mx').textContent=D.max.toFixed(1);
+  document.getElementById('r5ge').textContent=ge.toLocaleString();
+  document.getElementById('r5gesub').textContent=(100*ge/D.k).toFixed(1)+'% of sample means · '+ge.toLocaleString()+' / '+D.k.toLocaleString();
+  document.getElementById('s5x').value=S5.cut;
+  document.getElementById('v5x').textContent=S5.cut.toFixed(1);
+  var txt={1:['n = 1: each sample is one person, so this is the raw data. Centre 70.2, spread 19.2, strongly skewed by the 142-second athlete.',
+              'n = 1：每個樣本只有一個人，看到的就是原始資料。中心 70.2，散開 19.2，被 142 秒那位拉得很偏。'],
+           2:['n = 2: every possible 2-person sample, averaged. Centre still 70.2; spread narrower (13.1); less skewed (1.92).',
+              'n = 2：每一種兩人樣本各取平均。中心仍是 70.2；散開變窄（13.1）；偏態減少（1.92）。'],
+           3:['n = 3: every possible 3-person sample, averaged. Centre 70.2; spread 10.4; skewness 1.36. The shape is moving towards the gold normal curve.',
+              'n = 3：每一種三人樣本各取平均。中心 70.2；散開 10.4；偏態 1.36。形狀開始貼近金色的常態曲線。'],
+           5:['n = 5: every possible 5-person sample, averaged. Centre 70.2; spread 7.4; skewness 0.72. The distribution of sample means is now close to normal — the raw data have not changed.',
+              'n = 5：每一種五人樣本各取平均。中心 70.2；散開 7.4；偏態 0.72。樣本平均數的分布已經接近常態——原始資料完全沒有變。']}[S5.n];
+  document.getElementById('v5').innerHTML='<span class="zh">'+txt[1]+'</span><span class="en">'+txt[0]+'</span>';
+  d5()}
+function setCut(v){S5.cut=Math.max(45,Math.min(150,Math.round(v*2)/2));upd5()}
+document.getElementById('s5x').oninput=function(){setCut(+this.value)};
+document.getElementById('b5reset').onclick=function(){setCut(setOf(S5.n).mean)};
+Array.prototype.forEach.call(document.querySelectorAll('#seg5 button'),function(b){
+  b.onclick=function(){Array.prototype.forEach.call(document.querySelectorAll('#seg5 button'),
+    function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');S5.n=+b.dataset.n;upd5()}});
+(function(){var cv=document.getElementById('c5'),drag=false;
+  function toVal(e){var r=cv.getBoundingClientRect(),padL=14,padR=14,iw=r.width-padL-padR;
+    return 45+Math.max(0,Math.min(1,(e.clientX-r.left-padL)/iw))*105}
+  cv.addEventListener('pointerdown',function(e){drag=true;cv.setPointerCapture(e.pointerId);setCut(toVal(e))});
+  cv.addEventListener('pointermove',function(e){if(drag)setCut(toVal(e))});
+  cv.addEventListener('pointerup',function(){drag=false});
+  cv.addEventListener('pointercancel',function(){drag=false})})();
+
+/* ---------- boot ---------- */
+function redraw(){theme();d1();d2();d3();d3b();d4();d5()}
+document.getElementById('r1mu').textContent=POPMU.toFixed(1);
+document.getElementById('prev').disabled=true;
+upd2();upd3b();upd4();upd5();
+window.addEventListener('resize',redraw);
+if(window.matchMedia)window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redraw);
+new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
+redraw();
+</script>
+</body>
+</html>

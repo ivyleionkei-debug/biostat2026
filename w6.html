@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Do They Go Together?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#EDF0F1; --card:#F8FAFA; --sunk:#E2E8E9;
+  --ink:#15252A; --ink2:#3C5257; --muted:#6C8084; --line:#C7D4D6;
+  --accent:#0E6E6E; --accent-soft:#D2E5E3; --signal:#C2503E; --signal-soft:#F1DAD4;
+  --gold:#A87718; --gold-soft:#F0E4C8;
+  --r:10px; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#0E1518; --card:#162125; --sunk:#101A1D;
+  --ink:#E1EAEC; --ink2:#B4C6C9; --muted:#83979C; --line:#28383D;
+  --accent:#5CC6C0; --accent-soft:#123330; --signal:#F08E79; --signal-soft:#3B2019;
+  --gold:#D6A23F; --gold-soft:#332813; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#0E1518; --card:#162125; --sunk:#101A1D;
+  --ink:#E1EAEC; --ink2:#B4C6C9; --muted:#83979C; --line:#28383D;
+  --accent:#5CC6C0; --accent-soft:#123330; --signal:#F08E79; --signal-soft:#3B2019;
+  --gold:#D6A23F; --gold-soft:#332813; color-scheme:dark; }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans","Noto Sans TC",system-ui,-apple-system,sans-serif;
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;}
+.zh{font-family:"Noto Sans TC","IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-weight:600; text-wrap:balance; margin:0}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:16px; padding-block:0 44px}
+
+header.top{position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
+  background:var(--paper); background:color-mix(in srgb, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px; margin:0 auto; padding:10px 16px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap}
+.brand{font-family:"Newsreader",Georgia,serif; font-size:17px; font-weight:600}
+.brand small{display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:400}
+.rail{display:flex; gap:4px; margin-left:auto; flex-wrap:wrap}
+.rail button{font:inherit; font-size:12.5px; cursor:pointer; background:transparent; color:var(--muted);
+  border:1px solid transparent; border-radius:99px; padding:5px 11px; display:flex; align-items:center; gap:7px}
+.rail button .n{font-family:"IBM Plex Mono",monospace; font-size:11px; opacity:.75}
+.rail button:hover{color:var(--ink); background:var(--sunk)}
+.rail button[aria-current="true"]{background:var(--accent); color:#fff; border-color:var(--accent)}
+.rail .lbl{display:none}
+@media(min-width:920px){ .rail .lbl{display:flex; flex-direction:column; line-height:1.14; text-align:left} }
+.rail .lbl b{font-weight:500; font-size:11.5px}
+.rail .lbl i{font-style:normal; font-size:9.5px; opacity:.8}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+
+.panel{padding-block:26px 0}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--accent); display:flex; gap:10px; align-items:center}
+.eyebrow::after{content:""; flex:1; height:1px; background:var(--line)}
+h2.title{font-size:clamp(25px,4.4vw,36px); line-height:1.15; margin:.35em 0 .1em}
+.title-zh{font-size:clamp(17px,2.6vw,21px); color:var(--ink2); font-weight:500; margin-bottom:14px}
+.cols{display:grid; grid-template-columns:1fr; gap:22px; align-items:start}
+@media(min-width:920px){ .cols{grid-template-columns:minmax(290px,.82fr) 1.18fr; gap:30px} }
+.arg p{margin:0 0 .85em}
+.arg .zh{color:var(--ink)}
+.arg .en{color:var(--ink2); font-size:14px}
+.arg .en em{font-style:normal; color:var(--ink); font-weight:500}
+.arg .zh b{font-weight:700; color:var(--accent)}
+.formula{font-family:"IBM Plex Mono",monospace; background:var(--sunk); border:1px solid var(--line);
+  border-radius:8px; padding:10px 12px; margin:12px 0; font-size:14px}
+.formula .say{display:block; font-family:"IBM Plex Sans",sans-serif; font-size:12.5px;
+  color:var(--muted); margin-top:5px; font-style:italic}
+.callout{border-left:3px solid var(--gold); background:var(--gold-soft);
+  padding:12px 14px; border-radius:0 var(--r) var(--r) 0; margin:16px 0 0}
+.callout .k{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--gold); display:block; margin-bottom:5px}
+.callout p{margin:0 0 .5em; font-size:14px}
+.callout p:last-child{margin:0}
+
+.rig{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:16px}
+.rig + .rig{margin-top:14px}
+.rig h3{font-size:14px; font-family:"IBM Plex Sans",sans-serif; font-weight:600; margin-bottom:10px}
+canvas{display:block; width:100%; height:auto; max-width:100%; border-radius:6px; touch-action:auto; scroll-margin-top:104px}
+canvas.grab{cursor:ew-resize; touch-action:pan-y}
+
+.ctrls{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:12px}
+button.act{font:inherit; font-size:13px; font-weight:500; cursor:pointer; background:var(--accent);
+  color:#fff; border:1px solid var(--accent); border-radius:7px; padding:7px 13px}
+button.act:hover{filter:brightness(1.08)}
+button.act.ghost{background:transparent; color:var(--accent)}
+button.act.ghost:hover{background:var(--accent-soft); filter:none}
+.slider{display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--muted); flex:1 1 200px; min-width:180px}
+.slider input[type=range]{flex:1; min-width:90px; accent-color:var(--accent)}
+.slider .v{font-family:"IBM Plex Mono",monospace; color:var(--ink); font-weight:500; min-width:3.2em; text-align:right}
+.seg{display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; flex-wrap:wrap}
+.seg button{font:inherit; font-size:12.5px; cursor:pointer; background:var(--card); color:var(--muted);
+  border:0; border-right:1px solid var(--line); padding:6px 11px}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent); color:#fff}
+
+.readout{display:grid; grid-template-columns:repeat(auto-fit,minmax(102px,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-top:12px}
+.readout div{background:var(--card); padding:9px 11px}
+.readout .k{display:block; font-size:10.5px; letter-spacing:.06em; color:var(--muted); margin-bottom:3px}
+.readout .v{font-family:"IBM Plex Mono",monospace; font-size:19px; font-weight:500; line-height:1.15; font-variant-numeric:tabular-nums}
+.readout .v.sig{color:var(--signal)}
+.readout .v.acc{color:var(--accent)}
+.readout .sub{display:block; font-size:11px; color:var(--muted); margin-top:2px}
+.verdict{margin-top:12px; font-size:14px; padding:11px 13px; border-radius:8px;
+  background:var(--sunk); border:1px solid var(--line); min-height:3.1em}
+.verdict b{color:var(--signal)}
+.verdict .zh{display:block}
+.verdict .en{display:block; color:var(--muted); font-size:12.5px; margin-top:3px}
+.legend{display:flex; gap:14px; flex-wrap:wrap; font-size:11.5px; color:var(--muted); margin-top:9px}
+.legend span{display:flex; align-items:center; gap:5px}
+.legend i{width:11px; height:11px; border-radius:3px; display:inline-block}
+.src{font-size:11.5px; color:var(--muted); margin-top:10px; line-height:1.5}
+footer.foot{margin-top:34px; padding-top:16px; border-top:1px solid var(--line);
+  font-size:12px; color:var(--muted); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.nav{display:flex; gap:8px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+/* ---- v6 teaching-flow additions ---- */
+.flow{display:flex; flex-direction:column; align-items:flex-start; gap:4px; margin:6px 0 16px}
+.flow .node{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 14px; min-width:190px}
+.flow .node .k{display:block; font-size:10.5px; letter-spacing:.08em; color:var(--muted)}
+.flow .node b{display:block; font-family:"IBM Plex Mono",monospace; font-size:20px; font-weight:500; color:var(--ink)}
+.flow .node.pop b{color:var(--accent)}
+.flow .node.smp b{color:var(--signal)}
+.flow .node i{font-style:normal; font-size:11.5px; color:var(--muted)}
+.flow .arrow{font-size:18px; color:var(--muted); padding-left:80px; line-height:1}
+.key{border-left:3px solid var(--accent); background:var(--accent-soft); padding:10px 14px; border-radius:0 var(--r) var(--r) 0; margin:14px 0}
+.key p{margin:0 0 .4em; font-size:14.5px}
+.key p:last-child{margin:0}
+.key .zh{color:var(--ink)}
+.next{margin-top:16px; font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.06em; color:var(--accent); border-top:1px dashed var(--line); padding-top:10px}
+.formula.big{font-size:18px; padding:12px 14px}
+.formula .def{display:block; font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:12.5px; color:var(--ink2); margin-top:6px; font-style:normal}
+.formula .def:first-of-type{margin-top:9px}
+.warn{font-size:13px; color:var(--signal); background:var(--signal-soft); border-radius:7px; padding:8px 12px; margin:10px 0}
+.arg .note{font-size:12.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:8px; margin-top:10px}
+.steps{display:grid; gap:5px; margin:8px 0 12px}
+.steps div{display:flex; gap:10px; align-items:baseline; font-size:14px}
+.steps b{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:#fff; background:var(--accent); border-radius:99px; min-width:20px; height:20px; display:inline-flex; align-items:center; justify-content:center; font-weight:500}
+.logic{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12.5px; color:var(--ink2); margin:0 0 10px; padding:9px 12px; background:var(--sunk); border-radius:8px; border:1px solid var(--line)}
+.logic b{font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--ink)}
+.logic .sig{color:var(--signal)}
+.logic .acc{color:var(--accent)}
+.pdef{font-size:13px; margin:8px 0 0; padding:9px 12px; border-radius:8px; background:var(--card); border:1px dashed var(--line); color:var(--ink2)}
+.pdef b{color:var(--signal)}
+.cikey{margin:8px 0 12px; font-size:12px; color:var(--muted)}
+.cikey svg{display:block; width:100%; max-width:380px; height:auto}
+.rtab{width:100%; border-collapse:collapse; font-size:13px; margin-top:8px}
+.rtab th,.rtab td{padding:5px 8px; border-bottom:1px solid var(--line); text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.rtab th{font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:11px; letter-spacing:.06em; color:var(--muted); font-weight:500}
+.rtab th:first-child,.rtab td:first-child{text-align:left; font-family:"IBM Plex Sans","Noto Sans TC",sans-serif}
+.rtab td.bad{color:var(--signal); font-weight:600}
+.rtab td.iffy{color:var(--gold); font-weight:600}
+.rtab .tag{font-size:10.5px; letter-spacing:.06em; margin-left:6px; font-family:"IBM Plex Sans",sans-serif}
+details.how{margin-top:10px; font-size:12.5px; color:var(--muted)}
+details.how summary{cursor:pointer; color:var(--accent); font-weight:500}
+details.how p{margin:6px 0 0}
+.q{font-size:15px; color:var(--ink2); margin:2px 0 0; font-weight:500}
+.q.zh{color:var(--muted); font-weight:400; margin-bottom:14px}
+.trans{margin-top:18px; padding:12px 14px; border-radius:var(--r); background:var(--gold-soft); border:1px solid var(--line)}
+.trans p{margin:0 0 .35em; font-size:14.5px; font-weight:500}
+.trans p.zh{font-weight:400}
+.trans .to{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.08em; color:var(--accent); margin-top:8px}
+.pq{margin:12px 0; padding:14px 16px; border-radius:var(--r); background:var(--accent-soft); border-left:3px solid var(--accent); font-size:16px; line-height:1.45}
+.pq .zh{display:block; margin-top:8px; font-size:15px}
+.eqv{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0}
+.eqv div{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:9px 11px; font-size:12.5px; color:var(--ink2)}
+.eqv b{display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink); margin-bottom:3px}
+.eqv .r{font-family:"IBM Plex Mono",monospace; color:var(--accent); font-weight:500}
+.equiv{margin:12px 0 0; font-size:13px}
+.equiv div{display:flex; gap:10px; align-items:baseline; padding:6px 0; border-top:1px solid var(--line)}
+.equiv div:last-child{border-bottom:1px solid var(--line)}
+.equiv b{font-family:"IBM Plex Mono",monospace; font-weight:500; min-width:150px}
+.equiv .ok{color:var(--accent)} .equiv .no{color:var(--signal)}
+.tree{display:block; width:100%; max-width:420px; height:auto; margin:8px 0}
+.cmap{margin-top:34px; border-top:1px solid var(--line); padding-top:22px}
+.cmap h3{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-size:22px; margin-bottom:12px}
+.cmap .chain{display:flex; flex-wrap:wrap; gap:10px; align-items:stretch}
+.cmap .box{flex:1 1 160px; background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; font-size:13px; color:var(--ink2); position:relative}
+.cmap .box b{display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.06em; color:var(--accent); margin-bottom:4px}
+.cmap .box .zh{display:block; margin-top:4px; color:var(--muted)}
+.cmap .box.two{flex:2 1 340px}
+.cmap .box.two .pair{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px}
+.cmap .box.two .pair div{background:var(--sunk); border-radius:7px; padding:8px 10px}
+.cmap .arrow{align-self:center; color:var(--muted); font-size:18px}
+@media(max-width:700px){ .eqv{grid-template-columns:1fr} .cmap .arrow{display:none} }
+/* stage 2 · two-distribution layout */
+.clab{display:flex; flex-wrap:wrap; gap:2px 12px; align-items:baseline; font-size:12.5px; color:var(--ink2); margin:8px 0 2px}
+.clab b{font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--ink); font-size:12.5px}
+.clab .w{font-family:"IBM Plex Mono",monospace; font-weight:500}
+.clab .w.sd{color:var(--muted)} .clab .w.se{color:var(--accent)}
+.clab .zh{color:var(--muted)}
+.clab .expl{flex-basis:100%; font-size:11.5px; color:var(--muted); margin-top:-3px}
+.hub{margin:4px 0 2px; padding:8px 12px 6px; border-radius:8px; background:var(--sunk); border:1px dashed var(--line)}
+.xform{display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:center; gap:0 8px; text-align:center; font-size:12.5px; color:var(--ink2); line-height:1.3}
+.xform>span .zh{display:block; font-size:11px}
+@media(max-width:700px){ .xform{grid-template-columns:1fr} .xform .ar{transform:rotate(90deg)} }
+.xform .ar{color:var(--accent); font-size:15px; line-height:1}
+.hub .ctrls.hubrow{margin-top:8px; gap:6px 10px}
+.hub .slider{flex:1 1 150px; min-width:140px}
+.hub .fx{margin-top:5px}
+.xform b{font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--accent)}
+.xform .zh{color:var(--muted)}
+.fx{min-height:18px; font-size:12px; color:var(--muted); margin-top:6px; font-family:"IBM Plex Mono",monospace}
+.fx b{color:var(--signal); font-weight:500}
+.fx .zh{font-family:"Noto Sans TC","IBM Plex Sans",sans-serif; margin-left:8px}
+.eqv.three{grid-template-columns:1fr 1fr 1fr; margin-top:12px}
+.eqv.three div b{color:var(--accent)}
+.eqv.three div b.sd{color:var(--muted)} .eqv.three div b.p{color:var(--signal)}
+@media(max-width:700px){ .eqv.three{grid-template-columns:1fr} }
+h4.sub{font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:13px; letter-spacing:.04em; color:var(--accent); margin:16px 0 6px; font-weight:600}
+
+/* ---- phone layout (added v8.2) ---- */
+html{scroll-padding-top:104px}
+@media(max-width:919px){
+  .cols{display:flex; flex-direction:column}
+  .cols>div:not(.arg){order:-1}
+  .panel{scroll-margin-top:104px}
+}
+@media(max-width:700px){
+  body{font-size:14.5px}
+  .top-in{padding:7px 14px; gap:6px 10px}
+  .brand{font-size:15px}
+  .brand small{font-size:9.5px; letter-spacing:.10em}
+  .rail{gap:2px}
+  .rail button{padding:4px 10px; font-size:12px}
+  .wrap{padding-inline:12px}
+  .panel{padding-block:16px 0}
+  .rig{padding:12px 11px}
+  .rig h3{font-size:13.5px}
+  .arg .en{font-size:13.5px}
+  .readout{grid-template-columns:repeat(auto-fit,minmax(138px,1fr))}
+  .readout .v{font-size:17px}
+  .readout .k,.readout .sub{font-size:10.5px}
+  .hub{padding:8px 10px 6px}
+  .hub .slider{flex:1 1 100%; min-width:0}
+  .ctrls .act{flex:1 1 auto}
+  .legend{gap:5px 12px; font-size:11px}
+  .pq{font-size:15px; padding:12px 13px}
+  .formula.big{font-size:16px}
+  .equiv b{min-width:0; flex:0 0 46%}
+  .cmap .chain{flex-direction:column}
+}
+
+/* ---- Week 4 additions ---- */
+.rig .seg{margin-bottom:10px}
+.tbl-wrap{overflow-x:auto; margin:6px 0 10px}
+table.ctab{width:100%; border-collapse:collapse; font-size:13px; font-variant-numeric:tabular-nums}
+table.ctab th,table.ctab td{border:1px solid var(--line); padding:7px 9px; text-align:center}
+table.ctab th{font-weight:500; color:var(--ink2); background:var(--sunk); font-size:12px}
+table.ctab td .o{display:block; font-family:"IBM Plex Mono",monospace; font-size:18px; color:var(--ink)}
+table.ctab td .e{display:block; font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--gold); min-height:1.3em}
+table.ctab td .e.low{color:var(--signal); font-weight:600}
+table.ctab td.tot{color:var(--muted); font-family:"IBM Plex Mono",monospace}
+table.dmap{width:100%; border-collapse:collapse; font-size:12.5px; margin:10px 0 12px}
+table.dmap th,table.dmap td{border:1px solid var(--line); padding:8px 9px; vertical-align:top; text-align:left}
+table.dmap thead th{background:var(--sunk); font-weight:500; color:var(--ink2)}
+table.dmap tbody th{font-weight:500; color:var(--ink2); width:30%}
+table.dmap td b{display:block; color:var(--accent); font-weight:600}
+table.dmap td .zh{display:block; color:var(--muted); font-size:11.5px}
+table.dmap td.later{color:var(--muted); font-style:italic}
+.dq{margin:0 0 10px}
+.dq .k{display:block; font-size:11px; letter-spacing:.06em; color:var(--muted); margin-bottom:5px}
+.dq .seg{margin-bottom:0}
+.card5{border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:0 var(--r) var(--r) 0; background:var(--card); padding:12px 14px; margin-top:6px}
+.card5 .tn{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-size:21px; font-weight:600; color:var(--accent)}
+.card5 .tz{color:var(--ink2); font-size:13.5px; margin-bottom:8px}
+.card5 .lab{display:block; font-size:10.5px; letter-spacing:.08em; color:var(--muted); margin-top:10px; text-transform:uppercase}
+.card5 pre{margin:4px 0 0; padding:8px 10px; background:var(--sunk); border:1px solid var(--line); border-radius:7px; font-family:"IBM Plex Mono",monospace; font-size:12px; white-space:pre-wrap; word-break:break-word; color:var(--ink)}
+.card5 .apa{margin:4px 0 0; font-size:13.5px; line-height:1.55; color:var(--ink)}
+.card5 .apa i{font-style:italic}
+.card5 .ex{font-size:12px; color:var(--muted); margin-top:6px}
+.steps span{flex:1}
+@media(max-width:700px){ table.ctab td .o{font-size:16px} .card5 .tn{font-size:19px} }
+@media(max-width:700px){ #x2{grid-template-columns:1fr auto 1fr auto 1fr} #x2 .ar{transform:none} }
+/* ---- v2: concept-logic text ---- */
+.thread{display:flex; flex-wrap:wrap; gap:6px 8px; align-items:baseline; margin:14px 0 0; font-size:12.5px; color:var(--muted)}
+.thread .tq{font-weight:600; color:var(--ink); margin-right:4px}
+.thread .st{padding:3px 9px; border-radius:99px; border:1px solid var(--line); background:var(--card)}
+.thread .st[aria-current="true"]{background:var(--accent-soft); border-color:var(--accent); color:var(--ink)}
+.thread i.zh{font-style:normal; margin-left:5px; font-size:11px; color:var(--muted)}
+.lg{display:grid; gap:11px; margin:4px 0 14px}
+.lg .ln{border-left:2px solid var(--line); padding-left:12px}
+.lg .ln.k{border-left-color:var(--accent)}
+.lg .ln.k .en{font-weight:600}
+.arg .lg .ln p.en{margin:0; font-size:15px; line-height:1.5; color:var(--ink)}
+.arg .lg .ln p.zh{margin:3px 0 0; font-size:12.5px; line-height:1.5; color:var(--muted)}
+.arg .lg .ln.calc p.en{font-family:"IBM Plex Mono",monospace; font-size:14px; background:var(--sunk); border-radius:6px; padding:7px 10px}
+.dfn{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:9px 12px; margin-top:8px}
+.dfn b.t{display:block; font-size:12.5px; font-weight:600; color:var(--accent); margin-bottom:2px}
+.arg .dfn p.en{margin:0; font-size:13.5px; color:var(--ink2)}
+.arg .dfn p.zh{margin:2px 0 0; font-size:12px; color:var(--muted)}
+table.dmap th .zh{display:block; font-size:11px; color:var(--muted); font-weight:400}
+@media(max-width:700px){ .arg .lg .ln p.en{font-size:14.5px} .thread .st{font-size:11.5px} }
+.core{margin:14px 0 0; padding:10px 14px; border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 var(--r) var(--r) 0}
+.core p.en{margin:0; font-size:14.5px; font-weight:500; color:var(--ink)}
+.core p.zh{margin:3px 0 0; font-size:12.5px; color:var(--muted)}
+/* ---- v4: APA box, mini table ---- */
+.apa-box{margin-top:14px; border:1px solid var(--line); border-radius:var(--r); background:var(--card); padding:12px 14px}
+.apa-box b.t{display:block; font-size:11px; letter-spacing:.08em; color:var(--muted); font-weight:600; margin-bottom:6px}
+.apa-box p.sent{margin:0 0 8px; font-size:14px; line-height:1.6; color:var(--ink)}
+.apa-box b.hl{font-weight:600; background:var(--gold-soft); color:var(--ink); border-radius:4px; padding:0 3px; box-decoration-break:clone; -webkit-box-decoration-break:clone}
+.apa-key{margin:0; padding:0; list-style:none; display:grid; gap:4px}
+.apa-key li{font-size:12px; color:var(--ink2); line-height:1.45}
+.apa-key li b{font-weight:600; color:var(--ink); margin-right:4px}
+.apa-key li .zh{display:block; font-size:11.5px; color:var(--muted)}
+.goal{margin:4px 0 14px; border:1px solid var(--accent); border-radius:var(--r); background:var(--accent-soft); padding:10px 12px}
+.goal b.t{display:block; font-size:11px; letter-spacing:.08em; color:var(--accent); font-weight:600; margin-bottom:7px}
+.goal .g3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px}
+.goal .g3>div{background:var(--card); border-radius:6px; padding:7px 9px; min-width:0}
+.goal .k{display:block; font-size:11.5px; font-weight:600; color:var(--ink2); line-height:1.35}
+.goal .v{display:block; margin-top:4px; font-size:13.5px; font-weight:500; color:var(--ink); line-height:1.4; overflow-wrap:anywhere}
+.goal .zh{display:block; font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:11px; font-weight:400; color:var(--muted)}
+.goal p.gl{margin:8px 0 0; font-size:12.5px; color:var(--ink2)}
+.apa-box.read{border-color:var(--gold)}
+@media(max-width:560px){ .goal .g3{grid-template-columns:1fr} }
+table.mini{width:100%; border-collapse:collapse; font-size:12.5px; margin:2px 0 12px; font-variant-numeric:tabular-nums}
+table.mini th,table.mini td{border-bottom:1px solid var(--line); padding:5px 7px; text-align:right}
+table.mini th:first-child,table.mini td:first-child{text-align:left}
+table.mini th{font-weight:500; color:var(--muted); font-size:11.5px}
+table.mini tr.sum td{font-weight:600; color:var(--accent); border-bottom:0}
+/* ---- v5: stage 0 framework ---- */
+.flow4{display:grid; gap:4px; justify-items:center; margin:4px 0 14px}
+.flow4 .fb{width:100%; max-width:360px; text-align:center; background:var(--sunk); border:1px solid var(--line); border-radius:8px; padding:8px 12px; font-size:14px; font-weight:500; color:var(--ink)}
+.flow4 .fb .zh{display:block; font-size:12px; font-weight:400; color:var(--muted)}
+.flow4 .fb i{display:block; font-style:normal; font-size:12px; font-weight:400; color:var(--ink2); margin-top:4px}
+.flow4 .fa{color:var(--muted); font-size:16px; line-height:1}
+.flow4 .fsplit{display:grid; grid-template-columns:1fr 1fr; gap:8px; width:100%; max-width:360px}
+.flow4 .fb.ok{background:var(--card)}
+.flow4 .fb.rare{background:var(--signal-soft); border-color:var(--signal)}
+.excard{border:1px solid var(--line); border-radius:8px; background:var(--card); padding:10px 12px; margin-top:10px}
+.excard b.t{display:block; font-size:12.5px; color:var(--accent); margin-bottom:4px}
+.excard p{margin:0}
+.excard p.en{font-size:13px; color:var(--ink); margin-top:5px}
+.excard p.en b{font-weight:600; margin-right:4px}
+.excard p.zh{font-size:12px; color:var(--muted)}
+.excard p.q{color:var(--accent)}
+
+/* ---- Week 6 additions ---- */
+.eqv table.mini{margin:6px 0 8px}
+.eqv>div{min-width:0}
+.eqv .zh{display:block; color:var(--muted); font-size:11.5px}
+.verdict i{font-style:italic}
+.hub[hidden]{display:none!important}
+#r1t,#r1ci{font-size:16px}
+[hidden]{display:none!important}
+.legend i.ln-solid{width:22px; height:0; border-top:3px solid var(--gold); border-radius:0}
+.legend i.ln-dash{width:22px; height:0; border-top:3px dashed var(--accent); border-radius:0}
+.rig .seg + .seg{margin-top:-4px}
+.fm{display:grid; gap:10px; margin-top:10px}
+.fm label{display:block; font-size:12.5px; color:var(--ink2)}
+.fm label b{display:block; font-size:13px; color:var(--ink); margin-bottom:4px}
+.fm input[type=text],.fm textarea,.fm select{width:100%; font:inherit; font-size:14px; padding:8px 10px; border:1px solid var(--line); border-radius:7px; background:var(--card); color:var(--ink)}
+.fm textarea{min-height:110px; resize:vertical}
+.fm .note{font-size:12px; color:var(--muted); line-height:1.5}
+.fm .note .zh{display:block}
+.fm .note.bad{color:var(--signal)}
+.fm .note.ok{color:var(--accent)}
+.fm .ctrls{margin-top:2px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">兩個數值一起變嗎？<small>Week 6 · do they go together?</small></div>
+    <nav class="rail" id="rail" aria-label="stages"></nav>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="core"><p class="en">Two numbers measured on the same people, no IV: look at the scatterplot first, then ask how closely they go together (r) and how much one changes with the other (b).</p><p class="zh">同一群人身上量到兩個數值、沒有自變項：先看散布圖，再問兩者一起變得多緊密（r），以及一個變多少時另一個跟著變多少（b）。</p></div>
+
+<!-- ============ STAGE 0 ============ -->
+<section class="panel" id="p0">
+  <div class="eyebrow">stage 0 · same framework, new question</div>
+  <h2 class="title">Difference or relationship?</h2>
+  <div class="title-zh zh">差異，還是關係？</div>
+  <div class="cols">
+    <div class="arg">
+<div class="lg">
+<div class="ln"><p class="en">Week 4 ended with one sentence: no IV, only two numbers measured on the same people → a relationship, Week 6.</p><p class="zh">第四週最後一句：沒有自變項，只有同一群人身上量到的兩個數值 → 那是關係，第六週。</p></div>
+<div class="ln"><p class="en">“The same people, two numbers” can be two different questions.</p><p class="zh">「同一群人、兩個數值」可能是兩種不同的問題。</p></div>
+<div class="ln"><p class="en">The same variable measured twice (heart rate at baseline and after set 4): is there a difference? → paired t-test (Week 4).</p><p class="zh">同一個變項量兩次（基線和第 4 組後的心率）：有沒有差異？→ 配對 t 檢定（第四週）。</p></div>
+<div class="ln"><p class="en">Two different variables, each measured once (12-min run distance and VO₂max): do they go together? → a relationship (today).</p><p class="zh">兩個不同的變項，各量一次（12 分鐘跑距離和 VO₂max）：兩者會不會一起變？→ 關係（今天）。</p></div>
+<div class="ln"><p class="en">In a relationship study neither number is the IV or the DV: both are simply measured. r shows that they go together, not which one causes the other.</p><p class="zh">關係研究裡，兩個數值都不是自變項或依變項：兩個都只是量出來的。r 顯示兩者一起變，不顯示誰造成誰。</p></div>
+<div class="ln"><p class="en">A third thing can drive both: runners who train more cover more distance and also have a higher VO₂max. Whether you may speak of a cause comes from the design (random assignment, as in the Week 4 golf study), not from r or p.</p><p class="zh">可能有第三個因素同時影響兩者：訓練量大的跑者跑得比較遠，VO₂max 也比較高。能不能說「造成」，取決於研究設計（例如第四週高爾夫研究的隨機分派），不是取決於 r 或 p。</p></div>
+<div class="ln k"><p class="en">The framework does not change: assume H₀, compute a statistic, read p. Only the question and the tool change.</p><p class="zh">框架不變：先假設 H₀，算出統計量，讀 p。改變的只是問題和工具。</p></div>
+</div>
+<div class="goal"><b class="t">Goal: name the question · 目標：先說出是哪一種問題</b>
+<div class="g3"><div><span class="k">Difference 差異<span class="zh">same variable, compared 同一變項互相比較</span></span><span class="v">Welch t · paired t · χ²</span></div><div><span class="k">Relationship 關係<span class="zh">two variables, together 兩個變項一起看</span></span><span class="v">Pearson <i>r</i></span></div><div><span class="k">Prediction 預測<span class="zh">Y from X 用 X 預測 Y</span></span><span class="v">simple linear regression</span></div></div>
+<p class="gl">research question → difference or relationship? → tool → statistic + df + reference distribution → p<span class="zh">研究問題 → 差異還是關係？→ 工具 → 統計量 + 自由度 + 參考分配 → p</span></p></div>
+<div class="dfn"><b class="t">Relationship 關係</b><p class="en">Two variables measured on the same people move together: when one is higher, the other tends to be higher (or lower).</p><p class="zh">同一群人身上的兩個變項一起變動：一個比較高時，另一個傾向比較高（或比較低）。</p></div>
+<div class="dfn"><b class="t">ρ (rho) and r</b><p class="en">ρ is the correlation in the population; r is the one we compute from our sample. H₀ is about ρ.</p><p class="zh">ρ 是母體的相關；r 是從樣本算出來的相關。H₀ 講的是 ρ。</p></div>
+<div class="dfn"><b class="t">Correlation ≠ causation 相關 ≠ 因果</b><p class="en">Two measured numbers can go together because one drives the other, because a third thing drives both, or by chance in a small sample. The statistic cannot tell these apart; the study design can.</p><p class="zh">兩個量出來的數值一起變，可能是一個影響另一個、第三個因素同時影響兩者，或小樣本的巧合。統計量分不出這三種情況，研究設計才可以。</p></div>
+    </div>
+    <div class="rig">
+      <h3>One row = one person <span class="zh" style="color:var(--muted);font-weight:400">· 一列 = 一個人</span></h3>
+      <div class="eqv">
+        <div><b>Week 4 · difference 差異</b>
+          <table class="mini"><thead><tr><th>ID</th><th>HR baseline</th><th>HR set 4</th></tr></thead>
+          <tbody><tr><td>F</td><td>70</td><td>160</td></tr><tr><td>G</td><td>60</td><td>120</td></tr><tr><td>H</td><td>80</td><td>180</td></tr><tr><td>…</td><td>…</td><td>…</td></tr></tbody></table>
+          same variable (bpm), twice → subtract → paired t<br><span class="zh">同一個變項（bpm）量兩次 → 相減 → 配對 t</span></div>
+        <div><b>Week 6 · relationship 關係</b>
+          <table class="mini"><thead><tr><th>ID</th><th>km</th><th>VO₂max</th></tr></thead>
+          <tbody><tr><td>R01</td><td>2.10</td><td>40.7</td></tr><tr><td>R02</td><td>2.25</td><td>35.7</td></tr><tr><td>R03</td><td>2.35</td><td>44.8</td></tr><tr><td>…</td><td>…</td><td>…</td></tr></tbody></table>
+          two variables, different units → cannot subtract → do they go together?<br><span class="zh">兩個變項、單位不同 → 不能相減 → 兩者一起變嗎？</span></div>
+      </div>
+<div class="excard"><b class="t">Today’s study · 12 recreational runners 今天的研究：12 位休閒跑者</b>
+<p class="en"><b>Research question</b> Each runner did a 12-minute run (distance, km) and a lab VO₂max test (mL·kg⁻¹·min⁻¹). Can the 12-minute run stand in for the lab test?</p><p class="zh">研究問題：每位跑者做了 12 分鐘跑（距離，km）和實驗室 VO₂max 測驗（mL·kg⁻¹·min⁻¹）。12 分鐘跑可以代替實驗室測驗嗎？</p>
+<p class="en"><b>H₀</b> ρ = 0: distance and VO₂max have no straight-line relationship.</p><p class="zh">H₀：ρ = 0，距離和 VO₂max 沒有直線關係。</p>
+<p class="en"><b>H₁</b> ρ ≠ 0: they have one (positive or negative).</p><p class="zh">H₁：ρ ≠ 0，有直線關係（正或負）。</p>
+<p class="en q"><b>Why H₀</b> ρ ≠ 0 is infinitely many worlds with no single number; ρ = 0 is one exact number we can compute with.</p><p class="zh">為什麼用 H₀：ρ ≠ 0 包含無限多種情況，沒有單一數字；ρ = 0 是一個確定的數字，才能計算。</p></div>
+      <p class="src">Hypothetical demonstration data, n = 12.<br><span class="zh">假設的示範資料</span></p>
+
+      <h3 style="margin-top:18px">Your example 你的例子 <span class="zh" style="color:var(--muted);font-weight:400">· correlation that is not causation 有相關、沒有因果</span></h3>
+      <div class="excard" style="margin-top:6px">
+<p class="en">Think of two things in your own sport, training or daily life that go together, where one does <b>not</b> cause the other. Write 2–4 sentences <b>in English</b>: what the two things are, and what third thing could drive both.</p>
+<p class="zh">想一個你自己的運動、訓練或生活中的例子：兩件事會一起變，但其中一件並沒有造成另一件。用英文寫 2–4 句：這兩件事是什麼，以及什麼第三個因素可能同時影響兩者。</p>
+<p class="en">You may ask an AI for ideas. The example you submit must be your own, from your own experience, and written in your own words. Say below whether you used AI for ideas, for English, or both; for each, choose what you did with what the AI gave you.</p>
+<p class="zh">可以問 AI 找靈感，但交出來的例子必須是你自己的、來自你自己的經驗、用你自己的話寫。在下面註明有沒有用 AI 找靈感、翻譯或檢查英文；每一項都選一個答案，說明你怎麼處理 AI 給你的東西。</p>
+      </div>
+      <div class="fm">
+        <label for="exName"><b>Name 姓名</b><input type="text" id="exName" autocomplete="off" placeholder=""></label>
+        <label for="exText"><b>My example (English, 2–4 sentences) 我的例子（英文）</b><textarea id="exText" placeholder="X and Y go together in … because …; the third thing that could drive both is …"></textarea></label>
+        <label for="exIdeas"><b>Did you ask an AI for ideas? 你有沒有問 AI 找靈感？</b><select id="exIdeas"><option value="no">No 沒有</option><option value="yes">Yes 有</option></select></label>
+        <label for="exAudit" id="exAuditLab" hidden><b>What did you do with the AI’s suggestion? 你怎麼處理 AI 的建議？</b><select id="exAudit">
+          <option value="">— choose one 請選一項 —</option>
+          <option value="A">A · It was not from my own experience, so I replaced it with my own example. 不是我自己的經驗，所以換成我自己的例子</option>
+          <option value="B">B · It did not say what third thing drives both, so I added or changed that part. 沒有說明是什麼第三個因素同時影響兩者，我補上或修改了這部分</option>
+          <option value="C">C · One thing really did cause the other in its example, so I rejected it. 它的例子其實是一件事真的造成另一件，所以我不採用</option>
+          <option value="D">D · It was fine; I used it almost as it was. 沒有問題，我幾乎照用</option>
+          <option value="E">E · Other 其他</option>
+        </select></label>
+        <label for="exAuditOther" id="exAuditOtherLab" hidden><b>Other: what did you do, and why? 其他：你怎麼做，為什麼？</b><input type="text" id="exAuditOther" autocomplete="off" placeholder=""></label>
+        <label for="exTrans"><b>Did you use AI to translate or check your English? 你有沒有用 AI 翻譯或檢查英文？</b><select id="exTrans"><option value="no">No 沒有</option><option value="yes">Yes 有</option></select></label>
+        <label for="exTAudit" id="exTAuditLab" hidden><b>What did you do with the AI’s English? 你怎麼處理 AI 的英文？</b><select id="exTAudit">
+          <option value="">— choose one 請選一項 —</option>
+          <option value="T1">T1 · I wrote it in Chinese first, then read the AI’s English sentence by sentence; the meaning was what I meant. 我先用中文寫，再逐句看 AI 的英文，意思和我想的一樣</option>
+          <option value="T2">T2 · I changed a word or sentence the AI got wrong. 我改了 AI 寫錯的字或句子</option>
+          <option value="T3">T3 · I wrote it in English first and only asked the AI to check grammar. 我先用英文寫，只請 AI 檢查文法</option>
+          <option value="T4">T4 · I used the AI’s English as it was, without checking. 我沒有檢查，直接用 AI 的英文</option>
+          <option value="T5">T5 · Other 其他</option>
+        </select></label>
+        <label for="exTAuditOther" id="exTAuditOtherLab" hidden><b>Other: what did you do? 其他：你怎麼做？</b><input type="text" id="exTAuditOther" autocomplete="off" placeholder=""></label>
+        <label for="exTool" id="exToolLab" hidden><b>AI tool and version 工具與版本</b><input type="text" id="exTool" autocomplete="off" placeholder="e.g. ChatGPT (GPT-5), 2026-10-14"></label>
+        <div class="ctrls">
+          <button class="act" type="button" id="exSave">Save 儲存</button>
+          <button class="act ghost" type="button" id="exCopy">Copy 複製</button>
+        </div>
+        <div class="note" id="exNote">Save downloads W6_Example_&lt;your name&gt;.csv: upload it to Moodle. If the download does not start, press Copy and paste the text into Moodle.<span class="zh">儲存會下載 W6_Example_姓名.csv，請上傳到 Moodle；如果沒有下載，按「複製」再貼到 Moodle。</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 1 ============ -->
+<section class="panel" id="p1" hidden>
+  <div class="eyebrow">stage 1 · correlation</div>
+  <h2 class="title">Pearson’s r: do they go together?</h2>
+  <div class="title-zh zh">皮爾森相關 r：兩者一起變嗎？</div>
+  <div class="cols">
+    <div class="arg">
+<div class="lg">
+<div class="ln"><p class="en">Look first: the scatterplot. One dot = one runner: distance on the x-axis, VO₂max on the y-axis.</p><p class="zh">先看散布圖。一個點 = 一位跑者：x 軸是距離，y 軸是 VO₂max。</p></div>
+<div class="ln"><p class="en">r tells two things: the direction (+ rising, − falling) and how closely the dots lie along a straight line. It runs from −1 to +1; 0 means no straight-line relationship.</p><p class="zh">r 說明兩件事：方向（+ 上升、− 下降），以及點有多貼近一條直線。範圍 −1 到 +1；0 代表沒有直線關係。</p></div>
+</div>
+<div class="goal"><b class="t">Goal: r and its p · 目標：r 和它的 p</b><div class="g3"><div><span class="k">Statistic 統計量<span class="zh">how far from H₀ 離 H₀ 多遠</span></span><span class="v"><i>t</i> = <i>r</i> × √(n − 2) ÷ √(1 − <i>r</i>²)</span></div><div><span class="k">df 自由度</span><span class="v">n − 2 = 12 − 2 = 10</span></div><div><span class="k">Reference distribution 參考分配</span><span class="v"><i>t</i> distribution, both tails<span class="zh">t 分配，兩邊尾巴</span></span></div></div>
+<p class="gl">statistic + df + reference distribution → p → decision<span class="zh">統計量 + 自由度 + 參考分配 → p → 決定</span></p></div>
+<div class="lg"><div class="ln"><p class="en">The software computes r from all 12 dots, and its t:</p><p class="zh">軟體用全部 12 個點算出 r，以及它的 t：</p></div>
+<div class="ln calc"><p class="en"><i>t</i> = <i>r</i> × √(n − 2) ÷ √(1 − <i>r</i>²) = 0.72 × √10 ÷ √(1 − 0.72²) = 3.28</p></div></div>
+<div class="dfn"><b class="t">Scatterplot 散布圖</b><p class="en">One dot per person, one variable on each axis. Always look at it before you read r.</p><p class="zh">每人一個點，兩個軸各放一個變項。讀 r 之前一定要先看。</p></div>
+<div class="dfn"><b class="t">Pearson’s r 皮爾森相關係數</b><p class="en">Direction and closeness of a straight-line relationship, −1 to +1. r is itself an effect size; a rough guide: .10 small, .30 medium, .50 large.</p><p class="zh">直線關係的方向與緊密程度，−1 到 +1。r 本身就是效果量；粗略標準：.10 小、.30 中、.50 大。</p></div>
+<div class="dfn"><b class="t">Why df = n − 2 為什麼自由度是 n − 2</b><p class="en">Testing whether the population Pearson correlation is zero is equivalent to testing whether the slope in simple linear regression is zero. To fit that line, we estimate two parameters from the data: the intercept, which tells us where the line sits, and the slope, which tells us how steep it is. Estimating those two parameters leaves n − 2 residual degrees of freedom. With our twelve runners, that is 12 − 2 = 10.</p><p class="zh">檢定母體皮爾森相關是否為零，等同於檢定簡單線性迴歸的斜率是否為零。要擬合那條直線，我們必須從資料估計兩個參數：截距決定直線的位置，斜率決定直線的傾斜程度。估計了這兩個參數之後，剩下的殘差自由度就是 n − 2。我們有十二位跑者，所以是 12 − 2 = 10。</p></div>
+<div class="apa-box read"><b class="t">How to read 怎麼讀</b><p class="sent"><b class="hl"><i>r</i>(10) = .72, <i>p</i> = .008, 95% CI [.25, .92]</b></p><ul class="apa-key">
+<li><b><i>r</i> = .72</b> positive: runners who covered more distance tended to have a higher VO₂max; a large correlation.<span class="zh">正相關：跑得越遠的跑者，VO₂max 傾向越高；屬於大的相關。</span></li>
+<li><b>(10)</b> df = n − 2 = 12 − 2.<span class="zh">自由度 = n − 2 = 12 − 2。</span></li>
+<li><b><i>p</i> = .008</b> if ρ = 0 were true, an r at least this far from 0 would occur with probability .008 (both tails of <i>t</i>, df = 10).<span class="zh">如果 ρ = 0 成立，得到離 0 至少這麼遠的 r，機率是 .008（自由度 10 的 t 分配，兩邊尾巴）。</span></li>
+<li><b>95% CI [.25, .92]</b> the range of plausible ρ. It is wide because n = 12: the true correlation could be weak or very strong.<span class="zh">ρ 的合理範圍。n = 12，所以區間很寬：真正的相關可能很弱，也可能很強。</span></li>
+<li><b>Decision 決定</b> <i>p</i> &lt; .05 → reject H₀: distance and VO₂max were positively correlated.<span class="zh"><i>p</i> &lt; .05 → 拒絕 H₀：距離和 VO₂max 呈正相關。</span></li>
+<li><b>APA rules 規則</b> <i>r</i>, <i>p</i> in italics; df in brackets; two decimals for <i>r</i>, three for <i>p</i>; no leading 0 for <i>r</i> or <i>p</i> (neither can exceed 1).<span class="zh"><i>r</i>、<i>p</i> 用斜體；自由度寫在括號內；<i>r</i> 兩位小數、<i>p</i> 三位小數；<i>r</i> 和 <i>p</i> 都不寫小數點前的 0（兩者都不會大於 1）。</span></li></ul></div>
+<div class="apa-box"><b class="t">APA report 報告格式</b><p class="sent">Distance in the 12-minute run was positively correlated with VO₂max, <b class="hl"><i>r</i>(10) = .72</b>, <b class="hl"><i>p</i> = .008</b>, <b class="hl">95% CI [.25, .92]</b>.</p><ul class="apa-key">
+<li><b>positively correlated</b> the direction, in words<span class="zh">用文字寫出方向</span></li>
+<li><b><i>r</i>(10)</b> Pearson’s r; df = n − 2 in brackets<span class="zh">皮爾森 r；括號內是自由度 n − 2</span></li>
+<li><b><i>p</i></b> exact p, three decimals, no leading 0<span class="zh">精確 p 值，三位小數，不寫 0</span></li>
+<li><b>95% CI</b> range of plausible ρ<span class="zh">ρ 的 95% 信賴區間</span></li></ul></div>
+<h4 class="sub">Look again: one extra runner 再看一次散布圖：多一位跑者</h4>
+<div class="lg">
+<div class="ln"><p class="en">One extreme value can move any result: a mean, a t or an r. Add a runner at 3.10 km with a VO₂max of 38.0: r goes from .72 to .48 (p = .098, n = 13). Move him to 3.25 km and 57.0: r goes up to .79 (p = .001).</p><p class="zh">一個極端值可以移動任何結果：平均數、t 或 r。加入一位 3.10 km、VO₂max 38.0 的跑者：r 從 .72 變成 .48（p = .098，n = 13）。把他移到 3.25 km、57.0：r 升到 .79（p = .001）。</p></div>
+<div class="ln k"><p class="en">The rule is the same whichever way p moves: check the measurement. An error → correct it or leave it out, and say so. A real value → keep it and report it (you may add the result without it). Decide from the measurement, not from the p-value.</p><p class="zh">不論 p 往哪個方向變，規則都一樣：先檢查這筆測量。是錯誤 → 更正或排除，並說明。是真實數值 → 保留並報告（可以另外報告沒有它時的結果）。依測量本身決定，不要依 p 值決定。</p></div>
+</div>
+<div class="dfn"><b class="t">Outlier 離群值</b><p class="en">A point far from the pattern of the others. With a small n, one outlier can change r a lot.</p><p class="zh">遠離其他點整體型態的點。n 小的時候，一個離群值就能大幅改變 r。</p></div>
+<div class="dfn"><b class="t">One dot = one person 一點 = 一人</b><p class="en">Every test assumes independent observations. Do not put several measurements of the same person into one analysis as if they came from different people.</p><p class="zh">每一種檢定都假設觀察值互相獨立。不要把同一個人的多次測量，當成不同的人放進同一個分析。</p></div>
+<div class="dfn"><b class="t">Curved relationship 曲線關係</b><p class="en">r and the regression line measure straight lines only. A clear curve can give r near 0: that is why you look first.</p><p class="zh">r 和迴歸直線只量直線關係。明顯的曲線也可能得到接近 0 的 r：所以要先看圖。</p></div>
+    </div>
+    <div class="rig">
+      <h3>12-min run vs VO₂max <span class="zh" style="color:var(--muted);font-weight:400">· 12 分鐘跑與 VO₂max</span></h3>
+      <canvas id="c1" height="330" data-hm="290" aria-label="scatterplot of 12-minute run distance and VO2max for 12 runners"></canvas>
+      <div class="readout">
+        <div><span class="k">n</span><span class="v">12</span></div>
+        <div><span class="k">r</span><span class="v acc" id="r1r">0.72</span></div>
+        <div><span class="k">t(df)</span><span class="v" id="r1t">t(10) = 3.28</span></div>
+        <div><span class="k">p (two-sided 雙尾)</span><span class="v sig" id="r1p">.008</span></div>
+        <div><span class="k">95% CI of r</span><span class="v" id="r1ci">[.25, .92]</span></div>
+      </div>
+      <p class="src">Pearson r(10) = .72, p = .008 · hypothetical demonstration data (R01–R12)<br><span class="zh">假設的示範資料</span></p>
+
+      <h3 style="margin-top:16px">One extra runner <span class="zh" style="color:var(--muted);font-weight:400">· 多一位跑者</span></h3>
+      <div class="ctrls">
+        <button class="act" id="b3add">Add runner 13 加入第 13 位</button>
+        <button class="act ghost" id="b3reset">Remove 移除</button>
+      </div>
+      <canvas id="c3" height="300" data-hm="270" aria-label="scatterplot with an optional extra runner"></canvas>
+      <div class="hub" id="h3" hidden>
+        <div class="ctrls hubrow">
+          <label class="slider" for="x3">km <input type="range" id="x3" min="2.00" max="3.30" step="0.05" value="3.10"><span class="v" id="x3v">3.10</span></label>
+          <label class="slider" for="y3">VO₂max <input type="range" id="y3" min="32" max="58" step="0.5" value="38"><span class="v" id="y3v">38.0</span></label>
+        </div>
+      </div>
+      <div class="readout">
+        <div><span class="k">n</span><span class="v" id="r3n">12</span></div>
+        <div><span class="k">r</span><span class="v acc" id="r3r">0.72</span></div>
+        <div><span class="k">p (two-sided 雙尾)</span><span class="v sig" id="r3p">.008</span></div>
+      </div>
+      <div class="verdict" id="v3"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 2 ============ -->
+<section class="panel" id="p2" hidden>
+  <div class="eyebrow">stage 2 · simple linear regression</div>
+  <h2 class="title">Regression: how much, and a prediction</h2>
+  <div class="title-zh zh">迴歸：變多少，以及預測</div>
+  <div class="cols">
+    <div class="arg">
+<div class="lg">
+<div class="ln"><p class="en">Same data, new question: for each extra kilometre, how much higher is VO₂max? And what VO₂max do we predict for a runner who covers 2.80 km?</p><p class="zh">同一份資料，新的問題：每多跑 1 公里，VO₂max 高多少？跑 2.80 km 的跑者，我們預測他的 VO₂max 是多少？</p></div>
+<div class="ln"><p class="en">Correlation is symmetric: swap the two variables and r stays .72. Regression is not: you choose Y, the outcome you want to know, and X, the predictor you already have. The research question makes that choice, not the data.</p><p class="zh">相關是對稱的：兩個變項對調，r 還是 .72。迴歸不是：你要選 Y（你想知道的結果）和 X（你已經有的預測變項）。這個選擇由研究問題決定，不是由資料決定。</p></div>
+<div class="ln"><p class="en">Here: the lab test needs a metabolic cart, a technician and an hour per runner; the 12-minute run needs a track and a stopwatch, so every runner in a study can do it. We know the distance and want the VO₂max it points to: Y (outcome) = VO₂max, X (predictor) = distance.</p><p class="zh">這裡：實驗室測驗需要氣體分析儀、技術人員，每位跑者一小時；12 分鐘跑只需要跑道和碼錶，研究裡每位跑者都能做。我們知道距離，想知道它指向的 VO₂max：Y（結果）= VO₂max，X（預測變項）= 距離。</p></div>
+<div class="ln"><p class="en">The line: ŷ = a + b × x. b, the slope, is the change in Y for one unit of X. a, the intercept, is where the line meets x = 0.</p><p class="zh">直線：ŷ = a + b × x。b 是斜率：X 增加一個單位時，Y 的變化。a 是截距：直線在 x = 0 的位置。</p></div>
+<div class="ln"><p class="en">Swap the roles and the line changes. Predicting distance from VO₂max fits its own line, x̂ = 0.69 + 0.043 × y, by minimising the horizontal gaps instead of the vertical ones. Press “Both” on the right: two different lines, one r.</p><p class="zh">角色對調，直線就不一樣。用 VO₂max 預測距離時，會另外擬合一條直線 x̂ = 0.69 + 0.043 × y，縮小的是水平距離，不是垂直距離。按右邊的「兩條」：兩條不同的直線，同一個 r。</p></div>
+</div>
+<div class="goal"><b class="t">Goal: b and its p · 目標：b 和它的 p</b><div class="g3"><div><span class="k">Statistic 統計量<span class="zh">how far from H₀ (b = 0) 離 H₀ 多遠</span></span><span class="v"><i>t</i> = <i>b</i> ÷ SE<sub>b</sub></span></div><div><span class="k">df 自由度</span><span class="v">n − 2 = 10</span></div><div><span class="k">Reference distribution 參考分配</span><span class="v"><i>t</i> distribution, both tails<span class="zh">t 分配，兩邊尾巴</span></span></div></div>
+<p class="gl">With one X, the t and p of b are the same as those of r: one piece of evidence, read two ways.<span class="zh">只有一個 X 時，b 的 t 和 p 與 r 完全相同：同一份證據，兩種讀法。</span></p></div>
+<div class="lg"><div class="ln"><p class="en">The software does the arithmetic:</p><p class="zh">計算由軟體完成：</p></div>
+<div class="ln calc"><p class="en"><i>b</i> = <i>r</i> × SD<sub>Y</sub> ÷ SD<sub>X</sub> = 0.72 × 5.37 ÷ 0.32 = 12.08<br><i>t</i> = <i>b</i> ÷ SE<sub>b</sub> = 12.08 ÷ 3.68 = 3.28<br>ŷ = <i>a</i> + <i>b</i> × x = 13.30 + 12.08 × 2.80 = 47.12<br><i>R</i>² = <i>r</i>² = 0.72² = 0.52</p></div></div>
+<div class="dfn"><b class="t">Slope b 斜率</b><p class="en">Change in Y for one unit of X, in Y’s units: 12.08 mL·kg⁻¹·min⁻¹ per km (1.21 per 0.1 km).</p><p class="zh">X 增加一個單位時 Y 的變化，單位是 Y 的單位：每公里 12.08 mL·kg⁻¹·min⁻¹（每 0.1 km 1.21）。</p></div>
+<div class="dfn"><b class="t">Intercept a 截距</b><p class="en">ŷ at x = 0. Nobody runs 0 km in 12 minutes, so here a only positions the line; do not interpret it.</p><p class="zh">x = 0 時的 ŷ。沒有人 12 分鐘跑 0 km，所以這裡的 a 只負責決定直線的位置，不要解讀它。</p></div>
+<div class="dfn"><b class="t">R² 決定係數</b><p class="en">The share of the person-to-person differences in Y that go with X. R² = .52: 52% go with distance, 48% do not.</p><p class="zh">Y 在人與人之間的差異，有多少比例跟著 X 變。R² = .52：52% 跟距離有關，48% 無關。</p></div>
+<div class="dfn"><b class="t">Residual 殘差</b><p class="en">Observed Y − predicted ŷ: the vertical gap between a dot and the line. Here they run from −4.78 to +4.47.</p><p class="zh">觀察到的 Y − 預測的 ŷ：點和直線之間的垂直距離。這裡從 −4.78 到 +4.47。</p></div>
+<div class="apa-box read"><b class="t">How to read 怎麼讀</b><p class="sent"><b class="hl"><i>b</i> = 12.08, 95% CI [3.88, 20.28], <i>t</i>(10) = 3.28, <i>p</i> = .008; <i>R</i>² = .52, <i>F</i>(1, 10) = 10.76</b></p><ul class="apa-key">
+<li><b><i>b</i> = 12.08</b> each extra kilometre went with a VO₂max 12.08 mL·kg⁻¹·min⁻¹ higher, on average.<span class="zh">平均而言，每多跑 1 公里，VO₂max 高 12.08 mL·kg⁻¹·min⁻¹。</span></li>
+<li><b>95% CI [3.88, 20.28]</b> plausible slopes; it excludes 0 ⇔ <i>p</i> &lt; .05. It is wide because n = 12.<span class="zh">斜率的合理範圍；不含 0 ⇔ <i>p</i> &lt; .05。n = 12，所以很寬。</span></li>
+<li><b><i>t</i>(10) = 3.28, <i>p</i> = .008</b> the slope is 3.28 SEs from 0; the same t and p as r.<span class="zh">斜率離 0 有 3.28 個 SE；和 r 的 t、p 相同。</span></li>
+<li><b><i>R</i>² = .52</b> 52% of the differences in VO₂max go with distance.<span class="zh">VO₂max 的差異有 52% 跟距離有關。</span></li>
+<li><b><i>F</i>(1, 10) = 10.76</b> the test of the whole model. With one X, F = t² (3.28² = 10.76) and p is the same.<span class="zh">整個模型的檢定。只有一個 X 時，F = t²（3.28² = 10.76），p 也相同。</span></li>
+<li><b>Decision 決定</b> for the group, the 12-minute run tracks VO₂max. For one runner, the line misses by up to 4.78: keep the lab test when an individual value matters (e.g. training zones).<span class="zh">以整組來說，12 分鐘跑能反映 VO₂max。但對個人，直線可能差到 4.78：需要個人準確數值時（例如訓練強度區間），還是要做實驗室測驗。</span></li>
+<li><b>APA rules 規則</b> <i>b</i>, <i>t</i>, <i>p</i>, <i>R</i>², <i>F</i> in italics; two decimals; no leading 0 for <i>p</i> or <i>R</i>² (neither can exceed 1); report b with its unit.<span class="zh"><i>b</i>、<i>t</i>、<i>p</i>、<i>R</i>²、<i>F</i> 用斜體；兩位小數；<i>p</i> 和 <i>R</i>² 不寫小數點前的 0（都不會大於 1）；b 要附單位。</span></li></ul></div>
+<div class="apa-box"><b class="t">APA report 報告格式</b><p class="sent">Distance in the 12-minute run predicted VO₂max, <b class="hl"><i>b</i> = 12.08</b>, <b class="hl">95% CI [3.88, 20.28]</b>, <b class="hl"><i>t</i>(10) = 3.28</b>, <b class="hl"><i>p</i> = .008</b>: each extra kilometre went with a 12.08 mL·kg⁻¹·min⁻¹ higher VO₂max. The model explained 52% of the variance, <b class="hl"><i>R</i>² = .52</b>, <b class="hl"><i>F</i>(1, 10) = 10.76</b>, <i>p</i> = .008.</p><ul class="apa-key">
+<li><b><i>b</i></b> slope, with its meaning in units<span class="zh">斜率，並寫出單位的意義</span></li>
+<li><b>95% CI</b> range of plausible slopes<span class="zh">斜率的 95% 信賴區間</span></li>
+<li><b><i>t</i>(10), <i>p</i></b> test of the slope; df = n − 2<span class="zh">斜率的檢定；自由度 = n − 2</span></li>
+<li><b><i>R</i>²</b> share of variance explained<span class="zh">解釋的變異比例</span></li>
+<li><b><i>F</i>(1, 10)</b> model test: 1 predictor, n − 2 = 10<span class="zh">模型檢定：1 個預測變項，n − 2 = 10</span></li></ul></div>
+<h4 class="sub">Can one tool replace another? 一種工具可以取代另一種嗎？</h4>
+<div class="lg">
+<div class="ln"><p class="en">The same question in biomechanics. An IMU and a force plate measure the same ten jumps: r(8) = .99, yet the IMU reads 3.06 cm higher on average. r says the two move together, not that they give the same value.</p><p class="zh">生物力學也有同樣的問題。IMU 和測力板量同樣 10 次跳躍：r(8) = .99，但 IMU 平均高 3.06 cm。r 只說兩者一起變，不代表數值相同。</p></div>
+<div class="ln k"><p class="en">Agreement between two tools (validity or reliability) is a different question. Correlation tells us how the two measurements vary together, not how far apart their values are. Bland–Altman analysis and an appropriate ICC can help assess agreement, but interchangeability must be judged against an acceptable error range for the intended use.</p><p class="zh">兩種工具之間的一致性（效度或信度）是另一個問題。相關告訴我們兩種測量如何一起變動，不是它們的數值相差多少。Bland–Altman 分析和合適的 ICC 可以協助評估一致性，但能否互換，必須依照預定用途可接受的誤差範圍來判斷。</p></div>
+</div>
+    </div>
+    <div class="rig">
+      <h3>The line through the runners <span class="zh" style="color:var(--muted);font-weight:400">· 穿過跑者的直線</span></h3>
+      <div class="seg" id="s2d" role="group" aria-label="direction">
+        <button type="button" data-d="fwd" aria-pressed="true">VO₂max from distance 用距離預測 VO₂max</button>
+        <button type="button" data-d="rev" aria-pressed="false">Distance from VO₂max 用 VO₂max 預測距離</button>
+        <button type="button" data-d="both" aria-pressed="false">Both 兩條</button>
+      </div>
+      <div class="seg" id="s2v" role="group" aria-label="residuals">
+        <button type="button" data-v="line" aria-pressed="true">Residuals off 不顯示殘差</button>
+        <button type="button" data-v="res" aria-pressed="false">Residuals on 顯示殘差</button>
+      </div>
+      <canvas id="c2" height="330" data-hm="290" aria-label="scatterplot with the forward and reverse regression lines, residuals and a prediction"></canvas>
+      <div class="legend"><span><i class="ln-solid"></i>forward, solid: VO₂max from distance, vertical residuals 正向（實線）：用距離預測 VO₂max，垂直殘差</span><span><i class="ln-dash"></i>reverse, dashed: distance from VO₂max, horizontal residuals 反向（虛線）：用 VO₂max 預測距離，水平殘差</span></div>
+      <div class="hub">
+        <div class="ctrls hubrow">
+          <label class="slider" id="sl2" for="x2">Predict at x 預測 x <input type="range" id="x2" min="2.10" max="3.15" step="0.05" value="2.80"><span class="v" id="x2v">2.80</span></label>
+        </div>
+        <div class="fx" id="f2">ŷ = 13.30 + 12.08 × 2.80 = 47.12</div>
+      </div>
+      <div class="readout" id="ro2f">
+        <div><span class="k">b (per km 每 km)</span><span class="v acc">12.08</span></div>
+        <div><span class="k">a (intercept 截距)</span><span class="v">13.30</span></div>
+        <div><span class="k">R²</span><span class="v">.52</span></div>
+        <div><span class="k">ŷ at x 預測值</span><span class="v sig" id="r2y">47.12</span></div>
+      </div>
+      <div class="readout" id="ro2r" hidden>
+        <div><span class="k">b (km per mL·kg⁻¹·min⁻¹)</span><span class="v acc">0.043</span></div>
+        <div><span class="k">a (intercept 截距, km)</span><span class="v">0.69</span></div>
+        <div><span class="k">R²</span><span class="v">.52</span></div>
+        <div><span class="k">r (same both ways 兩個方向相同)</span><span class="v">.72</span></div>
+      </div>
+      <p class="src">Both lines are fitted separately to the same 12 runners on the same axes. The forward slider only moves along the data range (2.10–3.15 km): outside it, the line is a guess. Forward residuals are in VO₂max units, reverse residuals in km: do not compare their sizes.<br><span class="zh">兩條直線各自用同樣 12 位跑者、同樣的座標軸擬合。正向滑桿只在資料範圍內（2.10–3.15 km）移動：超出範圍，直線只是猜測。正向殘差的單位是 VO₂max，反向殘差的單位是 km：不要比較兩者的大小。</span></p>
+
+      <h3 style="margin-top:16px">IMU vs force plate <span class="zh" style="color:var(--muted);font-weight:400">· IMU 與測力板</span></h3>
+      <canvas id="c3b" height="260" data-hm="240" aria-label="IMU and force plate jump heights with the line of equal values"></canvas>
+      <div class="legend"><span><i style="background:var(--accent)"></i>one jump 一次跳躍</span><span><i style="background:var(--muted)"></i>dashed: IMU = force plate 虛線：兩者相同</span></div>
+      <div class="readout">
+        <div><span class="k">r(8)</span><span class="v acc">.99</span></div>
+        <div><span class="k">IMU − force plate (mean 平均)</span><span class="v sig">+3.06 cm</span></div>
+      </div>
+      <p class="src">Hypothetical data: 10 jumps measured by both tools. Every dot lies above the dashed line.<br><span class="zh">假設資料：10 次跳躍同時用兩種工具測量。每個點都在虛線上方。</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 3 ============ -->
+<section class="panel" id="p3" hidden>
+  <div class="eyebrow">stage 3 · choosing the tool</div>
+  <h2 class="title">Choosing the tool: two tables</h2>
+  <div class="title-zh zh">選擇工具：兩張表</div>
+  <div class="cols">
+    <div class="arg">
+<div class="lg">
+<div class="ln k"><p class="en">First question: is there an IV that makes groups or conditions? If yes, use the Week 4 map (table 1). If no, you have two measured numbers: ask what the research question wants (table 2).</p><p class="zh">第一個問題：有沒有決定分組或條件的自變項？有 → 用第四週的對照表（表一）。沒有 → 你手上是兩個量出來的數值：問研究問題想知道什麼（表二）。</p></div>
+</div>
+<h4 class="sub">Table 1 · a difference 表一：差異</h4>
+<div class="tbl-wrap"><table class="dmap">
+  <thead><tr><th></th><th>IV: different people<span class="zh">自變項：不同的人</span></th><th>IV: same people<span class="zh">自變項：同一群人</span></th></tr></thead>
+  <tbody>
+    <tr><th>DV: number<span class="zh">依變項：數值</span></th><td><b>Independent t (Welch)</b><span class="zh">獨立樣本 t</span></td><td><b>Paired t</b><span class="zh">配對 t</span></td></tr>
+    <tr><th>DV: category<span class="zh">依變項：類別</span></th><td><b>χ² test</b> · expected &lt; 5 → <b>Fisher</b><span class="zh">卡方 · 期望 &lt; 5 用 Fisher</span></td><td class="later">McNemar (not in this course)<span class="zh">本課不教</span></td></tr>
+    <tr><th>IV with 3 + groups · 2 + IVs<span class="zh">自變項三組以上 · 兩個以上自變項</span></th><td class="later" colspan="2">→ Week 7 (ANOVA) · Week 8 (two-way ANOVA)</td></tr>
+  </tbody>
+</table></div>
+<h4 class="sub">Table 2 · a relationship, a prediction, or agreement 表二：關係、預測或一致性</h4>
+<div class="tbl-wrap"><table class="dmap">
+  <thead><tr><th>Question<span class="zh">問題</span></th><th>Variables / design<span class="zh">變項／設計</span></th><th>Method<span class="zh">方法</span></th></tr></thead>
+  <tbody>
+    <tr><th>Do they go together?<span class="zh">一起變嗎？</span></th><td>Two measured numerical variables<span class="zh">兩個量得的數值變項</span></td><td><b>Pearson r</b><span class="zh">皮爾森相關</span></td></tr>
+    <tr><th>How much / predict?<span class="zh">變多少／預測？</span></th><td>One numerical outcome and one numerical predictor<span class="zh">一個數值結果與一個數值預測變項</span></td><td><b>Simple linear regression</b><span class="zh">簡單線性迴歸</span></td></tr>
+    <tr><th>Do two tools agree?<span class="zh">兩種工具測得的值有多一致？</span></th><td>The same quantity measured by two tools on matched observations<span class="zh">同一個量、兩種工具、對應觀測值</span></td><td class="later">Bland–Altman, appropriate ICC</td></tr>
+  </tbody>
+</table></div>
+<div class="dfn"><b class="t">Predictor and outcome 預測變項與結果</b><p class="en">In regression, X is the predictor and Y is the outcome (依變項（DV）). In correlation, neither is the IV: both are simply measured.</p><p class="zh">迴歸中，X 是預測變項，Y 是結果（依變項（DV））。相關中，兩個都不是自變項：兩個都只是量出來的數值。</p></div>
+    </div>
+    <div class="rig">
+      <h3>Answer the questions 回答問題</h3>
+      <div class="dq"><span class="k">1 · Is there an IV that makes groups or conditions? 有沒有決定分組或條件的自變項？</span>
+        <div class="seg" id="s4i" role="group" aria-label="IV">
+          <button type="button" data-i="yes" aria-pressed="false">yes 有</button>
+          <button type="button" data-i="no" aria-pressed="true">no: two measured numbers 沒有：兩個量出來的數值</button>
+        </div></div>
+      <div class="dq" id="dq4"><span class="k">2 · What does the research question want? 研究問題想知道什麼？</span>
+        <div class="seg" id="s4q" role="group" aria-label="question">
+          <button type="button" data-q="rel" aria-pressed="true">go together? 一起變嗎？</button>
+          <button type="button" data-q="pred" aria-pressed="false">how much / predict? 變多少／預測？</button>
+        </div></div>
+      <div class="card5" id="k4"></div>
+      <p class="src">APA 7: italic <i>r</i>, <i>b</i>, <i>t</i>, <i>p</i>, <i>R</i>², <i>F</i>; no leading zero for values that cannot exceed 1.<br><span class="zh">APA 第 7 版格式</span></p>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div>Fall 2026 生物統計與實驗設計 · Week 6 · NTNU</div>
+  <div class="nav">
+    <button class="act ghost" id="prev">← Back 上一步</button>
+    <button class="act" id="next">Next 下一步 →</button>
+  </div>
+</footer>
+</div>
+
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+function mean(a){for(var i=0,s=0;i<a.length;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;i<a.length;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function lgam(x){var c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,.001208650973866179,-.000005395239384953];
+  var y=x,t=x+5.5;t-=(x+.5)*Math.log(t);var s=1.000000000190015;for(var j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x)}
+function bcf(a,b,x){var F=1e-300,qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<F)d=F;d=1/d;var h=d;
+  for(var m=1;m<=300;m++){var m2=2*m,aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<F)d=F;c=1+aa/c;if(Math.abs(c)<F)c=F;d=1/d;h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<F)d=F;c=1+aa/c;if(Math.abs(c)<F)c=F;d=1/d;var del=d*c;h*=del;if(Math.abs(del-1)<3e-13)break}return h}
+function ibeta(x,a,b){if(x<=0)return 0;if(x>=1)return 1;
+  var bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2)?bt*bcf(a,b,x)/a:1-bt*bcf(b,a,1-x)/b}
+function p2t(t,df){return ibeta(df/(df+t*t),df/2,.5)}
+function pTxt(p){return p<.001?'< .001':p.toFixed(3).replace(/^0/,'')}
+function rTxt(r){return r.toFixed(2).replace(/^(-?)0/,'$1').replace('-','−')}
+function f2(x){return x.toFixed(2).replace('-','−')}
+function cor(x,y){var mx=mean(x),my=mean(y),sxy=0,sxx=0,syy=0;for(var i=0;i<x.length;i++){var a=x[i]-mx,b=y[i]-my;sxy+=a*b;sxx+=a*a;syy+=b*b}return sxy/Math.sqrt(sxx*syy)}
+function rtest(x,y){var n=x.length,r=cor(x,y),t=r*Math.sqrt(n-2)/Math.sqrt(1-r*r),p=p2t(t,n-2),z=.5*Math.log((1+r)/(1-r)),se=1/Math.sqrt(n-3);
+  return{n:n,r:r,t:t,df:n-2,p:p,lo:Math.tanh(z-1.959964*se),hi:Math.tanh(z+1.959964*se)}}
+function fitline(x,y){var r=cor(x,y),b=r*sd(y)/sd(x);return{b:b,a:mean(y)-b*mean(x)}}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+var T={};
+function theme(){T={ink:css('--ink'),ink2:css('--ink2'),muted:css('--muted'),line:css('--line'),acc:css('--accent'),
+  accs:css('--accent-soft'),sig:css('--signal'),sigs:css('--signal-soft'),gold:css('--gold'),card:css('--card'),sunk:css('--sunk')}}
+theme();
+var CW=600,FS=1,NARROW=false;
+function fit(cv){if(!cv.dataset.h)cv.dataset.h=cv.getAttribute('height');
+  var d=window.devicePixelRatio||1,w=cv.clientWidth||600;NARROW=w<560;CW=w;FS=w<420?1.08:1;
+  var h=parseInt((NARROW&&cv.dataset.hm)?cv.dataset.hm:cv.dataset.h,10);
+  cv.width=Math.round(w*d);cv.height=Math.round(h*d);var g=cv.getContext('2d');g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,w,h);return{g:g,w:w,h:h}}
+function lbl(g,t,x,y,c,sz,al){g.fillStyle=c;g.font=((sz||11)*FS).toFixed(1)+'px "IBM Plex Mono", monospace';
+  al=al||'center';g.textAlign=al;var m=g.measureText(t).width,L=(al==='left')?x:(al==='right')?x-m:x-m/2;
+  if(L+m>CW-2)x-=(L+m-(CW-2));if(L<2)x+=(2-L);g.fillText(t,x,y)}
+function line(g,x1,y1,x2,y2,c,w,dash){g.strokeStyle=c;g.lineWidth=w||1;g.setLineDash(dash||[]);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([])}
+function dot(g,x,y,r,fill,stroke){g.beginPath();g.arc(x,y,r,0,2*Math.PI);g.fillStyle=fill;g.fill();if(stroke){g.strokeStyle=stroke;g.lineWidth=1.5;g.stroke()}}
+function el(id){return document.getElementById(id)}
+function segSet(box,attr,val){[].forEach.call(box.children,function(b){b.setAttribute('aria-pressed',b.dataset[attr]===val?'true':'false')})}
+
+/* ---------- data (hypothetical demonstration data) ---------- */
+var KM=[2.10,2.25,2.35,2.45,2.50,2.50,2.65,2.75,2.85,2.85,3.05,3.15];
+var VO=[40.7,35.7,44.8,39.0,44.5,47.6,41.2,49.8,44.0,52.2,46.2,53.8];
+var FP=[24.1,27.5,29.8,31.2,33.6,35.0,37.4,39.9,42.3,45.1];
+var IMU=[27.7,29.7,33.9,33.8,37.5,37.0,40.7,42.3,46.5,47.4];
+var L=fitline(KM,VO);
+
+/* ---------- generic scatter frame ---------- */
+function frame(cv,xr,yr,xt,yt,xlab,ylab){var o=fit(cv),g=o.g,w=o.w,h=o.h;
+  var P={l:NARROW?40:48,r:14,t:14,b:NARROW?40:44};
+  var X=function(v){return P.l+(v-xr[0])/(xr[1]-xr[0])*(w-P.l-P.r)},Y=function(v){return h-P.b-(v-yr[0])/(yr[1]-yr[0])*(h-P.t-P.b)};
+  g.fillStyle=T.card;g.fillRect(0,0,w,h);
+  xt.forEach(function(v){line(g,X(v),P.t,X(v),h-P.b,T.line,1);lbl(g,(xt.dec!==undefined?v.toFixed(xt.dec):String(v)),X(v),h-P.b+15,T.muted,10.5)});
+  yt.forEach(function(v){line(g,P.l,Y(v),w-P.r,Y(v),T.line,1);lbl(g,String(v),P.l-6,Y(v)+4,T.muted,10.5,'right')});
+  lbl(g,xlab,(P.l+w-P.r)/2,h-6,T.ink2,11);
+  g.save();g.translate(12,(P.t+h-P.b)/2);g.rotate(-Math.PI/2);var yl=NARROW?ylab.split(' (')[0]:ylab;g.fillStyle=T.ink2;g.font=(11*FS).toFixed(1)+'px "IBM Plex Mono", monospace';g.textAlign='center';g.fillText(yl,0,0);g.restore();
+  return{g:g,w:w,h:h,X:X,Y:Y,P:P}}
+var XR=[2.0,3.3],YR=[32,58],XT=[2.0,2.2,2.4,2.6,2.8,3.0,3.2],YT=[35,40,45,50,55];
+var XL='12-min run distance (km) 12 分鐘跑距離',YL='VO₂max (mL·kg⁻¹·min⁻¹)';
+
+/* ---------- stage 1 ---------- */
+function s1draw(){var F=frame(el('c1'),XR,YR,XT,YT,XL,YL);
+  for(var i=0;i<KM.length;i++)dot(F.g,F.X(KM[i]),F.Y(VO[i]),5.5,T.acc,T.card)}
+
+/* ---------- stage 2 ---------- */
+var S2='line',S2D='fwd';
+var LR=fitline(VO,KM);                     /* reverse model fitted on its own: x-hat = a + b*y (km per unit VO2max) */
+var VMIN=Math.min.apply(null,VO),VMAX=Math.max.apply(null,VO);
+function s2draw(){var F=frame(el('c2'),XR,YR,XT,YT,XL,YL),g=F.g,xv=parseFloat(el('x2').value),yh=13.30+12.08*xv;
+  var fwd=(S2D!=='rev'),rev=(S2D!=='fwd');
+  if(S2==='res'){
+    if(fwd)for(var i=0;i<KM.length;i++)line(g,F.X(KM[i]),F.Y(VO[i]),F.X(KM[i]),F.Y(L.a+L.b*KM[i]),T.gold,1.6);
+    if(rev)for(var k=0;k<KM.length;k++)line(g,F.X(KM[k]),F.Y(VO[k]),F.X(LR.a+LR.b*VO[k]),F.Y(VO[k]),T.acc,1.6,[3,3])}
+  if(fwd)line(g,F.X(2.10),F.Y(L.a+L.b*2.10),F.X(3.15),F.Y(L.a+L.b*3.15),T.gold,2.4);
+  if(rev)line(g,F.X(LR.a+LR.b*VMIN),F.Y(VMIN),F.X(LR.a+LR.b*VMAX),F.Y(VMAX),T.acc,2.4,[8,5]);
+  for(var j=0;j<KM.length;j++)dot(g,F.X(KM[j]),F.Y(VO[j]),5.5,T.acc,T.card);
+  if(fwd){line(g,F.X(xv),F.h-F.P.b,F.X(xv),F.Y(yh),T.ink2,1,[4,4]);line(g,F.P.l,F.Y(yh),F.X(xv),F.Y(yh),T.ink2,1,[4,4]);
+    dot(g,F.X(xv),F.Y(yh),6.5,T.sig,T.card);lbl(g,'ŷ = '+f2(yh),F.X(xv)+8,F.Y(yh)-9,T.sig,11,'left');
+    lbl(g,'forward ŷ = 13.30 + 12.08x',F.X(3.25),F.Y(33.5),T.gold,11,'right')}
+  if(rev)lbl(g,'reverse x̂ = 0.69 + 0.043y',F.X(2.05),F.Y(57),T.acc,11,'left');
+  el('x2v').textContent=xv.toFixed(2);el('r2y').textContent=f2(yh);
+  el('sl2').hidden=!fwd;el('ro2f').hidden=!fwd;el('ro2r').hidden=!rev;
+  var fx=fwd?('ŷ = <i>a</i> + <i>b</i> × x = 13.30 + 12.08 × '+xv.toFixed(2)+' = '+f2(13.30+12.08*xv)+(S2==='res'?'<span class="zh">正向殘差 = 觀察值 − 預測值（垂直，VO₂max 單位）</span>':'')):'';
+  if(rev)fx+=(fwd?'<br>':'')+'x̂ = <i>a</i> + <i>b</i> × y = 0.69 + 0.043 × y, km'+(S2==='res'?'<span class="zh">反向殘差 = 觀察值 − 預測值（水平，km 單位）</span>':'');
+  el('f2').innerHTML=fx}
+el('s2v').onclick=function(e){var b=e.target.closest('button');if(!b)return;S2=b.dataset.v;segSet(this,'v',S2);s2draw()};
+el('s2d').onclick=function(e){var b=e.target.closest('button');if(!b)return;S2D=b.dataset.d;segSet(this,'d',S2D);s2draw()};
+el('x2').oninput=s2draw;
+
+/* ---------- stage 3 ---------- */
+var S3on=false;
+function s3data(){var x=KM.slice(),y=VO.slice();if(S3on){x.push(parseFloat(el('x3').value));y.push(parseFloat(el('y3').value))}return{x:x,y:y}}
+function s3draw(){var F=frame(el('c3'),XR,YR,XT,YT,XL,YL),g=F.g,d=s3data(),R=rtest(d.x,d.y),Ln=fitline(d.x,d.y);
+  if(S3on){var L0=L;line(g,F.X(2.10),F.Y(L0.a+L0.b*2.10),F.X(3.15),F.Y(L0.a+L0.b*3.15),T.muted,1.4,[5,4])}
+  line(g,F.X(2.05),F.Y(Ln.a+Ln.b*2.05),F.X(3.25),F.Y(Ln.a+Ln.b*3.25),T.gold,2.2);
+  for(var i=0;i<12;i++)dot(g,F.X(KM[i]),F.Y(VO[i]),5.5,T.acc,T.card);
+  if(S3on){var xx=F.X(d.x[12]),yy=F.Y(d.y[12]);dot(g,xx,yy,7,T.sig,T.card);lbl(g,'runner 13',xx-9,yy+4,T.sig,11,'right')}
+  el('r3n').textContent=R.n;el('r3r').textContent=f2(R.r);el('r3p').textContent=pTxt(R.p);
+  el('x3v').textContent=parseFloat(el('x3').value).toFixed(2);el('y3v').textContent=parseFloat(el('y3').value).toFixed(1);
+  el('v3').innerHTML=S3on?('<span class="en">With runner 13: <i>r</i>('+R.df+') = '+rTxt(R.r)+', <i>p</i> '+(R.p<.001?'< .001':'= '+pTxt(R.p))+'. The dashed line is the fit without runner 13; one point moved it. Check the measurement before you trust either r.</span><span class="zh">加入第 13 位：r 變成 '+rTxt(R.r)+'。虛線是沒有第 13 位時的直線；一個點就把它移動了。相信任何一個 r 之前，先檢查這筆測量。</span>'):
+    '<span class="en">Twelve runners: <i>r</i>(10) = .72, <i>p</i> = .008. Add runner 13 and move the sliders.</span><span class="zh">12 位跑者：r(10) = .72，p = .008。加入第 13 位，拉動滑桿看看。</span>'}
+el('b3add').onclick=function(){S3on=true;el('h3').hidden=false;el('x3').value=3.10;el('y3').value=38;s3draw()};
+el('b3reset').onclick=function(){S3on=false;el('h3').hidden=true;s3draw()};
+el('x3').oninput=s3draw;el('y3').oninput=s3draw;
+function s3bdraw(){var F=frame(el('c3b'),[22,50],[22,50],[25,30,35,40,45],[25,30,35,40,45],'force plate jump height (cm) 測力板','IMU (cm)'),g=F.g;
+  line(g,F.X(22),F.Y(22),F.X(50),F.Y(50),T.muted,1.4,[6,4]);lbl(g,'IMU = force plate',F.X(49.5),F.Y(44.6),T.muted,10.5,'right');
+  for(var i=0;i<FP.length;i++){line(g,F.X(FP[i]),F.Y(FP[i]),F.X(FP[i]),F.Y(IMU[i]),T.sig,1);dot(g,F.X(FP[i]),F.Y(IMU[i]),5,T.acc,T.card)}}
+XT.dec=1;
+
+/* ---------- stage 4 ---------- */
+var S4={i:'no',q:'rel'};
+var CARD={
+ rel:{n:'Pearson correlation',z:'皮爾森相關',r:'df <- read.csv("PASTE YOUR OWN LOCATION/W6_Runners_Demo_Data_2026.csv")\nplot(df$Distance12_km, df$VO2max)\ncor.test(df$Distance12_km, df$VO2max)',
+   j:'Regression → Correlation Matrix\nDistance12_km and VO2max → box · tick Confidence intervals\nExploration → Scatterplot to look first',
+   a:'Distance in the 12-minute run was positively correlated with VO₂max, <i>r</i>(10) = .72, <i>p</i> = .008, 95% CI [.25, .92].',x:'Stage 1 · 12 runners · the scatterplot first, then the test'},
+ pred:{n:'Simple linear regression',z:'簡單線性迴歸',r:'df <- read.csv("PASTE YOUR OWN LOCATION/W6_Runners_Demo_Data_2026.csv")\nm <- lm(VO2max ~ Distance12_km, data = df)\nsummary(m)\nconfint(m)\nplot(df$Distance12_km, df$VO2max)\nabline(m)',
+   j:'Regression → Linear Regression\nVO2max → Dependent Variable · Distance12_km → Covariates\nModel Fit: R² · F test · Model Coefficients: Confidence interval',
+   a:'Distance in the 12-minute run predicted VO₂max, <i>b</i> = 12.08, 95% CI [3.88, 20.28], <i>t</i>(10) = 3.28, <i>p</i> = .008; <i>R</i>² = .52, <i>F</i>(1, 10) = 10.76.',x:'Stage 2 · the same 12 runners'},
+ grp:{n:'Use the Week 4 questions',z:'用第四週的兩個問題',r:'',j:'',
+   a:'DV number or category? IV different people or the same people? → Welch t, paired t, χ² or Fisher. Three or more groups → Week 7.',x:'Week 4 · table 1'}};
+function s4read(){el('dq4').hidden=(S4.i==='yes');var C=CARD[S4.i==='yes'?'grp':S4.q];
+  el('k4').innerHTML='<div class="tn">'+C.n+'</div><div class="tz zh">'+C.z+'</div>'+
+    (C.r?'<span class="lab">R</span><pre>'+C.r+'</pre>':'')+(C.j?'<span class="lab">Jamovi</span><pre>'+C.j+'</pre>':'')+
+    '<span class="lab">'+(C.r?'APA sentence 報告句':'What to write 怎麼寫')+'</span><p class="apa">'+C.a+'</p><p class="ex">'+C.x+'</p>'}
+['s4i','s4q'].forEach(function(id){el(id).onclick=function(e){var b=e.target.closest('button');if(!b)return;
+  var key=Object.keys(b.dataset)[0];S4[key]=b.dataset[key];segSet(this,key,S4[key]);s4read()}});
+
+
+/* ---------- stage 0 activity: your example ---------- */
+function exHasCJK(t){return /[぀-ヿ㐀-䶿一-鿿豈-﫿]/.test(t)}
+function exNote(msg,cls){var n=el('exNote');n.className='note '+(cls||'');n.innerHTML=msg}
+function exBad(msg,zh,id){exNote(msg+'<span class="zh">'+zh+'</span>','bad');el(id).focus();return null}
+function exGather(){var name=el('exName').value.trim(),txt=el('exText').value.trim(),tool=el('exTool').value.trim();
+  var ideas=el('exIdeas').value,aud=el('exAudit').value,audo=el('exAuditOther').value.trim();
+  var trans=el('exTrans').value,taud=el('exTAudit').value,taudo=el('exTAuditOther').value.trim();
+  if(!name)return exBad('Please type your name first.','請先輸入姓名。','exName');
+  if(!txt)return exBad('Please write your example.','請寫下你的例子。','exText');
+  if(exHasCJK(txt))return exBad('Please write the example in English.','例子請用英文寫。','exText');
+  if(ideas==='yes'&&!aud)return exBad('Please choose what you did with the AI’s suggestion.','請選一項說明你怎麼處理 AI 的建議。','exAudit');
+  if(ideas==='yes'&&aud==='E'&&!audo)return exBad('You chose Other: please write one line.','你選了「其他」：請寫一句說明。','exAuditOther');
+  if(trans==='yes'&&!taud)return exBad('Please choose what you did with the AI’s English.','請選一項說明你怎麼處理 AI 的英文。','exTAudit');
+  if(trans==='yes'&&taud==='T5'&&!taudo)return exBad('You chose Other: please write one line.','你選了「其他」：請寫一句說明。','exTAuditOther');
+  if((ideas==='yes'||trans==='yes')&&!tool)return exBad('You used AI: please name the tool and version.','你用了 AI：請寫工具名稱與版本。','exTool');
+  if(ideas!=='yes'){aud='';audo=''}if(trans!=='yes'){taud='';taudo=''}if(ideas!=='yes'&&trans!=='yes')tool='';
+  return{name:name,text:txt,ideas:ideas,aud:aud,audo:audo,trans:trans,taud:taud,taudo:taudo,tool:tool,when:new Date().toISOString()}}
+function exCsv(d){var q=function(v){return '"'+String(v).replace(/"/g,'""')+'"'};
+  return 'Name,Example,AI_ideas,AI_ideas_audit,AI_ideas_other,AI_translate,AI_translate_audit,AI_translate_other,AI_tool,Saved\n'+
+    [d.name,d.text,d.ideas,d.aud,d.audo,d.trans,d.taud,d.taudo,d.tool,d.when].map(q).join(',')+'\n'}
+function exShow(){var i=(el('exIdeas').value==='yes'),t=(el('exTrans').value==='yes');
+  el('exAuditLab').hidden=!i;el('exAuditOtherLab').hidden=!(i&&el('exAudit').value==='E');
+  el('exTAuditLab').hidden=!t;el('exTAuditOtherLab').hidden=!(t&&el('exTAudit').value==='T5');
+  el('exToolLab').hidden=!(i||t)}
+['exIdeas','exTrans','exAudit','exTAudit'].forEach(function(id){el(id).onchange=exShow});
+el('exSave').onclick=function(){var d=exGather();if(!d)return;
+  var blob=new Blob(['﻿'+exCsv(d)],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='W6_Example_'+d.name.replace(/[\\/:*?"<>|\s]+/g,'_')+'.csv';document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);
+  exNote('Saved as '+a.download+'. Upload it to Moodle. If no file appeared, press Copy.<span class="zh">已儲存為 '+a.download+'，請上傳到 Moodle；沒有看到檔案就按「複製」。</span>','ok')};
+el('exCopy').onclick=function(){var d=exGather();if(!d)return;
+  var t='Name: '+d.name+'\nExample: '+d.text+'\nAI for ideas: '+d.ideas+(d.aud?' · '+d.aud+(d.audo?' — '+d.audo:''):'')+'\nAI for English: '+d.trans+(d.taud?' · '+d.taud+(d.taudo?' — '+d.taudo:''):'')+(d.tool?'\nAI tool: '+d.tool:'')+'\nSaved: '+d.when;
+  var done=function(){exNote('Copied. Paste it into the Moodle text box.<span class="zh">已複製，請貼到 Moodle 的文字框。</span>','ok')};
+  var fail=function(){var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done()}catch(e){exNote('Copy failed: select the text yourself.<span class="zh">複製失敗：請自行選取文字。</span>','bad')}ta.remove()};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,fail);else fail()};
+
+/* ---------- rail ---------- */
+var STAGES=[{n:'0',e:'Difference or relationship?',z:'差異還是關係'},{n:'1',e:'Correlation r',z:'相關 r'},{n:'2',e:'Regression b',z:'迴歸 b'},{n:'3',e:'Choosing the tool',z:'選擇工具'}];var NS=STAGES.length;
+var cur=0,rail=el('rail');
+STAGES.forEach(function(s,k){var b=document.createElement('button');b.type='button';
+  b.innerHTML='<span class="n">'+s.n+'</span><span class="lbl"><b>'+s.e+'</b><i class="zh">'+s.z+'</i></span>';
+  b.setAttribute('aria-current',k===0?'true':'false');b.onclick=function(){go(k)};rail.appendChild(b)});
+function go(k){cur=Math.max(0,Math.min(NS-1,k));
+  for(var j=0;j<NS;j++){el('p'+j).hidden=(j!==cur);rail.children[j].setAttribute('aria-current',j===cur?'true':'false')}
+  el('prev').disabled=(cur===0);el('next').disabled=(cur===NS-1);redraw();window.scrollTo({top:0,behavior:'instant'})}
+el('prev').onclick=function(){go(cur-1)};el('next').onclick=function(){go(cur+1)};
+
+/* ---------- boot ---------- */
+function redraw(){if(cur===1){s1draw();s3draw()}else if(cur===2){s2draw();s3bdraw()}else if(cur===3)s4read()}
+s4read();go(0);
+var rz;window.addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(redraw,120)});
+if(window.matchMedia){var mq=window.matchMedia('(prefers-color-scheme: dark)');(mq.addEventListener?mq.addEventListener('change',function(){theme();redraw()}):0)}
+new MutationObserver(function(){theme();redraw()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Week 11 Biostatistics Lecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#F3F0E8; --paper2:#EAE5D9; --card:#FFFFFF; --ink:#141414; --ink2:#45443F; --muted:#6B6960; --line:#D8D2C4;
+  --track:#C2410C; --track-soft:#F7DED2; --track-hi:#F07A4A; --court:#1D5BB8; --court-soft:#DCE6F6;
+  --ok:#1F7A3A; --ok-soft:#DDEFE1; --bad:#B42318; --bad-soft:#FBE3E0; --stuck:#9A5800; --stuck-soft:#F6E7CC;
+  --jv:#2F6DB5; --jv-soft:#E6EEF8; --jv-panel:#F6F7F9; --jv-line:#CDD4DE;
+  --case:var(--track); --case-soft:var(--track-soft);
+  --r:14px; --rs:10px; color-scheme:light;
+  --disp:"Space Grotesk","Noto Sans TC",system-ui,sans-serif;
+  --body:"Inter","Noto Sans TC",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--track);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.zh{font-family:"Noto Sans TC",var(--body)}
+.z{display:block;font-size:.88em;color:var(--ink2);font-family:"Noto Sans TC",var(--body);font-weight:400}
+i.v{font-style:italic}
+code,.mono{font-family:var(--mono);font-size:.9em}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+@media(max-width:600px){.wrap{padding:0 16px}}
+
+/* ---- top bar: the 7 stops ---- */
+.bar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 94%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:14px;height:56px}
+.bar .wk{font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:-.01em;white-space:nowrap}
+.bar .wk b{color:var(--track)}
+.stops{display:flex;gap:2px;margin-left:auto;overflow:hidden}
+.stops button{border:0;background:transparent;border-radius:99px;padding:6px 11px;font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:baseline;white-space:nowrap;transition:background .15s,color .15s}
+.stops button .n{font-family:var(--mono);font-size:11px}
+.stops button:hover{color:var(--ink);background:var(--paper2)}
+.stops button[aria-current="true"]{background:var(--ink);color:var(--paper)}
+.stops button.done .n::after{content:" ✓";color:var(--ok)}
+@media(max-width:1020px){.stops button .t{display:none}.stops button{padding:6px 9px}}
+
+/* ---- hero: the 16-week track ---- */
+.hero{background:var(--ink);color:var(--paper);padding:56px 0 44px;margin-bottom:8px}
+.hero .top{display:grid;grid-template-columns:auto 1fr;gap:12px 32px;align-items:end}
+.hero .big{font-family:var(--disp);font-weight:600;font-size:clamp(96px,16vw,200px);line-height:.8;letter-spacing:-.05em;color:var(--track-hi)}
+.hero h1{font-family:var(--disp);font-weight:600;font-size:clamp(36px,5.4vw,64px);line-height:1;letter-spacing:-.03em;margin:0}
+.hero h1 .z{color:#CFCABE;font-size:.5em;letter-spacing:0;margin-top:10px;font-weight:500}
+.hero .line{margin:18px 0 0;font-size:18px;max-width:60ch;color:#E8E3D7}
+.hero .line .z{color:#B9B3A6;font-size:15px}
+@media(max-width:700px){.hero .top{grid-template-columns:1fr}.hero{padding:36px 0 32px}}
+.track{margin-top:40px;display:grid;grid-template-columns:repeat(16,1fr);gap:4px}
+
+.seg{position:relative;padding-top:12px;font-size:11px;line-height:1.25;color:#9C978C;min-width:0}
+.seg::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;border-radius:3px;background:#3A3934}
+.seg.done::before{background:#77736A}
+.seg.now::before{background:var(--track-hi)}
+.seg b{display:block;font-family:var(--mono);font-weight:500;font-size:11px;color:#C9C4B8}
+.seg.now{color:var(--paper)} .seg.now b{color:var(--track-hi)}
+.seg .lab{display:block;word-break:keep-all;overflow-wrap:normal;hyphens:auto}
+.seg .lab.zh{word-break:normal;overflow-wrap:anywhere;line-break:strict;font-size:10.5px;letter-spacing:-.02em}
+.seg{overflow:hidden}
+.track-cap{display:none}
+@media(max-width:1023px){.track{grid-template-columns:repeat(16,1fr);gap:3px;row-gap:0}.seg{padding-top:10px}.seg .lab,.seg .here{display:none}.seg b{font-size:9px;text-align:center}.track-cap{display:flex;justify-content:space-between;gap:12px;margin-top:12px;font-size:13px;color:#CFCABE}.track-cap b{color:var(--track-hi);font-family:var(--mono);font-weight:500}}
+.seg.fin::before{background:repeating-linear-gradient(90deg,var(--paper) 0 6px,#3A3934 6px 12px)}
+.seg.fin{color:var(--paper)}
+.here{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:10.5px;color:var(--ink);background:var(--track-hi);border-radius:4px;padding:1px 5px}
+
+/* ---- stage header ---- */
+.stage{padding:40px 0 64px}
+.sh{display:grid;grid-template-columns:auto 1fr;gap:4px 22px;align-items:end;margin-bottom:28px}
+.sh .ix{font-family:var(--disp);font-weight:600;font-size:clamp(56px,8vw,96px);line-height:.85;letter-spacing:-.05em;color:var(--case)}
+.sh h2{font-family:var(--disp);font-weight:600;font-size:clamp(28px,3.8vw,44px);line-height:1.05;letter-spacing:-.02em;margin:0}
+.sh h2 .z{font-size:.5em;letter-spacing:0;margin-top:6px;font-weight:500}
+.sh .key{grid-column:2;margin:10px 0 0;font-size:17px;max-width:60ch}
+@media(max-width:600px){.sh{grid-template-columns:1fr}.sh .key{grid-column:1}}
+.stage.ca{--case:var(--track);--case-soft:var(--track-soft)}
+.stage.cb{--case:var(--court);--case-soft:var(--court-soft)}
+.stage.neutral{--case:var(--ink);--case-soft:var(--paper2)}
+
+/* ---- blocks ---- */
+.blk{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-top:18px}
+.blk>h3{font-family:var(--disp);font-weight:600;font-size:22px;letter-spacing:-.01em;margin:0 0 4px;line-height:1.2}
+.blk>h3 .z{font-size:.66em;margin-top:2px;letter-spacing:0}
+.blk .lead{margin:6px 0 0;color:var(--ink2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
+.tag{display:inline-flex;gap:6px;align-items:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.file{display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);font-size:12.5px;background:var(--paper2);border-radius:8px;padding:4px 10px;margin-top:10px}
+.file em{font-style:normal;font-family:"Noto Sans TC",var(--body);font-size:11.5px;color:var(--muted)}
+
+/* ---- buttons ---- */
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:99px;padding:8px 18px;font-weight:600;font-size:14px;transition:transform .12s}
+.btn:hover{transform:translateY(-1px)} .btn:active{transform:translateY(0)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default;transform:none}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+
+/* ---- facts (case cards) ---- */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:16px}
+@media(max-width:760px){.facts{grid-template-columns:repeat(2,1fr)}}
+.facts div{padding:14px 14px 14px 0}
+.facts div+div{padding-left:14px;border-left:1px solid var(--line)}
+@media(max-width:760px){.facts div:nth-child(3){border-left:0;padding-left:0}.facts div:nth-child(n+3){border-top:1px solid var(--line)}}
+.facts b{display:block;font-family:var(--disp);font-weight:600;font-size:30px;line-height:1.05;letter-spacing:-.02em;color:var(--case)}
+.facts span{display:block;font-size:13.5px;color:var(--ink2);margin-top:4px}
+.study-t{font-family:"Noto Sans TC",var(--body);font-weight:700;font-size:19px;line-height:1.4;margin:6px 0 0}
+.rq{margin:8px 0 10px;font-size:16.5px;line-height:1.5}.rq b{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;font-weight:500}
+.steptag{display:block;margin-top:28px}
+.orig{margin-top:14px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:14.5px;color:var(--ink2)}
+.orig b{font-family:var(--mono);font-weight:500;color:var(--ink);font-size:13.5px;background:var(--paper2);padding:2px 8px;border-radius:6px}
+
+/* ---- Jamovi window ---- */
+.jw{border:1px solid var(--jv-line);border-radius:12px;overflow:hidden;background:var(--card);margin-top:16px}
+.jw-bar{display:flex;align-items:center;gap:12px;padding:9px 14px;background:var(--jv);color:#fff;font-size:13px;flex-wrap:wrap}
+.jw-bar .dots{display:flex;gap:5px}.jw-bar .dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.55);display:block}
+.jw-bar .path{font-weight:600}
+.jw-bar .path span{opacity:.75;font-weight:400}
+.jw-bar .fn{margin-left:auto;font-family:var(--mono);font-size:11.5px;opacity:.9}
+.jw-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+@media(max-width:860px){.jw-body{grid-template-columns:minmax(0,1fr)}}
+.jw-opts{background:var(--jv-panel);border-right:1px solid var(--jv-line);padding:14px}
+@media(max-width:860px){.jw-opts{border-right:0;border-bottom:1px solid var(--jv-line)}}
+.jw-res{padding:14px 16px}
+.jw-res h5{margin:0 0 6px;font-size:14px;font-weight:600}
+.jw-note{font-size:13px;color:var(--ink2);margin:10px 0 0}
+.vm{display:grid;grid-template-columns:minmax(96px,.8fr) 18px minmax(0,1.4fr);gap:8px;align-items:start}
+.vm .vl{background:#fff;border:1px solid var(--jv-line);border-radius:8px;padding:6px;display:flex;flex-direction:column;gap:4px}
+.vm .arr{align-self:center;color:var(--jv);font-size:14px;text-align:center}
+.vm .bx{display:flex;flex-direction:column;gap:6px}
+.vm .b{border:1px solid var(--jv-line);background:#fff;border-radius:8px;padding:5px 7px;min-height:34px}
+.vm .b .bl{display:block;font-size:11.5px;color:var(--muted);margin-bottom:3px}
+.vm .b.bad{border-color:var(--bad);background:var(--bad-soft)}
+.var{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:12px;padding:2px 7px;border-radius:5px;background:var(--jv-soft);color:var(--ink);margin:1px 2px 1px 0}
+.vl .var{background:transparent}
+.var.x{background:#fff;outline:1.5px solid var(--bad);color:var(--bad)}
+.var svg{width:12px;height:12px;flex:none;color:var(--jv)}
+.do{margin:12px 0 0;padding-left:18px;font-size:13.5px;display:grid;gap:4px}
+table.t{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+table.t th,table.t td{padding:6px 7px;text-align:right;border-bottom:1px solid #E6E9EE;white-space:nowrap}
+table.t th:first-child,table.t td:first-child{text-align:left}
+table.t thead th{font-weight:500;color:var(--muted);font-size:12px;border-bottom:1.5px solid var(--ink)}
+table.t tr.dim td{color:#8A8F98}
+table.t tr.go td{background:#FFF8E6}
+table.t.src td{white-space:normal;text-align:left;vertical-align:top}table.t.src td:first-child{font-family:var(--mono);width:34%}@media(max-width:600px){table.t.src td{display:block;width:auto;border-bottom:0;padding:4px 7px}table.t.src tr{display:block;border-bottom:1px solid #E6E9EE;padding:4px 0}table.t.src td:first-child{width:auto}}table.t.src td .z{font-size:12px}table.t.pico td:first-child{width:24%}
+table.t td input{width:5.6em;font:inherit;font-family:var(--mono);font-size:14px;text-align:right;padding:3px 6px;border:1.5px dashed var(--track);border-radius:6px;background:#fff;color:var(--ink)}
+table.t td input.good{border:1.5px solid var(--ok);background:var(--ok-soft)}
+table.t td input.off{border:1.5px solid var(--bad)}
+.tw{overflow-x:auto}
+.chk{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.chk .msg{font-size:13.5px}
+.chk .msg.ok{color:var(--ok);font-weight:600}
+.chk .msg.no{color:var(--bad)}
+.chk .msg .z{font-size:12.5px}
+
+/* ---- R console ---- */
+.rc{background:#17181A;color:#E9E7E0;border-radius:12px;overflow:hidden;margin-top:16px}
+.rc .rb{padding:9px 14px;font-family:var(--mono);font-size:12px;color:#A9A59B;border-bottom:1px solid #2B2C2F}
+.rc pre{margin:0;padding:14px;font-family:var(--mono);font-size:12.5px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.rc .cm{color:#8DB6F2}
+mark.h1{background:#FFD8A8;color:#141414;border-radius:3px;padding:0 3px}
+mark.h2{background:#C9E7C9;color:#141414;border-radius:3px;padding:0 3px}
+.eq{font-family:var(--disp);font-weight:600;font-size:clamp(22px,3vw,30px);letter-spacing:-.01em;margin-top:18px}
+.eq .z{font-size:.55em;margin-top:2px;letter-spacing:0}
+
+/* ---- tabs inside a stage ---- */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.tabs button{border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:6px 14px;font-size:14px;font-weight:500}
+.tabs button[aria-selected="true"]{border-color:var(--case);background:var(--case);color:#fff}
+.tabs button .ok{color:var(--ok);margin-left:6px}
+.tabs button[aria-selected="true"] .ok{color:#fff}
+
+/* ---- items (multiple choice) ---- */
+.q{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.blk>.q:first-of-type,.blk>div>.q:first-child{border-top:0;padding-top:0}
+.fx+div>.q:first-child{border-top:1px solid var(--line);padding-top:16px}
+.q .qt{font-weight:600;font-size:16.5px;margin:0;line-height:1.4}
+.q .qt .z{font-weight:400;font-size:14px;margin-top:2px}
+.q .op{display:grid;gap:8px;margin-top:12px}
+.q .op.chips{display:flex;flex-wrap:wrap}
+.q .op button{text-align:left;border:1.5px solid var(--line);background:var(--card);border-radius:var(--rs);padding:9px 12px;font-size:14.5px;line-height:1.35;transition:border-color .12s,transform .12s}
+.q .op button .z{font-size:13px}
+.q .op button:hover:not(:disabled){border-color:var(--ink);transform:translateY(-1px)}
+.q .op button[aria-pressed="true"]{border-color:var(--ink);background:var(--paper2)}
+.q .op button:disabled{cursor:default}
+.q .op button.key{border-color:var(--ok);background:var(--ok-soft)}
+.q .op button.miss{border-color:var(--bad);background:var(--bad-soft)}
+.q .op button.dim{opacity:.5}
+.q .op button .mk{font-weight:700;margin-right:6px}
+.q .fb{margin-top:10px;font-size:14px;padding:9px 12px;border-radius:var(--rs);background:var(--paper2)}
+.q .fb.ok{background:var(--ok-soft)} .q .fb.no{background:var(--bad-soft)}
+.q .fb b{display:block}
+.q .fb .z{font-size:13px}
+.q .hint{margin-top:8px;font-size:13.5px;padding:8px 12px;border-left:3px solid var(--stuck);background:var(--stuck-soft);border-radius:0 8px 8px 0}
+.q .hint .hl{display:block;font-family:var(--mono);font-size:10.5px;color:var(--stuck);letter-spacing:.06em;text-transform:uppercase}
+.q .hint .z{font-size:12.5px}
+.q .acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+
+/* ---- "what did they report": sentence + six chips ---- */
+.sent{font-family:"Noto Sans TC",var(--body);font-size:clamp(17px,2vw,21px);line-height:2.1;padding:16px 18px;background:var(--paper);border-radius:var(--rs);border-left:4px solid var(--case)}
+.sent .pt{border-bottom:2px solid transparent;padding:0 1px}
+.sent.on .pt.y{border-bottom-color:var(--ok);background:var(--ok-soft)}
+.sent .pt .lb,.sent .gh{display:none}
+.sent.on .pt .lb{display:inline;font-family:var(--mono);font-size:10.5px;color:var(--ok);margin-left:3px;vertical-align:super}
+.sent.on .gh{display:inline-block;font-family:var(--mono);font-size:11.5px;line-height:1.4;color:var(--bad);border:1.5px dashed var(--bad);border-radius:5px;padding:0 5px;margin:0 3px;vertical-align:middle}
+.six{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.six button{border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:7px 14px;font-size:14px;transition:transform .12s}
+.six button:hover:not(:disabled){transform:translateY(-1px);border-color:var(--ink)}
+.six button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.six button[aria-pressed="true"]::before{content:"✓ "}
+.six button.r-ok,.six button.r-ok[aria-pressed="true"]{background:var(--ok-soft);color:var(--ink);border-color:var(--ok)}
+.six button.r-no,.six button.r-no[aria-pressed="true"]{background:var(--bad-soft);color:var(--ink);border:2px solid var(--bad)}
+.six button.r-ok::before,.six button.r-no::before{content:none!important}
+.six button .vd{display:block;font-size:12px;font-weight:600;margin-top:2px;text-align:left}
+.six button.r-ok .vd{color:var(--ok)} .six button.r-no .vd{color:var(--bad)}
+.six button.r-ok,.six button.r-no{border-radius:12px;text-align:left}
+.six button:disabled{cursor:default}
+.six-hint{font-size:13px;color:var(--muted);margin-top:8px}
+.score{font-family:var(--disp);font-weight:600;font-size:28px;margin-top:12px}
+.score .z{font-size:.5em;font-weight:400}
+
+/* ---- slope chips (warm-up) ---- */
+.fx{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.fx div{font-family:var(--mono);font-size:15px;background:var(--paper);border-radius:var(--rs);padding:10px 14px}
+.fx div b{font-family:var(--body);display:block;font-size:12px;color:var(--muted);font-weight:500;margin-bottom:2px}
+
+/* ---- scoreboard (case A decide) ---- */
+.board{display:grid;gap:0;margin-top:6px;border-top:1.5px solid var(--ink)}
+.board div{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line)}
+.board div b{font-weight:600}
+.board div span{color:var(--ink2);font-size:14px}
+.board div em{font-style:normal;font-family:var(--mono);font-size:clamp(18px,2.4vw,26px);font-weight:500}
+
+@media(max-width:600px){.board div{grid-template-columns:1fr auto}.board div span{grid-column:1/-1;order:3}}
+
+/* ---- dot matrix (case B) ---- */
+.dots{margin-top:14px}
+.dots svg{width:100%;height:auto;display:block}
+.dots .seg2{display:inline-flex;border:1.5px solid var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+.dots .seg2 button{border:0;background:var(--card);padding:7px 14px;font-size:14px}
+.dots .seg2 button[aria-pressed="true"]{background:var(--case);color:#fff}
+.dfbig{display:flex;gap:28px;flex-wrap:wrap;align-items:baseline;margin-top:16px}
+.dfbig div{font-family:var(--disp);font-weight:600;font-size:clamp(40px,7vw,72px);line-height:1;letter-spacing:-.03em}
+.dfbig div small{display:block;font-family:var(--body);font-size:13px;font-weight:500;color:var(--muted);letter-spacing:0;margin-top:6px}
+.dfbig div.b{color:var(--case)}
+.dfbig .ar{font-size:32px;color:var(--muted)}
+
+/* ---- APA writer ---- */
+.apaw textarea,.pair textarea{width:100%;font:inherit;font-size:15px;min-height:90px;padding:12px 14px;border:1.5px solid var(--line);border-radius:var(--rs);background:#fff;color:var(--ink);resize:vertical;margin-top:10px}
+.apaw textarea:focus,.pair textarea:focus{border-color:var(--ink);outline:none}
+.model{margin-top:14px;font-size:15px;line-height:2;padding:14px 16px;background:var(--paper);border-radius:var(--rs)}
+.model .k{border-bottom:2px solid var(--ok)}
+.model .k sup{font-family:var(--mono);font-size:10px;color:var(--ok);margin-left:2px}
+.sm{font-size:13px;color:var(--muted);margin-top:8px}
+.sm.ok{color:var(--ok)} .sm.bad{color:var(--bad)}
+
+/* ---- fix cards (stage 6) ---- */
+.ai{margin-top:10px;display:grid;gap:8px}
+.ai .me{justify-self:end;max-width:86%;background:var(--paper2);border-radius:14px 14px 4px 14px;padding:10px 14px;font-size:14.5px}
+.ai .bot{max-width:92%;background:#fff;border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:10px 14px;font-size:14.5px}
+.ai .bot .z,.ai .me .z{font-size:13px}
+.wide{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-top:12px}
+@media(max-width:700px){.wide{grid-template-columns:1fr}}
+.wide .x{font-family:var(--disp);font-size:28px;color:var(--bad);text-align:center}
+
+/* ---- stuck ---- */
+#stuckBtn{position:fixed;right:20px;bottom:20px;z-index:40;border:0;background:var(--stuck);color:#fff;border-radius:99px;padding:11px 18px;font-weight:600;font-size:14.5px;box-shadow:0 6px 20px rgba(0,0,0,.18);display:flex;gap:8px;align-items:center;transition:transform .12s}
+#stuckBtn:hover{transform:translateY(-2px)}
+#stuckBtn .cnt{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,.25);border-radius:99px;padding:0 8px}
+@media(max-width:600px){#stuckBtn{right:12px;bottom:12px;padding:9px 14px}}
+#stuckDr{position:fixed;z-index:50;right:20px;bottom:76px;width:min(400px,calc(100vw - 24px));max-height:calc(100vh - 110px);overflow:auto;background:#fff;border-radius:16px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.25);border-top:5px solid var(--stuck)}
+@media(max-width:600px){#stuckDr{right:12px;left:12px;width:auto;bottom:64px}}
+#stuckDr h3{font-family:var(--disp);font-size:20px;margin:0}
+#stuckDr .f{margin-top:12px}
+#stuckDr .f>b{display:block;font-size:13px;margin-bottom:6px}
+#stuckDr select,#stuckDr textarea{width:100%;font:inherit;font-size:14px;padding:8px 10px;border:1.5px solid var(--line);border-radius:var(--rs);background:#fff}
+#stuckDr textarea{min-height:64px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;font-size:13.5px}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chips button:disabled{cursor:default}
+.slog{display:grid;gap:6px;margin-top:10px}
+.slog div{font-size:13.5px;background:var(--stuck-soft);border-radius:8px;padding:7px 10px}
+.slog div b{color:var(--stuck)}
+
+/* ---- gate, done line, footer ---- */
+.gate{position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-size:14px;max-width:min(520px,calc(100vw - 32px))}
+.gate .z{color:#CFCABE}
+.can{margin-top:22px;font-family:var(--disp);font-size:20px;font-weight:600;color:var(--ok);display:flex;gap:10px;align-items:baseline}
+.can .z{font-size:.72em}
+.who{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:26px}
+.who input{font:inherit;font-size:16px;padding:9px 14px;border-radius:99px;border:1.5px solid #5A5850;background:transparent;color:var(--paper);min-width:220px}
+.who input::placeholder{color:#9C978C}
+.who .ok{color:var(--track-hi);font-weight:600}
+.who button{border:0;background:transparent;color:#9C978C;font-size:13px;text-decoration:underline}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding:18px 0 90px;margin-top:10px;font-size:13px;color:var(--muted)}
+.note{font-size:14px;margin-top:10px}
+.note.ok{color:var(--ok)} .note.bad{color:var(--bad)}
+
+.refs{border-top:1px solid var(--line);padding:16px 0 4px;margin-top:20px;font-size:12.5px;color:var(--muted)}.refs p{margin:6px 0 0;padding-left:2em;text-indent:-2em;overflow-wrap:anywhere}
+
+
+/* ---------- Week 11 additions ---------- */
+.flow{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:14px 0 0;padding:0;border-top:1.5px solid var(--ink);counter-reset:fl}
+.flow li{counter-increment:fl;padding:12px 12px 12px 0;border-bottom:1px solid var(--line);font-size:16px}
+.flow li::before{content:counter(fl);display:block;font-family:var(--disp);font-weight:600;font-size:30px;line-height:1;color:var(--track);margin-bottom:6px}
+.flow li b{font-weight:600;display:block}
+@media(max-width:600px){.flow{grid-template-columns:1fr 1fr}}
+.wait{margin:12px 0 0;padding:10px 14px;border:1.5px dashed var(--line);border-radius:var(--rs);font-size:14.5px;color:var(--muted)}
+.wait .z{font-size:13px}
+.fig{margin-top:14px}
+.fig svg{display:block;width:100%;height:auto;max-width:640px}
+.fig.sq svg{max-width:360px}
+.fig .cap{font-size:13px;color:var(--muted);margin:6px 0 0}
+.fig .cap .z{font-size:12.5px}
+.fig text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.calc{margin-top:12px;font-family:var(--mono);font-size:13.5px;padding:10px 12px;background:var(--paper2);border-radius:var(--rs);overflow-wrap:anywhere}
+.calc .z{font-family:"Noto Sans TC",var(--body);font-size:12.5px}
+.q:first-child{margin-top:8px;padding-top:0;border-top:0}
+.foot>span:first-child{min-width:0;overflow-wrap:anywhere}.foot{flex-wrap:wrap}
+.q .op button.key,.q .op button.miss,.q .op button.dim{color:var(--ink)}
+.jw-body.stack{grid-template-columns:minmax(0,1fr)}
+details.rv{border-top:1px solid var(--line);padding:12px 0}
+details.rv:first-of-type{margin-top:10px}
+details.rv summary{cursor:pointer;font-size:16.5px;line-height:1.4;list-style:none;display:grid;grid-template-columns:1fr auto;gap:2px 12px}
+details.rv summary::-webkit-details-marker{display:none}
+details.rv summary::after{content:"+";font-family:var(--disp);font-size:24px;line-height:1;grid-row:1 / span 2;grid-column:2;color:var(--case)}
+details.rv[open] summary::after{content:"−"}
+details.rv summary .z{grid-column:1;font-size:14px}
+details.rv .ans{margin-top:10px;padding:10px 14px;background:var(--paper);border-radius:var(--rs);font-size:15px;line-height:1.55}
+details.rv .ans .z{font-size:13.5px;margin-top:4px}
+.seg2.sw{display:inline-flex;border:1.5px solid var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+.seg2.sw button{border:0;background:var(--card);padding:7px 16px;font-size:14px}
+.seg2.sw button[aria-pressed="true"]{background:var(--case);color:#fff}
+.rkd,#rkMean{transition:transform .6s ease,opacity .3s}
+@media(prefers-reduced-motion:reduce){.rkd,#rkMean{transition:none}}
+.sl{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,1.4fr) 64px;gap:12px;align-items:center;margin-top:14px;font-size:14.5px}
+.sl .z{font-size:13px}
+.sl input[type=range]{width:100%;accent-color:var(--case)}
+.sl output{font-family:var(--mono);font-size:15px;text-align:right}
+@media(max-width:600px){.sl{grid-template-columns:1fr 64px}.sl>span{grid-column:1 / -1}}
+.board.two,.board.three{margin-top:16px}
+.board div span .z,.board div b .z{font-size:12.5px}
+@media(max-width:600px){.board div{grid-template-columns:1fr}}
+.q .op.chips button[aria-pressed="true"]{color:var(--ink)}
+.def{margin:10px 0 0;padding:10px 14px;background:var(--paper);border-radius:var(--rs);font-size:15px;line-height:1.5}
+.def .z{font-size:13.5px;margin-top:2px}
+.parts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.part{border:1.5px solid var(--ink);background:var(--card);color:var(--ink);border-radius:var(--rs);padding:7px 12px;font-size:14px;text-align:left;cursor:grab;line-height:1.3}
+.part b{font-weight:600;display:block}.part .v{font-family:var(--mono);font-size:13px;color:var(--ink2)}
+.part[aria-pressed="true"]{background:var(--ink);color:var(--paper)}.part[aria-pressed="true"] .v{color:var(--paper)}
+.part.used{opacity:.35;border-style:dashed;cursor:default}
+.model.rep{font-size:16px;line-height:2.4}
+.slot{display:inline-block;min-width:150px;min-height:1.7em;line-height:1.7;vertical-align:middle;border:1.5px dashed var(--muted);border-radius:8px;padding:0 8px;background:var(--card);cursor:pointer;text-align:center}
+.slot.sm{min-width:56px}
+.slot.over{border-color:var(--ink);background:var(--paper2)}
+.slot.on{border:1.5px solid var(--ok);background:var(--ok-soft);cursor:default;min-width:0}
+table.t.cmp td.df{background:var(--stuck-soft)}
+table.t.cmp td:first-child{font-family:var(--body);width:26%}
+@media(max-width:600px){.slot{min-width:96px}}
+.selfq{border-top:1px solid var(--line);padding:12px 0 4px;margin-top:10px}
+.selfq p{margin:0 0 6px;font-size:15px;line-height:1.4}.selfq p .z{font-size:13.5px}
+#selfBox .f{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;margin-top:6px;font-size:13.5px}
+#selfBox .f b{font-weight:500;color:var(--ink2)}
+#selfBox .f:has(textarea){grid-template-columns:1fr}
+#selfBox textarea{width:100%;font:inherit;font-size:15px;min-height:56px;padding:10px 12px;border:1.5px solid var(--line);border-radius:var(--rs);background:#fff;color:var(--ink);resize:vertical}
+#selfBox .chips{display:flex;gap:6px;flex-wrap:wrap}
+#selfBox .chips button{min-width:38px;text-align:center}
+#fabs{position:fixed;right:20px;bottom:20px;z-index:40;display:flex;gap:10px;flex-wrap:wrap-reverse;justify-content:flex-end;align-items:center;max-width:calc(100vw - 24px)}
+#fabs #stuckBtn{position:static;white-space:nowrap}
+#selfBtn{border:0;background:var(--court);color:#fff;border-radius:99px;padding:11px 18px;font-weight:600;font-size:14.5px;box-shadow:0 6px 20px rgba(0,0,0,.18);display:flex;gap:8px;align-items:center;transition:transform .12s;white-space:nowrap}
+#selfBtn[hidden]{display:none}
+#selfBtn:hover{transform:translateY(-2px)}
+#selfBtn .cnt{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,.25);border-radius:99px;padding:0 8px}
+#selfDr{position:fixed;z-index:50;right:20px;bottom:76px;width:min(420px,calc(100vw - 24px));max-height:calc(100vh - 110px);overflow:auto;background:#fff;border-radius:16px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.25);border-top:5px solid var(--court)}
+#selfDr h3{font-family:var(--disp);font-size:20px;margin:0}
+#stuckBtn{white-space:nowrap}
+@media(max-width:600px){#fabs{right:12px;bottom:12px;gap:6px}#selfBtn{padding:9px 12px;font-size:13.5px}#selfDr{right:12px;left:12px;width:auto;bottom:64px}}
+@media(max-width:360px){#selfBtn{font-size:12.5px;padding:9px 10px}}
+
+/* ---------- Week 11 accent: teal in place of Week 10's orange ---------- */
+:root{--track:#0F766E;--track-soft:#D5EEEA;--track-hi:#2DD4BF}
+.qn{display:inline-block;font-family:var(--mono);font-size:.78em;font-weight:500;color:var(--case);border:1.5px solid var(--case);border-radius:6px;padding:0 6px;margin-right:8px;vertical-align:.08em;letter-spacing:.02em}
+.qn:empty{display:none}
+
+/* ---------- week menu in the top bar; links on the 16-week track ---------- */
+.bar .wk{position:relative;flex:none}
+#wkBtn{font:inherit;font-family:var(--disp);font-weight:600;font-size:15px;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:99px;padding:6px 12px 6px 14px;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap}
+#wkBtn::after{content:"";width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--track)}
+#wkBtn:hover,#wkBtn[aria-expanded="true"]{border-color:var(--ink)}
+#wkMenu{position:absolute;top:calc(100% + 8px);left:0;z-index:60;width:min(360px,calc(100vw - 24px));max-height:calc(100vh - 90px);overflow:auto;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:6px;box-shadow:0 16px 40px rgba(0,0,0,.18)}
+#wkMenu .wi{display:block;padding:8px 12px;border-radius:9px;font-family:var(--body);font-weight:400;font-size:14.5px;line-height:1.35;color:var(--ink);text-decoration:none;white-space:normal}
+#wkMenu .wi b{font-family:var(--disp);font-weight:600;margin-right:4px}
+#wkMenu .wi .zh{color:var(--ink2);font-size:13.5px}
+#wkMenu a.wi:hover,#wkMenu a.wi:focus-visible{background:var(--paper2);outline:none}
+#wkMenu .wi.here{background:var(--track-soft)}#wkMenu .wi.here b{color:var(--track)}
+#wkMenu .wi.off{color:var(--muted);opacity:.6}#wkMenu .wi.off .zh{color:var(--muted)}
+.seg.lnk a{color:inherit;text-decoration:none;display:block}
+.seg.lnk .lab:not(.zh){text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.45)}
+.seg.lnk a:hover b,.seg.lnk a:hover .lab{color:var(--paper)}
+.seg.lnk a:focus-visible{outline:2px solid var(--track-hi);outline-offset:3px;border-radius:4px}
+.stops{overflow-x:auto;scrollbar-width:none}.stops::-webkit-scrollbar{display:none}
+/* the five stage buttons always fit: Chinese labels show on the current stage only when the bar is narrow */
+@media(max-width:1500px){.stops button:not([aria-current="true"]) .t .zh{display:none}}
+@media(max-width:1020px){.stops button[aria-current="true"] .t{display:inline}.stops button[aria-current="true"] .t .zh{display:none}}
+@media(max-width:560px){.stops button[aria-current="true"] .t{display:none}}
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap"><div class="wk"><button type="button" id="wkBtn" aria-haspopup="true" aria-expanded="false" aria-controls="wkMenu">Wk11</button><div id="wkMenu" role="menu" hidden></div></div><nav class="stops" id="stops" aria-label="sections"></nav></div></header>
+
+<!-- ========== 00 ========== -->
+<section id="p0" class="pnl">
+  <div class="hero"><div class="wrap">
+    <div class="top">
+      <div class="big" aria-hidden="true">11</div>
+      <div><h1>Rank tests · agreement<span class="z">無母數檢定・一致性</span></h1></div>
+    </div>
+    <div class="track" id="track16" aria-label="16 weeks"></div><div class="track-cap"><span><b>W11</b> 無母數・一致性 · you are here</span><span><b>W16</b> Final: analyse + APA</span></div>
+    <div class="who"><input type="text" id="who" autocomplete="off" placeholder="Your name 你的姓名" aria-label="Your name"><span class="ok" id="whoOk"></span><button type="button" id="whoReset">New student 換人作答</button></div>
+  </div></div>
+  <div class="stage neutral"><div class="wrap">
+    <div class="sh"><div class="ix">00</div><div><h2>Last week · Mixed model<span class="z">上週・混合模型</span></h2></div>
+      <p class="key">The output is ready. How do you write the result?<span class="z">報表出來了，結果怎麼寫？</span></p></div>
+    <div class="blk">
+      <p class="rq"><b>Research question 研究問題</b>Does where an elite blocker looks (the ball, the setter’s hands or the setter’s upper body) change block initiation time?<span class="z">菁英攔網者看哪裡（球、舉球員的手或舉球員的上半身），會不會改變攔網啟動時間？</span></p>
+      <div class="tw"><table class="t src pico"><tbody><tr><td>Design 設計</td><td>8 blockers · 3 focus × 4 tactics, both within · 192 trials<span class="z">8 位攔網者・3 焦點 × 4 戰術，都是受試者內・共 192 次試作</span></td></tr><tr><td>Tactic 戰術</td><td>Four set types with different ball speed and flight time<span class="z">四種舉球戰術，球速和飛行時間都不同</span></td></tr></tbody></table></div>
+    </div>
+    <div class="blk"><h3>Model A and Model B<span class="z">模型 A 與模型 B</span></h3>
+      <div class="seg2 sw" id="mdMode" role="group" aria-label="model"><button type="button" data-m="A" aria-pressed="true">Model A · Intercept | ID</button><button type="button" data-m="B" aria-pressed="false">Model B · + Intercept | ID_Focus</button></div>
+      <div class="fig"><svg id="mdSvg" viewBox="0 0 640 300" role="img" aria-label="Initiation time of the eight blockers under three focus conditions, as each model allows"></svg><p class="cap">One line = one blocker. The lines show what each model lets differ between blockers.<span class="z">一條線 = 一位攔網者。線條顯示每個模型容許攔網者之間不同的地方。</span></p></div>
+      <div class="board two" id="mdOut"></div>
+      <details class="rv" data-rv="5"><summary><b><span class="qn">Q0.1</span>Linear mixed model (LMM): Model B added Intercept | ID_Focus. What may now differ between blockers?</b><span class="z">線性混合模型（LMM）：模型 B 加了 Intercept | ID_Focus。現在攔網者之間哪一樣可以不同？</span></summary><div class="ans"><b>The starting level (Intercept | ID), and how much focus affects her (Intercept | ID_Focus).</b> So the Focus test counts the blockers: Den df 14 = (8 − 1) × (3 − 1).<span class="z"><b>起點（Intercept | ID），和焦點對她的影響（Intercept | ID_Focus）。</b>所以焦點的檢定數的是攔網者：分母自由度 14 = (8 − 1) × (3 − 1)。</span></div></details>
+    </div>
+  <div class="jw">
+    <div class="jw-bar"><span class="dots"><i></i><i></i><i></i></span><span class="path"><span>Analyses › Linear Models ›</span> Mixed Model</span><span class="fn">W10_Block_Trials_Long_2026.csv · Model B</span></div>
+    <div class="jw-res"><h5>Fixed Effects Omnibus tests</h5><div class="tw"><table class="t"><thead><tr><th></th><th>F</th><th>Num df</th><th>Den df</th><th>p</th></tr></thead>
+      <tbody><tr><td>Focus</td><td>4.904</td><td>2</td><td>14.0</td><td>.024</td></tr><tr><td>Tactic</td><td>76.911</td><td>3</td><td>159.0</td><td>&lt; .001</td></tr><tr><td>Focus ✻ Tactic</td><td>0.484</td><td>6</td><td>159.0</td><td>.820</td></tr></tbody></table></div>
+      <p class="jw-note">R² marginal .53 · conditional .60</p>
+      <h5 style="margin-top:14px">Estimated Marginal Means – Focus</h5><div class="tw"><table class="t"><thead><tr><th>Focus</th><th>Mean (s)</th></tr></thead><tbody><tr><td>Ball</td><td>0.206</td></tr><tr><td>Hands</td><td>0.220</td></tr><tr><td>UpperBody</td><td>0.145</td></tr></tbody></table></div>
+      <h5 style="margin-top:14px">Post Hoc Tests – Focus · Bonferroni</h5><div class="tw"><table class="t"><thead><tr><th>Comparison</th><th>Diff (s)</th><th>df</th><th>t</th><th>p bonf</th></tr></thead>
+      <tbody><tr><td>Ball – Hands</td><td>−0.0140</td><td>14.0</td><td>−0.548</td><td>1.000</td></tr><tr><td>Ball – UpperBody</td><td>0.0611</td><td>14.0</td><td>2.397</td><td>.093</td></tr><tr><td>Hands – UpperBody</td><td>0.0751</td><td>14.0</td><td>2.944</td><td>.032</td></tr></tbody></table></div>
+      <p class="jw-note">95% CI (Bonferroni) Hands – UpperBody: [0.01, 0.14]</p></div>
+  </div>
+    <div class="blk"><h3>Before writing the result<span class="z">寫結果之前</span></h3>
+      <details class="rv" data-rv="1"><summary><b><span class="qn">Q0.2</span>Tactic has the largest F. Which effect is reported first?</b><span class="z">戰術的 F 最大。先報告哪一個效果？</span></summary><div class="ans"><b>Focus.</b> The research question asks where the blocker looks. Tactic is a condition built into the design: the four sets differ in ball speed, so a large difference is expected.<span class="z"><b>焦點。</b>研究問題問的是攔網者看哪裡。戰術是設計裡的情境因子：四種戰術的球速本來就不同，差異大是預期之內。</span></div></details>
+      <details class="rv" data-rv="2"><summary><b><span class="qn">Q0.3</span>Tactic p &lt; .001, Focus p = .024. Can the two p values be compared?</b><span class="z">戰術 p &lt; .001，焦點 p = .024。兩個 p 可以比較嗎？</span></summary><div class="ans"><b>No.</b> Focus is tested against 8 blockers (Den df 14). Tactic is tested against trials (Den df 159). A p value is also not an effect size.<span class="z"><b>不可以。</b>焦點用 8 位攔網者來檢定（分母自由度 14），戰術用試作來檢定（分母自由度 159）。而且 p 值不是效果量。</span></div></details>
+      <details class="rv" data-rv="3"><summary><b><span class="qn">Q0.4</span>Focus × Tactic: p = .820. What is written?</b><span class="z">焦點 × 戰術：p = .820。怎麼寫？</span></summary><div class="ans"><b>“No evidence that the focus effect depended on tactic.”</b> Not “no interaction”: with 8 blockers, not significant is not the same as zero. The focus effect is then reported averaged over the four tactics.<span class="z"><b>「沒有證據顯示焦點效果隨戰術改變。」</b>不寫「沒有交互作用」：只有 8 位攔網者，不顯著不等於零。之後報告對四種戰術取平均的焦點效果。</span></div></details>
+      <details class="rv" data-rv="4"><summary><b>The result, written for a thesis</b><span class="z">寫成論文的結果</span></summary><div class="model">A linear mixed model showed an effect of focus on initiation time, <span class="k"><i>F</i>(2, 14) = 4.90<sup>statistic · df</sup></span>, <span class="k"><i>p</i> = .024<sup>exact p</sup></span>, <span class="k">marginal <i>R</i>² = .53, conditional <i>R</i>² = .60<sup>effect size</sup></span>. Initiation time also differed by tactic, <i>F</i>(3, 159) = 76.91, <i>p</i> &lt; .001, as expected from the different set trajectories. There was no evidence that the focus effect depended on tactic, <i>F</i>(6, 159) = 0.48, <i>p</i> = .820. <span class="k">Bonferroni<sup>post hoc</sup></span> comparisons showed shorter times with upper-body than hand focus (0.145 vs 0.220 s, <span class="k">95% CI [0.01, 0.14]<sup>CI</sup></span>, <i>p</i> = .032); the difference from ball focus was not significant (<i>p</i> = .093).</div><h5 style="margin-top:14px">Where each number comes from<span class="z">每個數字從哪裡來</span></h5><div class="tw"><table class="t src"><tbody><tr><td><i>F</i>(2, 14) = 4.90, <i>p</i> = .024</td><td>Omnibus tests › Focus row: F 4.904, Num df 2, Den df 14.0, p .024.<span class="z">Omnibus tests › Focus 那一列。</span></td></tr><tr><td><i>R</i>² = .53, .60</td><td>The R² line under the Omnibus table (GAMLj: Model Info).<span class="z">Omnibus 表下面的 R² 那一行（GAMLj：Model Info）。</span></td></tr><tr><td><i>F</i>(3, 159) = 76.91, <i>p</i> &lt; .001</td><td>Omnibus tests › Tactic row.<span class="z">Omnibus tests › Tactic 那一列。</span></td></tr><tr><td><i>F</i>(6, 159) = 0.48, <i>p</i> = .820</td><td>Omnibus tests › Focus ✻ Tactic row: F 0.484.<span class="z">Omnibus tests › Focus ✻ Tactic 那一列。</span></td></tr><tr><td>0.145 vs 0.220 s</td><td>Estimated Marginal Means › Focus: UpperBody, Hands.<span class="z">Estimated Marginal Means › Focus：UpperBody、Hands。</span></td></tr><tr><td>95% CI [0.01, 0.14], <i>p</i> = .032</td><td>Post Hoc Tests › Hands – UpperBody row and the CI line under it.<span class="z">Post Hoc Tests › Hands – UpperBody 那一列，和下面的 CI 那一行。</span></td></tr><tr><td><i>p</i> = .093</td><td>Post Hoc Tests › Ball – UpperBody row.<span class="z">Post Hoc Tests › Ball – UpperBody 那一列。</span></td></tr></tbody></table></div></details>
+    </div>
+  </div></div>
+</section>
+
+<!-- ========== 01 ========== -->
+<section id="p1" class="pnl" hidden><div class="stage ca"><div class="wrap">
+  <div class="sh"><div class="ix">01</div><div><h2>Non-parametric tests<span class="z">無母數檢定</span></h2></div>
+    <p class="key">The paired t-test from Week 4 meets an extreme value. What do you use instead?<span class="z">第 4 週的成對 t 檢定，遇到極端值時改用什麼？</span></p></div>
+  <div class="blk"><span class="tag">The study 研究</span>
+    <p class="rq"><b>Research question 研究問題</b>Is time to exhaustion longer after 4 weeks of high-intensity interval training?<span class="z">4 週高強度間歇訓練後，力竭時間是否變長？</span></p>
+    <div class="tw"><table class="t src pico"><tbody><tr><td>P</td><td>Trained cyclists, n = 8<span class="z">受過訓練的自行車選手，8 人</span></td></tr><tr><td>I / C</td><td>4 weeks of interval training; the same cyclists before and after<span class="z">4 週間歇訓練；同一批選手前後比較</span></td></tr><tr><td>O</td><td>Time to exhaustion at a fixed power (s)<span class="z">固定功率下的力竭時間（秒）</span></td></tr><tr><td>Design 設計</td><td>One group, tested twice: 依變項（DV）a number, the same people<span class="z">單組前後測：依變項（DV）是數值，同一批人</span></td></tr></tbody></table></div>
+  </div>
+  <div class="blk"><span class="tag">Values or ranks 數值或等級</span>
+    <div class="seg2 sw" id="rkMode" role="group" aria-label="view"><button type="button" data-m="v" aria-pressed="true">Values 數值</button><button type="button" data-m="r" aria-pressed="false">Ranks 等級</button></div>
+    <div class="fig"><svg id="rkSvg" viewBox="0 0 640 150" role="img" aria-label="The eight changes as values or as ranks"></svg></div>
+    <label class="sl"><span>Change of cyclist C8 (s)<span class="z">選手 C8 的變化（秒）</span></span><input type="range" id="rkX" min="32" max="400" step="1" value="212"><output id="rkXo">+212</output></label>
+    <div class="row" style="margin-top:6px"><button class="btn ghost" type="button" data-rk="32">+32</button><button class="btn ghost" type="button" data-rk="212">+212</button><button class="btn ghost" type="button" data-rk="400">+400</button></div>
+    <div class="board two" id="rkOut"></div>
+  </div>
+  <div class="blk"><span class="tag">Decide 決定</span><div id="d_2a"></div></div>
+</div></div></section>
+
+<!-- ========== 02 ========== -->
+<section id="p2" class="pnl" hidden><div class="stage cb"><div class="wrap">
+  <div class="sh"><div class="ix">02</div><div><h2>Agreement<span class="z">一致性</span></h2></div>
+    <p class="key">The correlation r from Week 6 is high. Do the two methods agree?<span class="z">第 6 週的相關 r 很高，兩種方法就一致嗎？</span></p></div>
+  <div class="blk"><span class="tag">The study 研究</span>
+    <p class="rq"><b>Research question 研究問題</b>Can a phone app replace the force plate for measuring countermovement jump height?<span class="z">手機 App 能不能取代測力板來測反向跳高度？</span></p>
+      <div class="tw"><table class="t src pico"><tbody><tr><td>P</td><td>University athletes, n = 12<span class="z">大學運動員，12 人</span></td></tr><tr><td>Methods 方法</td><td>Each jump is measured by the app and by the force plate at the same time<span class="z">每一跳同時用 App 和測力板測量</span></td></tr><tr><td>O</td><td>Jump height (cm), two readings per athlete<span class="z">跳躍高度（公分），每人兩個讀數</span></td></tr><tr><td>Design 設計</td><td>No 自變項（IV）: two measurements of the same jump<span class="z">沒有自變項（IV）：同一跳的兩個測量</span></td></tr></tbody></table></div>
+  </div>
+  <div class="blk"><span class="tag">Correlation and Bland–Altman 相關與 Bland–Altman</span>
+    <p class="def"><b>Bland–Altman</b>: for each athlete, the difference between the two methods (App − ForcePlate), plotted against their mean.<span class="z"><b>Bland–Altman</b>：每位運動員兩種方法的差（App − ForcePlate），對兩者的平均作圖。</span></p>
+    <div class="grid2">
+      <div class="fig"><svg id="agS" viewBox="0 0 360 330" role="img" aria-label="App against force plate with the line of equal readings"></svg><p class="cap"><b>Scatter plot 散佈圖</b> · Dashed line: the two methods give the same number.<span class="z">虛線：兩種方法讀數相同。</span></p></div>
+      <div class="fig"><svg id="agB" viewBox="0 0 360 330" role="img" aria-label="Difference between the methods against their mean"></svg><p class="cap"><b>Bland–Altman plot Bland–Altman 圖</b> · Solid line: bias. Dashed lines: limits of agreement.<span class="z">實線：偏差。虛線：一致性界限。</span></p></div>
+    </div>
+    <label class="sl"><span>Add to every app reading (cm)<span class="z">每個 App 讀數加上（公分）</span></span><input type="range" id="agA" min="-6" max="3" step="0.5" value="0"><output id="agAo">0</output></label>
+    <label class="sl"><span>Multiply every app reading<span class="z">每個 App 讀數乘以</span></span><input type="range" id="agK" min="0.9" max="1.2" step="0.05" value="1"><output id="agKo">× 1.00</output></label>
+    <div class="row" style="margin-top:6px"><button class="btn ghost" type="button" data-ag="-3,1">− 3 cm</button><button class="btn ghost" type="button" data-ag="3,1">+ 3 cm</button><button class="btn ghost" type="button" data-ag="0,1.2">× 1.2</button><button class="btn ghost" type="button" data-ag="0,1">Reset 還原</button></div>
+    <div class="board three" id="agOut"></div>
+    <div class="tw" style="margin-top:18px"><table class="t src"><thead><tr><th>Tool 工具</th><th>Question 問題</th><th>Result 結果</th></tr></thead><tbody><tr><td>Pearson r · Week 6</td><td>Do the two readings rise together?<span class="z">兩個讀數是否一起變大？</span></td><td>r, no unit<span class="z">r，沒有單位</span></td></tr><tr><td>Bland–Altman · Week 11</td><td>How far apart are the two readings for the same jump?<span class="z">同一跳的兩個讀數差多少？</span></td><td>Bias and limits of agreement, in cm<span class="z">偏差和一致性界限，單位是公分</span></td></tr></tbody></table></div>
+  </div>
+  <div class="blk"><span class="tag">Decide 決定</span><div id="d_3a"></div></div>
+</div></div></section>
+
+<!-- ========== 03 ========== -->
+<section id="p3" class="pnl" hidden><div class="stage neutral"><div class="wrap">
+  <div class="sh"><div class="ix">03</div><div><h2>Jamovi<span class="z">Jamovi 操作</span></h2></div>
+    <p class="key">The same numbers in Jamovi.<span class="z">同樣的數字，在 Jamovi 裡。</span></p></div>
+  <p class="wait" data-wait="d2_test,d3_tool">Jamovi opens after you press “Decide” in 01 and in 02.<span class="z">在 01 和 02 各按一次「決定」之後，這裡才會打開。</span></p>
+  <div data-after="d2_test,d3_tool" hidden>
+    <div class="tabs" role="tablist" data-tabs="t3" style="margin-top:8px">
+      <button role="tab" data-t="t3w">Wilcoxon</button><button role="tab" data-t="t3a">Correlation 相關</button><button role="tab" data-t="t3b">Bland–Altman</button><button role="tab" data-t="t3c">ICC</button></div>
+    <div id="t3w" class="tp">
+    <div class="blk rqb"><p class="rq"><b><span class="qn">Q3.1</span>Research question 研究問題</b>Is time to exhaustion longer after 4 weeks of high-intensity interval training?<span class="z">4 週高強度間歇訓練後，力竭時間是否變長？</span></p><p class="sm" style="margin-top:0">TTE_Pre and TTE_Post: the same cyclist’s time before and after, so they go in as one pair. TTE_Pre 和 TTE_Post：同一位選手訓練前後的時間，所以成對放進去。</p></div>
+    <div class="file">W11_TTE_Wide_2026.csv <em>練習資料</em></div>
+    <div class="jw" data-num="n2_w">
+      <div class="jw-bar"><span class="dots"><i></i><i></i><i></i></span><span class="path"><span>Analyses › T-Tests ›</span> Paired Samples T-Test</span></div>
+      <div class="jw-body stack">
+        <div class="jw-opts"><div class="vmap" data-vars="ID:n,TTE_Pre:c,TTE_Post:c" data-boxes="Paired Variables|TTE_Pre,TTE_Post"></div>
+          <ol class="do"><li>Tests: keep <b>Student’s</b>, tick <b>Wilcoxon rank</b></li><li>Additional Statistics: <b>Effect size</b>, <b>Descriptives</b></li><li>Assumption Checks: <b>Normality test</b></li></ol></div>
+        <div class="jw-res"><h5>Paired Samples T-Test</h5><div class="tw"><table class="t"><thead><tr><th></th><th></th><th>statistic</th><th>df</th><th>p</th><th></th><th>Effect Size</th></tr></thead>
+          <tbody><tr class="dim"><td>TTE_Pre · TTE_Post</td><td>Student’s t</td><td>−1.66</td><td>7.00</td><td>.141</td><td>Cohen’s d</td><td>−0.586</td></tr><tr class="go"><td></td><td>Wilcoxon W</td><td data-in="W"></td><td></td><td data-in="p"></td><td>Rank biserial correlation</td><td data-in="rb"></td></tr></tbody></table></div>
+          <h5 style="margin-top:12px">Normality Test (Shapiro-Wilk)</h5><div class="tw"><table class="t"><thead><tr><th></th><th>W</th><th>p</th></tr></thead><tbody><tr><td>TTE_Pre − TTE_Post</td><td>0.575</td><td>&lt; .001</td></tr></tbody></table></div>
+          <h5 style="margin-top:12px">Descriptives</h5><div class="tw"><table class="t"><thead><tr><th></th><th>N</th><th>Mean</th><th>Median</th><th>SD</th><th>SE</th></tr></thead><tbody><tr class="go"><td>TTE_Pre</td><td>8</td><td>409</td><td data-in="m1"></td><td>78.0</td><td>27.6</td></tr><tr class="go"><td>TTE_Post</td><td>8</td><td>450</td><td data-in="m2"></td><td>62.5</td><td>22.1</td></tr></tbody></table></div>
+          <p class="jw-note">Jamovi subtracts TTE_Pre − TTE_Post. W = the sum of the ranks of the positive differences. One cyclist got slower, and her change is the smallest: rank 1. Jamovi 用 TTE_Pre − TTE_Post。W = 正差值的等級和。只有一位變慢，而且她的變化最小：等級 1。</p>
+          <div class="chk"></div></div>
+      </div>
+    </div>
+  
+    </div>
+    <div id="t3a" class="tp" hidden>\n      <div class="blk rqb"><p class="rq"><b><span class="qn">Q3.2</span>Research question 研究問題</b>Do app and force-plate jump heights rise together?<span class="z">App 和測力板的跳躍高度是否一起變大？</span></p><p class="sm" style="margin-top:0">App and ForcePlate: two readings of the same jump. No 自變項（IV）. App 和 ForcePlate：同一跳的兩個讀數。沒有自變項（IV）。</p></div>
+<div class="file">W11_Jump_App_ForcePlate_2026.csv <em>練習資料</em></div>
+      <div class="jw" data-num="n3_r">
+        <div class="jw-bar"><span class="dots"><i></i><i></i><i></i></span><span class="path"><span>Analyses › Regression ›</span> Correlation Matrix</span></div>
+        <div class="jw-body">
+          <div class="jw-opts"><div class="vmap" data-vars="ID:n,App:c,ForcePlate:c" data-boxes="Variables|App,ForcePlate"></div>
+            <ol class="do"><li>Correlation Coefficients: <b>Pearson</b>, <b>Spearman</b></li></ol></div>
+          <div class="jw-res"><h5>Correlation Matrix</h5><div class="tw"><table class="t"><thead><tr><th></th><th></th><th>App</th></tr></thead>
+            <tbody><tr class="go"><td>ForcePlate</td><td>Pearson’s r</td><td data-in="r"></td></tr><tr class="dim"><td></td><td>df</td><td>10</td></tr><tr class="dim"><td></td><td>p-value</td><td>&lt; .001</td></tr><tr class="go"><td></td><td>Spearman’s rho</td><td data-in="rho"></td></tr><tr class="dim"><td></td><td>df</td><td>10</td></tr><tr class="dim"><td></td><td>p-value</td><td>&lt; .001</td></tr></tbody></table></div>
+            <div class="chk"></div></div>
+        </div>
+      </div>
+    </div>
+    <div id="t3b" class="tp" hidden>\n      <div class="blk rqb"><p class="rq"><b><span class="qn">Q3.3</span>Research question 研究問題</b>How far apart are the app and force-plate readings for the same jump?<span class="z">同一跳的 App 和測力板讀數差多少？</span></p><p class="sm" style="margin-top:0">Method 1 − Method 2 = App − ForcePlate: a positive bias means the app reads higher. Method 1 − Method 2 = App − ForcePlate：偏差為正，代表 App 讀數較高。</p></div>
+<div class="file">W11_Jump_App_ForcePlate_2026.csv <em>練習資料</em></div>
+      <div class="blk" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+        <div><span class="tag">Install once · 先安裝</span><div style="font-size:15px;margin-top:4px">⊕ Modules › jamovi library › <b>blandr</b> › Install</div></div>
+        <div class="row" style="margin:0"><button class="btn" type="button" id="gamOk">I see blandr 看到了</button><button class="btn ghost" type="button" id="gamNo">Not working 沒成功</button><span class="sm" id="gamNote"></span></div>
+      </div>
+      <div class="jw" data-num="n3_ba">
+        <div class="jw-bar"><span class="dots"><i></i><i></i><i></i></span><span class="path"><span>Analyses › blandr ›</span> Bland-Altman Analysis</span></div>
+        <div class="jw-body">
+          <div class="jw-opts"><div class="vmap" data-vars="ID:n,App:c,ForcePlate:c" data-boxes="Method 1|App;Method 2|ForcePlate"></div></div>
+          <div class="jw-res"><h5>Bland-Altman Analysis</h5><div class="tw"><table class="t"><thead><tr><th></th><th>Estimate</th><th>Lower</th><th>Upper</th></tr></thead>
+            <tbody><tr class="go"><td>Bias (n = 12)</td><td data-in="bias"></td><td>2.37</td><td>3.76</td></tr><tr class="go"><td>Lower limit of agreement</td><td data-in="lo"></td><td>−0.306</td><td>2.14</td></tr><tr class="go"><td>Upper limit of agreement</td><td data-in="hi"></td><td>3.99</td><td>6.44</td></tr></tbody></table></div>
+            <p class="jw-note">Bias = the mean of App − ForcePlate. Lower and Upper = the 95% CI of each estimate. 偏差 = App − ForcePlate 的平均數。Lower、Upper = 各估計值的 95% CI。</p>
+            <div class="chk"></div>
+            <div class="fig"><svg viewBox="0 0 640 250" role="img" aria-label="Bland-Altman plot: App minus ForcePlate against the mean of the two"><line x1="46" y1="210" x2="544" y2="210" stroke="var(--line)" stroke-width="1.5"/><line x1="46" y1="210" x2="46" y2="14" stroke="var(--line)" stroke-width="1.5"/><text x="117.1" y="226" text-anchor="middle">30</text><text x="295.0" y="226" text-anchor="middle">40</text><text x="472.9" y="226" text-anchor="middle">50</text><text x="38" y="189.5" text-anchor="end">0</text><text x="38" y="140.5" text-anchor="end">2</text><text x="38" y="91.5" text-anchor="end">4</text><text x="38" y="42.5" text-anchor="end">6</text><line x1="46" y1="185.5" x2="544" y2="185.5" stroke="var(--muted)" stroke-width="1"/><line x1="46" y1="110.4" x2="544" y2="110.4" stroke="var(--court)" stroke-width="2"/><text x="550" y="114.4">bias 3.07</text><line x1="46" y1="163.0" x2="544" y2="163.0" stroke="var(--court)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="550" y="167.0">0.92</text><line x1="46" y1="57.8" x2="544" y2="57.8" stroke="var(--court)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="550" y="61.8">5.21</text><circle cx="102.9" cy="146.3" r="5" fill="var(--court)" opacity=".85"/><circle cx="177.6" cy="77.7" r="5" fill="var(--court)" opacity=".85"/><circle cx="208.7" cy="124.2" r="5" fill="var(--court)" opacity=".85"/><circle cx="242.5" cy="90.0" r="5" fill="var(--court)" opacity=".85"/><circle cx="255.0" cy="138.9" r="5" fill="var(--court)" opacity=".85"/><circle cx="292.3" cy="104.7" r="5" fill="var(--court)" opacity=".85"/><circle cx="328.8" cy="67.9" r="5" fill="var(--court)" opacity=".85"/><circle cx="337.7" cy="131.6" r="5" fill="var(--court)" opacity=".85"/><circle cx="373.3" cy="97.3" r="5" fill="var(--court)" opacity=".85"/><circle cx="404.4" cy="119.3" r="5" fill="var(--court)" opacity=".85"/><circle cx="440.0" cy="85.0" r="5" fill="var(--court)" opacity=".85"/><circle cx="483.5" cy="141.4" r="5" fill="var(--court)" opacity=".85"/><text x="295" y="244" text-anchor="middle">mean of App and ForcePlate (cm)</text><text transform="translate(12 112) rotate(-90)" text-anchor="middle">App − ForcePlate (cm)</text></svg><p class="cap">Each dot = one athlete. Solid line: bias. Dashed lines: limits of agreement.<span class="z">每一點 = 一位運動員。實線：偏差。虛線：一致性界限。</span></p></div>
+            <div class="calc">limits of agreement = bias ± 1.96 × SD of the differences = 3.07 ± 1.96 × 1.10 = 0.92, 5.21<span class="z">一致性界限 = 偏差 ± 1.96 × 差值的標準差</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="t3c" class="tp" hidden>
+      <div class="blk rqb"><p class="rq"><b>Research question 研究問題</b>Do the two methods give the same number, summarised in one coefficient?<span class="z">兩種方法的數字是否相同，用一個係數表示？</span></p><p class="sm" style="margin-top:0">An ICC has types; each type answers a different question. ICC 有不同類型；每一型回答不同的問題。</p></div>
+
+      <div class="jw">
+        <div class="jw-bar"><span class="dots"><i></i><i></i><i></i></span><span class="path"><span>Analyses › seolmatrix ›</span> Rater Reliability · Intraclass correlation</span></div>
+        <div class="jw-res"><h5>Intraclass Correlation Coefficient</h5><div class="tw"><table class="t src"><thead><tr><th>Type</th><th>ICC</th><th>Question 問題</th></tr></thead>
+          <tbody><tr><td>ICC3 · consistency</td><td>0.985</td><td>Do the two methods rank the athletes the same way?<span class="z">兩種方法排出的名次一樣嗎？</span></td></tr><tr><td>ICC2 · absolute agreement</td><td>0.883</td><td>Do the two methods give the same number?<span class="z">兩種方法的數字一樣嗎？</span></td></tr></tbody></table></div>
+          <p class="jw-note">Pearson r = .985, the same as the consistency ICC. Only the absolute-agreement ICC drops when one method reads higher. Pearson r = .985，和 consistency 型 ICC 一樣。只有 absolute agreement 型會因為一種方法讀數偏高而下降。</p></div>
+      </div>
+    </div>
+  
+  </div>
+  <div class="can" id="can3" hidden>✓ Your Jamovi shows the same numbers.<span class="z">你的 Jamovi 跑出同樣的數字。</span></div>
+</div></div></section>
+
+<!-- ========== 04 ========== -->
+<section id="p4" class="pnl" hidden><div class="stage neutral"><div class="wrap">
+  <div class="sh"><div class="ix">04</div><div><h2>Report · apply<span class="z">報告・應用</span></h2></div>
+    <p class="key">Every number in the sentence comes from a row you can point to.<span class="z">句子裡的每個數字，都指得出是哪一列。</span></p></div>
+  <p class="wait" data-wait="d2_test,d3_tool">The report opens after you press “Decide” in 01 and in 02.<span class="z">在 01 和 02 各按一次「決定」之後，報告才會打開。</span></p>
+  <div data-after="d2_test,d3_tool" hidden>
+    <div class="blk"><span class="tag">Report 報告 · cyclists 自行車選手</span><div id="rep_B"></div></div>
+    <div class="blk"><span class="tag">Report 報告 · app and force plate App 與測力板</span><div id="rep_C"></div></div>
+  </div>
+  <div class="blk"><span class="tag">Apply 應用</span>
+    <div class="tw"><table class="t src"><thead><tr><th>Design 設計</th><th>Tool taught 已學工具</th><th>Rank test 等級檢定</th></tr></thead><tbody><tr><td>Same people, 2 conditions<span class="z">同一批人，2 個條件</span></td><td>Paired t</td><td>Wilcoxon signed-rank</td></tr><tr><td>Same people, 3+ conditions<span class="z">同一批人，3 個以上條件</span></td><td>Repeated measures ANOVA</td><td>Friedman</td></tr><tr><td>Two numbers, no IV<span class="z">兩個數值，沒有自變項（IV）</span></td><td>Pearson r</td><td>Spearman ρ</td></tr></tbody></table></div>
+    <div id="q_2a"></div><div id="q_2b"></div>
+    <div class="tw" style="margin-top:22px"><table class="t src pico"><tbody><tr><td>Study 研究</td><td>12 archers · 3 breathing rhythms, within · 10 arrows per rhythm = 360 arrows<span class="z">12 位射箭選手・3 種呼吸節奏，受試者內・每種節奏 10 箭 = 共 360 箭</span></td></tr><tr><td>依變項（DV）</td><td>Distance of the arrow from the centre (cm)<span class="z">箭著點離靶心的距離（公分）</span></td></tr><tr><td>Model 模型</td><td>Linear mixed model (LMM): breathing rhythm as the fixed effect · Random Effects: Intercept | ID only<span class="z">線性混合模型（LMM）：呼吸節奏為固定效果・Random Effects 只有 Intercept | ID</span></td></tr></tbody></table></div>
+    <div id="q_2c"></div></div>
+  <div class="can" id="can4" hidden>✓ Reported and applied.<span class="z">寫成報告，並應用到新的設計。</span></div>
+  <div class="grid2" style="margin-top:28px">
+    <div class="blk"><h3>Your stuck log<span class="z">你的卡住紀錄</span></h3><div class="slog" id="stkList"></div>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:14.5px"><input type="checkbox" id="stkNone"> Not stuck today 今天沒有卡住</label></div>
+    <div class="blk"><h3>Hand in<span class="z">交回</span></h3>
+      <div class="row"><button class="btn" type="button" id="exSend">Send 送出</button></div>
+      <div class="note" id="exNote"></div>
+      <p class="sm" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>Only if Send does not work:</b> save the file or copy it, and email it to the TA.<span class="z"><b>只有「送出」不成功時才需要：</b>儲存檔案或複製，再 email 給助教。</span></p>
+      <div class="row" style="margin-top:6px"><button class="btn ghost" type="button" id="exSave">Save file 儲存檔案</button><button class="btn ghost" type="button" id="exCopy">Copy 複製</button></div><div class="sm" id="sumbox" hidden></div></div>
+  </div>
+</div></div></section>
+
+<div class="wrap"><div class="refs"><b>References 參考文獻</b>
+  <p>Bland, J. M., &amp; Altman, D. G. (1986). Statistical methods for assessing agreement between two methods of clinical measurement. <i>The Lancet, 327</i>(8476), 307–310. https://doi.org/10.1016/S0140-6736(86)90837-8</p>
+  <p>Koo, T. K., &amp; Li, M. Y. (2016). A guideline of selecting and reporting intraclass correlation coefficients for reliability research. <i>Journal of Chiropractic Medicine, 15</i>(2), 155–163. https://doi.org/10.1016/j.jcm.2016.02.012</p></div></div>
+<div class="wrap"><footer class="foot"><span>Files 檔案：W11_Jamovi_SOP_2026 · W11_TTE_Wide_2026.csv · W11_Jump_App_ForcePlate_2026.csv</span><span class="row" style="margin:0"><button class="btn ghost" type="button" id="prev">← Back</button><button class="btn" type="button" id="next">Next →</button></span></footer></div>
+
+<button type="button" id="stuckBtn" aria-controls="stuckDr" aria-expanded="false">Stuck? 卡住了 <span class="cnt" id="stuckCnt">0</span></button>
+<div id="stuckDr" role="dialog" aria-labelledby="stuckH" hidden>
+  <h3 id="stuckH">Stuck? One line. <span class="zh" style="font-size:15px;color:var(--ink2)">卡住了？寫一行。</span></h3>
+  <div class="f"><b>Where 在哪裡</b><select id="stkWhere"></select></div>
+  <div class="f"><b>Kind 類型</b><div class="chips" id="stkType"></div></div>
+  <div class="f"><b>What happened 發生什麼</b><textarea id="stkWhat" placeholder="paste the message 貼上訊息"></textarea></div>
+  <div class="f"><b>Fixed by 怎麼解決</b><div class="chips" id="stkFix"></div></div>
+  <div class="f" id="stkAiF" hidden><b>Was the AI right? AI 對嗎？</b><div class="chips" id="stkAi"></div></div>
+  <div class="row"><button class="btn" type="button" id="stkSave">Save 儲存</button><button class="btn ghost" type="button" id="stkClose">Close 關閉</button><span class="sm" id="stkNote"></span></div>
+</div>
+<button type="button" id="selfBtn" aria-controls="selfDr" aria-expanded="false" hidden>Self-check 自我評估 <span class="cnt" id="selfCnt">–</span></button>
+<div id="selfDr" role="dialog" aria-labelledby="selfH" hidden>
+  <h3 id="selfH">Week 1 and now <span class="zh" style="font-size:15px;color:var(--ink2)">第 1 週和現在</span></h3>
+  <div id="selfBox"></div>
+  <div class="row"><button class="btn ghost" type="button" id="selfClose">Close 關閉</button></div>
+</div>
+
+<script>
+"use strict";
+/* ---------- items: short question, short options, hints behind a button ---------- */
+var UNS=['unsure','Not sure','不確定'];
+var ITEMS=[
+ {id:'q2_fried',n:'Q4.3',page:'p4',m:'q_2a',q:['The same cyclists are tested at week 0, 4 and 8, and the times are skewed. Which rank test?','同一批選手在第 0、4、8 週各測一次，時間呈偏態。用哪一個等級檢定？'],key:'fri',chips:true,
+  opts:[['wil','Wilcoxon signed-rank','Wilcoxon signed-rank'],['fri','Friedman','Friedman'],['kw','Kruskal–Wallis','Kruskal–Wallis'],UNS],
+  hints:[['Same people or different people?','同一批人，還是不同的人？'],['How many conditions?','有幾個條件？']],
+  ofb:{wil:['Wilcoxon signed-rank compares 2 conditions.','Wilcoxon signed-rank 比較 2 個條件。'],kw:['Kruskal–Wallis is for 3+ separate groups.','Kruskal–Wallis 用在 3 組以上不同的人。']},
+  fb:['Same people, 3+ conditions → Friedman.','同一批人、3 個以上條件 → Friedman。']},
+ {id:'q2_spear',n:'Q4.4',page:'p4',m:'q_2b',q:['Ten javelin throwers: grip strength (kg) and throwing distance (m). One thrower’s distance is far beyond the others. Do the two go together? Which coefficient do you plan?','10 位標槍選手：握力（公斤）和擲遠距離（公尺）。其中一位的距離遠遠超過其他人。兩者是否一起變大？你計畫用哪一個係數？'],key:'spe',chips:true,
+  opts:[['pea','Pearson r','Pearson r'],['spe','Spearman ρ','Spearman ρ'],['wil','Wilcoxon signed-rank','Wilcoxon signed-rank'],UNS],
+  hints:[['Two numbers, no 自變項（IV）: a relationship question.','兩個數值、沒有自變項（IV）：關係的問題。'],['Which coefficient uses the order instead of the values?','哪一個係數用的是順序，不是數值？']],
+  ofb:{pea:['Pearson r uses the values: one extreme thrower can raise or lower r on her own.','Pearson r 用的是數值：一位極端的選手就能把 r 拉高或拉低。'],wil:['Wilcoxon signed-rank compares two conditions in the same people. Here the two numbers are two different variables.','Wilcoxon signed-rank 比較同一批人的兩個條件。這裡的兩個數值是兩個不同的變項。']},
+  fb:['Two numbers, no IV, one extreme value → Spearman ρ: Pearson r computed on the ranks.','兩個數值、沒有自變項（IV）、一個極端值 → Spearman ρ：用等級算的 Pearson r。']},
+ {id:'q4_arch',n:'Q4.5',page:'p4',m:'q_2c',q:['Linear mixed model (LMM) question: what does this model let differ between archers?','線性混合模型（LMM）問題：這個模型讓射手之間哪一樣可以不同？'],key:'start',
+  opts:[['start','Only the starting level (Intercept | ID)','只有起點（Intercept | ID）'],['both','The starting level (Intercept | ID) and how much breathing rhythm affects him (Intercept | ID_Condition)','起點（Intercept | ID），和呼吸節奏對他的影響（Intercept | ID_Condition）'],['none','Nothing (no random effect)','什麼都不能不同（沒有隨機效果）'],UNS],
+  hints:[['Intercept | ID = each archer’s own starting level.','Intercept | ID = 每位射手自己的起點。'],['Is there a term in Random Effects that carries the breathing rhythm?','Random Effects 裡，有沒有哪一項帶著呼吸節奏？']],
+  ofb:{both:['That needs a second term, Intercept | ID_Condition. This model has only Intercept | ID.','那需要第二項 Intercept | ID_Condition。這個模型只有 Intercept | ID。'],none:['Each archer keeps his own starting level.','每位射手有自己的起點。']},
+  fb:['Only the starting level (Intercept | ID). So the model assumes breathing rhythm acts the same in all 12, and the test counts 360 arrows. To count archers, add Intercept | ID_Condition: Den df (12 − 1) × (3 − 1) = 22.','只有起點（Intercept | ID）。所以模型假設呼吸節奏對 12 人的作用都一樣，檢定數的是 360 支箭。要數射手，就加 Intercept | ID_Condition：分母自由度 (12 − 1) × (3 − 1) = 22。']}
+];
+
+/* ---------- decisions: choose, write the reason, then the stage opens ---------- */
+var DEC=[
+ {id:'d2_test',n:'Q1.1',page:'p1',m:'d_2a',q:['Which test do you plan?','你計畫用哪一個檢定？'],key:'wil',
+  opts:[['t','Paired t-test','成對樣本 t 檢定'],['wil','Wilcoxon signed-rank','Wilcoxon signed-rank'],['both','Run both, report the smaller p','兩個都跑，報告 p 較小的'],UNS],
+  ofb:{t:['The paired t-test compares the mean change. Here one cyclist makes most of that mean.','成對 t 比較的是平均變化。這裡大部分的平均來自一位選手。'],both:['Choosing after you see both p values raises the false-positive rate.','看完兩個 p 再選，會提高假陽性率。']},
+  model:['Wilcoxon signed-rank, because with 8 cyclists one extreme change (+212 s) pulls the mean and inflates the SD. Ranks use every cyclist’s direction and order, so one value cannot dominate.','Wilcoxon signed-rank，因為只有 8 位選手，一個極端的變化（+212 秒）會拉高平均數、放大標準差。等級用的是每位選手的方向和順序，一個值不會主導結果。']},
+ {id:'d3_tool',n:'Q2.1',page:'p2',m:'d_3a',q:['The thesis wants to write that the app “agrees with” the force plate. Which analysis do you plan?','論文想寫 App 和測力板「一致」。你計畫用哪一個分析？'],key:'ba',
+  opts:[['r','Pearson r','Pearson r'],['t','Paired t-test','成對樣本 t 檢定'],['ba','Bland–Altman','Bland–Altman'],UNS],
+  ofb:{r:['r asks whether the two readings rise together, not whether they are the same number.','r 問的是兩個讀數是否一起變大，不是數字是否相同。'],t:['A t-test asks only whether the mean difference is zero. Wide scatter gives p > .05 and looks like agreement.','t 檢定只問平均差是不是零。差值很分散時 p > .05，看起來反而像一致。']},
+  model:['Bland–Altman, because agreement asks how far apart the two readings are for the same jump, in cm. r only shows that they rise together: an app that always reads 3 cm high still gives r near 1.','Bland–Altman，因為一致性問的是同一跳的兩個讀數差幾公分。r 只表示兩者一起變大：App 永遠多 3 公分，r 還是接近 1。']}
+];
+
+/* ---------- number checks: the empty cells in each Jamovi window ---------- */
+var NUMS=[
+ {id:'n2_w',page:'p3',f:[['W',1,'1.00'],['p',.015625,'.016'],['rb',-.944444,'−0.944'],['m1',401,'401'],['m2',446,'446']],
+  traps:[['W',35,.5,'That is Post − Pre. Put TTE_Pre first, as on the page.','那是 Post − Pre。照頁面，TTE_Pre 放前面。'],['W',-1.66,.05,'That is the Student’s t row. Read the Wilcoxon W row.','那是 Student’s t 那一列。讀 Wilcoxon W 那一列。'],['p',.141,.002,'That is the Student’s t row. Read the Wilcoxon W row.','那是 Student’s t 那一列。讀 Wilcoxon W 那一列。'],['rb',.944,.006,'Keep the sign Jamovi shows (Pre − Post).','照 Jamovi 顯示的正負號（Pre − Post）。'],['rb',-.586,.006,'That is Cohen’s d, on the Student’s t row.','那是 Cohen’s d，在 Student’s t 那一列。'],['m1',409,.6,'That is the Mean. Read the Median column.','那是 Mean。讀 Median 那一欄。'],['m2',450,.6,'That is the Mean. Read the Median column.','那是 Mean。讀 Median 那一欄。']]},
+ {id:'n3_r',page:'p3',f:[['r',.985196,'0.985'],['rho',.986014,'0.986']],traps:[['r',10,.5,'That is the df row.','那是 df 那一列。']]},
+ {id:'n3_ba',page:'p3',f:[['bias',3.066667,'3.07'],['lo',.919052,'0.919'],['hi',5.214281,'5.21']],
+  traps:[['bias',-3.067,.02,'Other direction: Method 1 = App, Method 2 = ForcePlate.','方向相反：Method 1 = App，Method 2 = ForcePlate。'],['lo',2.37,.02,'That is the CI of the bias. Read the Estimate column.','那是偏差的 CI。讀 Estimate 那一欄。'],['hi',3.76,.02,'That is the CI of the bias. Read the Estimate column.','那是偏差的 CI。讀 Estimate 那一欄。']]}
+];
+
+/* ---------- six things a result can report ---------- */
+var SIX=[['stat','Statistic','統計量'],['df','df','自由度'],['p','Exact p','精確 p'],['es','Effect size','效果量'],['ci','95% CI','95% CI'],['ph','Post hoc method','事後比較方法']];
+var APA={
+ B:{page:'p4',ph:'A Wilcoxon signed-rank test showed …',
+  model:'A Wilcoxon signed-rank test showed longer time to exhaustion after training (<i>Mdn</i> = 446 s) than before (<i>Mdn</i> = 401 s), <span class="k"><i>W</i> = 1<sup>statistic</sup></span>, <span class="k"><i>p</i> = .016<sup>exact p</sup></span>, <span class="k">rank-biserial correlation = .94<sup>effect size</sup></span>.',
+  note:['A rank test has no df. Report medians, not means.','等級檢定沒有自由度。報告中位數，不是平均數。'],
+  src:'<h5 style="margin-top:14px">Where each number comes from<span class="z">每個數字從哪裡來</span></h5><div class="tw"><table class="t src"><tbody><tr><td><i>Mdn</i> = 446 s, 401 s</td><td>Descriptives › Median column: TTE_Post, TTE_Pre.<span class="z">Descriptives › Median 那一欄：TTE_Post、TTE_Pre。</span></td></tr><tr><td><i>W</i> = 1</td><td>Paired Samples T-Test › Wilcoxon W row › statistic 1.00.<span class="z">Paired Samples T-Test › Wilcoxon W 那一列的 statistic。</span></td></tr><tr><td><i>p</i> = .016</td><td>Same row › p.<span class="z">同一列的 p。</span></td></tr><tr><td>.94</td><td>Same row › Rank biserial correlation −0.944. The minus sign comes from Pre − Post: write the direction in words.<span class="z">同一列的 Rank biserial correlation −0.944。負號來自 Pre − Post：方向用文字寫。</span></td></tr></tbody></table></div>'},
+ C:{page:'p4',ph:'App and force-plate jump heights …',
+  model:'App and force-plate jump heights were strongly correlated, <span class="k"><i>r</i>(10) = .99<sup>statistic · df</sup></span>, <span class="k"><i>p</i> &lt; .001<sup>p</sup></span>. A Bland–Altman analysis showed that the app read <span class="k">3.07 cm higher<sup>effect size</sup></span> than the force plate (bias), 95% limits of agreement [0.92, 5.21] cm, so the two methods are not interchangeable.',
+  note:['Agreement is reported in the units of the outcome: cm.','一致性用結果變項的單位報告：公分。'],
+  src:'<h5 style="margin-top:14px">Where each number comes from<span class="z">每個數字從哪裡來</span></h5><div class="tw"><table class="t src"><tbody><tr><td><i>r</i>(10) = .99, <i>p</i> &lt; .001</td><td>Correlation Matrix › Pearson’s r 0.985, df 10, p-value.<span class="z">Correlation Matrix › Pearson’s r、df、p-value。</span></td></tr><tr><td>3.07 cm</td><td>Bland-Altman Analysis › Bias row › Estimate.<span class="z">Bland-Altman Analysis › Bias 那一列的 Estimate。</span></td></tr><tr><td>[0.92, 5.21] cm</td><td>Bland-Altman Analysis › Lower limit of agreement 0.919, Upper limit of agreement 5.21 › Estimate.<span class="z">Bland-Altman Analysis › 兩條一致性界限的 Estimate。</span></td></tr></tbody></table></div>'}
+};
+
+function el(id){return document.getElementById(id)}
+function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+/* ---------- event log (same 27 columns as Weeks 7–9) ---------- */
+var LESSON='W11_RANKS_AGREEMENT',CONTENT='2026.1',SCHEMA='1',STORE='W11_LAB_'+CONTENT;
+var SHEET_URL='https://script.google.com/macros/s/AKfycbynNgUFsUH_YTErZE7zE467vydbG0Pwd8Obs7Jv5Sdk2pGYJwU0zgeoecPISConOwdY/exec';   /* Apps Script web-app URL (/exec). Empty = Save file only. */
+var SENT=0,EV=[],SEQ=0,T0=performance.now(),SID=null,VIS={page:'p0',since:performance.now(),acc:{}};
+function sid(){return 'S'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function now(){return new Date().toISOString()}
+function tz(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){return ''}}
+function who(){return el('who').value.trim()}
+function log(o){SEQ++;var e={schema_version:SCHEMA,lesson_id:LESSON,content_version:CONTENT,learner_name:who(),session_id:SID,event_id:SID+'-'+SEQ,sequence_no:SEQ,
+  event_time:now(),timezone:tz(),elapsed_ms:Math.round(performance.now()-T0),page_id:o.page_id||VIS.page,item_id:o.item_id||'',item_version:o.item_version||CONTENT,event_type:o.event_type,
+  attempt_no:o.attempt_no||'',selected_option:o.selected_option||'',correctness:o.correctness||'',reason_option:o.reason_option||'',confidence:o.confidence||'',
+  support_type:o.support_type||'',hint_level:o.hint_level||'',answer_revealed:o.answer_revealed||'',prior_event_id:o.prior_event_id||'',visible_duration_ms:o.visible_duration_ms||'',
+  data_origin:o.data_origin||'observed_in_page',completion_status:o.completion_status||'',other_text:o.other_text||''};
+  EV.push(e);save();queueSend();return e.event_id}
+var UI={num:{},dec:{},rep:{},self:{v:{},t:'',none:false,sent:false,seen:false},rv:{},demo:{x:212,m:'v',a:0,k:1,md:'A'},apa:{B:{t:'',ticks:{},sent:false,rev:'',revSent:false},C:{t:'',ticks:{},sent:false,rev:'',revSent:false}},stuck:[],none:false,gam:'',tab:{}};
+var ST={};
+var RESETTING=false;
+function save(){if(RESETTING)return;try{localStorage.setItem(STORE,JSON.stringify({sid:SID,seq:SEQ,ev:EV,st:ST,name:who(),ui:UI,sent:SENT}))}catch(e){}}
+function visTick(){var n=performance.now();if(document.visibilityState==='visible'){VIS.acc[VIS.page]=(VIS.acc[VIS.page]||0)+(n-VIS.since)}VIS.since=n}
+document.addEventListener('visibilitychange',function(){visTick();log({event_type:'visibility_change',selected_option:document.visibilityState})});
+window.addEventListener('pagehide',function(){visTick();save()});
+var PANELS=['p0','p1','p2','p3','p4'],cur=0;
+function gate(en,zh){var o=document.querySelector('.gate');if(o)o.remove();var g=document.createElement('div');g.className='gate';g.setAttribute('role','status');g.innerHTML=en+'<span class="z">'+zh+'</span>';document.body.appendChild(g);setTimeout(function(){g.remove()},3800)}
+function needName(){if(!who()){go(0);el('who').focus();gate('Type your name first.','請先輸入姓名。');return true}return false}
+
+
+/* ---------- multiple choice ---------- */
+function st(id){if(!ST[id])ST[id]={att:[],hints:[],lock:false,lastEv:''};return ST[id]}
+function isKey(it,v){return it.key===v}
+function render(it){var s=st(it.id),box=el('i_'+it.id);if(!box)return;var sel=box.dataset.sel||'',n=s.att.length,done=s.lock,hn=(it.hints||[]).length,last=n?s.att[n-1]:null;
+  var h='<p class="qt">'+(it.n?'<span class="qn">'+it.n+'</span>':'')+it.q[0]+'<span class="z">'+it.q[1]+'</span></p><div class="op'+(it.chips?' chips':'')+'">';
+  it.opts.forEach(function(o){var k=isKey(it,o[0]),pr=done?(last&&last.v===o[0]):(sel===o[0]);var cls=done?(k?'key':(pr?'miss':'dim')):'';
+    var mk=done?(k?'<span class="mk">✓</span>':(pr&&last.c==='incorrect'?'<span class="mk">✗</span>':'')):'';
+    h+='<button type="button" data-v="'+o[0]+'" class="'+cls+'" aria-pressed="'+(pr?'true':'false')+'"'+(done?' disabled':'')+'>'+mk+o[1]+(o[2]!==o[1]?'<span class="z">'+o[2]+'</span>':'')+'</button>'});
+  h+='</div>';
+  s.hints.forEach(function(l){var t=it.hints[l-1];h+='<div class="hint"><span class="hl">hint '+l+'</span>'+t[0]+'<span class="z">'+t[1]+'</span></div>'});
+  if(n){var a=last;
+    if(a.c==='correct')h+='<div class="fb ok"><b>✓ '+it.fb[0]+'</b><span class="z">'+it.fb[1]+'</span></div>';
+    else if(done)h+='<div class="fb no"><b>'+it.fb[0]+'</b><span class="z">'+it.fb[1]+'</span></div>';
+    else{var of=(it.ofb&&it.ofb[a.v])?it.ofb[a.v]:null;h+='<div class="fb no"><b>'+(a.c==='unscored'?'Try once more.':'Not yet.')+(of?' '+of[0]:'')+'</b><span class="z">'+(a.c==='unscored'?'再試一次。':'再想想。')+(of?of[1]:'')+'</span></div>'}}
+  if(!done)h+='<div class="acts"><button class="btn" type="button" data-act="submit">'+(n?'Submit again 再送出':'Submit 送出')+'</button>'+(s.hints.length<hn?'<button class="btn ghost" type="button" data-act="hint">Hint 提示</button>':'')+'</div>';
+  box.innerHTML=h}
+function mount(it){var d=document.createElement('div');d.id='i_'+it.id;d.className='q';d.dataset.sel='';el(it.m).appendChild(d);render(it);
+  d.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var s=st(it.id);
+    if(b.dataset.v!==undefined&&!s.lock){d.dataset.sel=b.dataset.v;render(it);return}
+    if(b.dataset.act==='hint'){var lv=s.hints.length+1;s.hints.push(lv);s.lastEv=log({page_id:it.page,item_id:it.id,event_type:'hint_open',hint_level:lv,support_type:'prewritten_hint',attempt_no:s.att.length+1,prior_event_id:s.lastEv});render(it);return}
+    if(b.dataset.act==='submit'){if(needName())return;var v=d.dataset.sel;if(!v){gate('Choose one first.','請先選一個。');return}
+      var c=v==='unsure'?'unscored':(isKey(it,v)?'correct':'incorrect'),no=s.att.length+1;s.att.push({v:v,c:c,t:now()});var fin=(c==='correct')||no>=2;s.lock=fin;
+      s.lastEv=log({page_id:it.page,item_id:it.id,event_type:no===1?'answer_submit':'revision_submit',attempt_no:no,selected_option:v,correctness:c,hint_level:s.hints.length?s.hints[s.hints.length-1]:'',answer_revealed:fin?'yes':'no',prior_event_id:s.lastEv});
+      if(fin)log({page_id:it.page,item_id:it.id,event_type:'answer_reveal',attempt_no:no,prior_event_id:s.lastEv,data_origin:'computed',correctness:c});
+      d.dataset.sel='';render(it);progress();save()}})}
+
+
+/* ---------- number checks inside the Jamovi windows ---------- */
+function numNorm(s){return String(s==null?'':s).replace(/[\uFF01-\uFF5E]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0)}).replace(/[。]/g,'.').replace(/^\s*[A-Za-zη²ₚ]+\s*(\([^)]*\))?\s*=\s*/,'')}
+function numParse(s){s=numNorm(s).trim().replace(/[−–]/g,'-').replace(/\s/g,'');if(!s)return null;var lt=/^</.test(s);s=s.replace(/^[<=]+/,'');if(/^-?\./.test(s))s=s.replace(/^(-?)\./,'$10.');var v=parseFloat(s);return isNaN(v)?null:{v:v,lt:lt}}
+function numDec(s){s=numNorm(s).replace(/[^0-9.]/g,'');var k=s.indexOf('.');return k<0?0:s.length-k-1}
+function numSig(s){s=numNorm(s).replace(/[^0-9]/g,'').replace(/^0+/,'');return s.length}
+function numOk(f,x,raw){if(!x)return false;var k=f[0],ex=f[1];if(x.lt)return ex<.001&&x.v<=.001;var d=numDec(raw);
+  if(k==='p'||k==='ps'){if(d<3)return false}else if(k!=='df'&&k!=='W'){if(numSig(raw)<2)return false}
+  return Math.abs(x.v-ex)<=0.5*Math.pow(10,-d)+1e-9}
+function nstate(id){if(!UI.num[id])UI.num[id]={vals:{},att:0,ok:false,trap:null};return UI.num[id]}
+function nspec(id){for(var i=0;i<NUMS.length;i++)if(NUMS[i].id===id)return NUMS[i]}
+function fmtKey(f){var v=f[1];return f[0]==='df'?String(v):(Math.abs(v)<1&&f[0]!=='lo'&&f[0]!=='est'?v.toFixed(3).replace(/^0/,''):v.toFixed(2))}
+function nRender(id){var N=nspec(id),w=document.querySelector('.jw[data-num="'+id+'"]');if(!w)return;var s=nstate(id);
+  N.f.forEach(function(f){var td=w.querySelector('td[data-in="'+f[0]+'"]');if(!td)return;var inp=td.querySelector('input');
+    if(!inp){inp=document.createElement('input');inp.type='text';inp.inputMode='decimal';inp.autocomplete='off';inp.setAttribute('aria-label',f[0]);inp.dataset.k=f[0];td.appendChild(inp);
+      inp.addEventListener('input',function(){nstate(id).vals[f[0]]=inp.value;save()});inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();nCheck(id)}})}
+    if(inp.value!==(s.vals[f[0]]||''))inp.value=s.vals[f[0]]||'';
+    var x=numParse(inp.value);inp.className=s.att?(numOk(f,x,inp.value)?'good':(inp.value?'off':'')):'';inp.disabled=s.ok});
+  var c=w.querySelector('.chk');var m='';
+  if(s.ok)m='<span class="msg ok">✓ Matches 對上了</span>';
+  else if(s.att){var t=s.trap;m='<span class="msg no">'+(t?t[0]:'Type it as Jamovi shows it, and check the row.')+'<span class="z">'+(t?t[1]:'照 Jamovi 顯示的數字輸入，並檢查是哪一行。')+'</span></span>';
+    if(s.att>=3)m+='<span class="msg">Answer 答案：'+N.f.map(function(f){return f[0]+' = '+f[2]}).join(' · ')+'</span>'}
+  c.innerHTML=(s.ok?'':'<button class="btn" type="button">Check 核對</button>')+m;var b=c.querySelector('button');if(b)b.onclick=function(){nCheck(id)};
+  tabMarks()}
+function nCheck(id){if(needName())return;var N=nspec(id),s=nstate(id),all=true,str=[];
+  N.f.forEach(function(f){var x=numParse(s.vals[f[0]]);if(!numOk(f,x,s.vals[f[0]]))all=false;str.push(f[0]+'='+(s.vals[f[0]]||''))});
+  s.trap=null;if(!all)(N.traps||[]).forEach(function(t){var x=numParse(s.vals[t[0]]);if(!s.trap&&x&&Math.abs(x.v-t[1])<=t[2])s.trap=[t[3],t[4]]});
+  s.att++;if(all)s.ok=true;
+  log({page_id:N.page,item_id:id,event_type:'num_check',attempt_no:s.att,selected_option:str.join(';'),correctness:all?'correct':'incorrect',reason_option:s.trap?'trap':'',answer_revealed:(!all&&s.att>=3)?'yes':''});
+  nRender(id);repRender('B');repRender('C');progress();save()}
+
+
+/* ---------- tabs inside a stage ---------- */
+document.querySelectorAll('[data-tabs]').forEach(function(g){var key=g.dataset.tabs;
+  g.addEventListener('click',function(e){var b=e.target.closest('button[data-t]');if(!b)return;UI.tab[key]=b.dataset.t;tabShow(g);log({item_id:key,event_type:'widget_use',selected_option:b.dataset.t});save()});tabShow(g)});
+function tabShow(g){var key=g.dataset.tabs,bs=g.querySelectorAll('button[data-t]'),cur=UI.tab[key]||bs[0].dataset.t;
+  bs.forEach(function(b){var on=b.dataset.t===cur;b.setAttribute('aria-selected',on?'true':'false');el(b.dataset.t).hidden=!on})}
+function tabMarks(){document.querySelectorAll('[data-tabs] button[data-t]').forEach(function(b){var ws=[].slice.call(el(b.dataset.t).querySelectorAll('.jw[data-num]'));var ok=ws.length&&ws.every(function(w){return UI.num[w.dataset.num]&&UI.num[w.dataset.num].ok});
+  var m=b.querySelector('.ok');if(ok&&!m){m=document.createElement('span');m.className='ok';m.textContent='✓';b.appendChild(m)}if(!ok&&m)m.remove()})}
+
+
+/* ---------- 01 · values or ranks ---------- */
+var RKB=[15,22,-5,31,9,26,18];
+function lgam(x){var c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,.001208650973866179,-.000005395239384953],y=x,t=x+5.5,s=1.000000000190015;t-=(x+.5)*Math.log(t);for(var j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x)}
+function betacf(a,b,x){var qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap,h;if(Math.abs(d)<1e-30)d=1e-30;d=1/d;h=d;for(var m=1;m<=200;m++){var m2=2*m,aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;h*=d*c;aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<1e-30)d=1e-30;c=1+aa/c;if(Math.abs(c)<1e-30)c=1e-30;d=1/d;var del=d*c;h*=del;if(Math.abs(del-1)<3e-9)break}return h}
+function betai(a,b,x){if(x<=0)return 0;if(x>=1)return 1;var bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b}
+function tP(t,df){return betai(df/2,.5,df/(df+t*t))}
+function wilP(d){var n=d.length,o=d.map(function(v,i){return i}).sort(function(a,b){return Math.abs(d[a])-Math.abs(d[b])}),rk=[],W=0;o.forEach(function(i,r){rk[i]=r+1});d.forEach(function(v,i){if(v<0)W+=rk[i]});
+  var cnt=0;for(var m=0;m<(1<<n);m++){var s=0;for(var i=0;i<n;i++)if(m&(1<<i))s+=i+1;if(s<=W)cnt++}return{rk:rk,W:W,p:Math.min(1,2*cnt/(1<<n))}}
+function pf(p){return p<.001?'< .001':'= '+p.toFixed(3).replace(/^0/,'')}
+function rkDraw(){var X=+UI.demo.x,mode=UI.demo.m,d=RKB.concat([X]),n=d.length,mean=d.reduce(function(a,b){return a+b},0)/n,sd=Math.sqrt(d.reduce(function(a,b){return a+(b-mean)*(b-mean)},0)/(n-1)),t=mean/(sd/Math.sqrt(n)),pt=tP(t,n-1),w=wilP(d);
+  var W=640,L=30,R=20,y=62;function sx(v){return L+(v+20)/440*(W-L-R)}function sr(r){return L+(r+2)/11*(W-L-R)}
+  var svg=el('rkSvg');
+  if(!svg.dataset.init){var h='<line x1="'+L+'" y1="'+(y+26)+'" x2="'+(W-R)+'" y2="'+(y+26)+'" stroke="var(--line)" stroke-width="1.5"/><g id="rkAx"></g><line id="rkZero" y1="18" y2="'+(y+26)+'" stroke="var(--ink)" stroke-width="1" stroke-dasharray="3 3"/><g id="rkMean"><path d="M0 '+(y+26)+' l-7 12 h14 z" fill="var(--ink)"/><text id="rkMeanT" y="'+(y+54)+'" text-anchor="middle"></text></g>';
+    for(var i=0;i<n;i++)h+='<g class="rkd" id="rkd'+i+'"><circle cx="0" cy="'+y+'" r="'+(i===n-1?9:7)+'" fill="var(--track)" opacity="'+(i===n-1?1:.75)+'"/><text id="rkt'+i+'" y="'+(y-14)+'" text-anchor="middle"></text></g>';
+    h+='<text id="rkCap" x="'+(W-R)+'" y="146" text-anchor="end"></text>';svg.innerHTML=h;svg.dataset.init='1'}
+  var ax='';if(mode==='v'){[0,100,200,300,400].forEach(function(v){ax+='<line x1="'+sx(v)+'" y1="'+(y+22)+'" x2="'+sx(v)+'" y2="'+(y+30)+'" stroke="var(--muted)"/><text x="'+sx(v)+'" y="'+(y+70)+'" text-anchor="middle">'+v+'</text>'})}
+  else{for(var r=-1;r<=8;r++)if(r!==0)ax+='<line x1="'+sr(r)+'" y1="'+(y+22)+'" x2="'+sr(r)+'" y2="'+(y+30)+'" stroke="var(--muted)"/><text x="'+sr(r)+'" y="'+(y+70)+'" text-anchor="middle">'+(r<0?'−'+(-r):r)+'</text>'}
+  el('rkAx').innerHTML=ax;var z=mode==='v'?sx(0):sr(0);el('rkZero').setAttribute('x1',z);el('rkZero').setAttribute('x2',z);
+  d.forEach(function(v,i){var px=mode==='v'?sx(v):sr(v<0?-w.rk[i]:w.rk[i]);el('rkd'+i).style.transform='translateX('+px.toFixed(1)+'px)';el('rkt'+i).textContent=mode==='v'?(i===n-1?'+'+v:''):(v<0?'−':'')+w.rk[i]});
+  el('rkMean').style.transform='translateX('+sx(mean).toFixed(1)+'px)';el('rkMean').style.opacity=mode==='v'?1:0;el('rkMeanT').textContent='mean '+mean.toFixed(1);
+  el('rkCap').textContent=mode==='v'?'change in time to exhaustion (s) = Post − Pre':'rank of the change; − = got slower';
+  el('rkX').value=X;el('rkXo').textContent='+'+X;
+  document.querySelectorAll('#rkMode button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.m===mode?'true':'false')});
+  el('rkOut').innerHTML='<div><b>Paired t-test<span class="z">成對樣本 t 檢定</span></b><span>mean change '+mean.toFixed(1)+' s · SD '+sd.toFixed(1)+' s<span class="z">平均變化・標準差</span></span><em>p '+pf(pt)+'</em></div>'+
+    '<div><b>Wilcoxon signed-rank</b><span>7 faster, ranks 2 to 8 · 1 slower, rank 1<span class="z">7 位進步，等級 2 到 8・1 位退步，等級 1</span></span><em>p '+pf(w.p)+'</em></div>'}
+el('rkMode').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;UI.demo.m=b.dataset.m;rkDraw();log({page_id:'p1',item_id:'rank_view',event_type:'widget_use',selected_option:UI.demo.m});save()});
+el('rkX').addEventListener('input',function(){UI.demo.x=+this.value;rkDraw()});
+el('rkX').addEventListener('change',function(){log({page_id:'p1',item_id:'rank_slider',event_type:'widget_use',selected_option:String(UI.demo.x)});save()});
+document.querySelectorAll('[data-rk]').forEach(function(b){b.onclick=function(){UI.demo.x=+b.dataset.rk;rkDraw();log({page_id:'p1',item_id:'rank_slider',event_type:'widget_use',selected_option:String(UI.demo.x)});save()}});
+
+/* ---------- 02 · rise together, or the same number ---------- */
+var AGF=[28.4,31.2,33.9,35.1,36.8,38.2,39.5,41.3,42.6,44.8,46.1,49.7],AGA=[30.0,35.6,36.4,39.0,38.7,41.5,44.3,43.5,46.2,47.5,50.2,51.5];
+function agDraw(){var a=+UI.demo.a,k=+UI.demo.k,n=AGF.length,ap=AGA.map(function(v){return v*k+a}),d=ap.map(function(v,i){return v-AGF[i]}),m=ap.map(function(v,i){return (v+AGF[i])/2});
+  function mu(x){return x.reduce(function(p,q){return p+q},0)/x.length}
+  var bias=mu(d),sd=Math.sqrt(d.reduce(function(p,q){return p+(q-bias)*(q-bias)},0)/(n-1)),lo=bias-1.96*sd,hi=bias+1.96*sd,mx=mu(AGF),my=mu(ap),sxy=0,sxx=0,syy=0;
+  AGF.forEach(function(x,i){sxy+=(x-mx)*(ap[i]-my);sxx+=(x-mx)*(x-mx);syy+=(ap[i]-my)*(ap[i]-my)});var r=sxy/Math.sqrt(sxx*syy);
+  var S=360,H=330,P=44,T=12,A0=20,A1=68;function q(v){return P+(v-A0)/(A1-A0)*(S-P-12)}function qy(v){return H-P-(v-A0)/(A1-A0)*(H-P-T)}
+  var h='<line x1="'+P+'" y1="'+(H-P)+'" x2="'+(S-12)+'" y2="'+(H-P)+'" stroke="var(--line)" stroke-width="1.5"/><line x1="'+P+'" y1="'+(H-P)+'" x2="'+P+'" y2="'+T+'" stroke="var(--line)" stroke-width="1.5"/>';
+  [30,40,50,60].forEach(function(t){h+='<text x="'+q(t)+'" y="'+(H-P+16)+'" text-anchor="middle">'+t+'</text><text x="'+(P-8)+'" y="'+(qy(t)+4)+'" text-anchor="end">'+t+'</text>'});
+  h+='<line x1="'+q(A0)+'" y1="'+qy(A0)+'" x2="'+q(A1)+'" y2="'+qy(A1)+'" stroke="var(--ink)" stroke-width="1.2" stroke-dasharray="5 4"/>';
+  AGF.forEach(function(x,i){h+='<line x1="'+q(x)+'" y1="'+qy(x)+'" x2="'+q(x)+'" y2="'+qy(ap[i])+'" stroke="var(--court)" stroke-width="1" opacity=".45"/><circle cx="'+q(x)+'" cy="'+qy(ap[i]).toFixed(1)+'" r="5" fill="var(--court)" opacity=".9"/>'});
+  h+='<text x="'+((P+S-12)/2)+'" y="'+(H-6)+'" text-anchor="middle">ForcePlate (cm)</text><text transform="translate(12 '+((H-P+T)/2)+') rotate(-90)" text-anchor="middle">App (cm)</text>';el('agS').innerHTML=h;
+  var B0=-10,B1=18,M0=22,M1=64;function bx(v){return P+(v-M0)/(M1-M0)*(S-P-58)}function by(v){return H-P-(v-B0)/(B1-B0)*(H-P-T)}var xr=S-58;
+  h='<line x1="'+P+'" y1="'+(H-P)+'" x2="'+xr+'" y2="'+(H-P)+'" stroke="var(--line)" stroke-width="1.5"/><line x1="'+P+'" y1="'+(H-P)+'" x2="'+P+'" y2="'+T+'" stroke="var(--line)" stroke-width="1.5"/>';
+  [30,40,50,60].forEach(function(t){h+='<text x="'+bx(t)+'" y="'+(H-P+16)+'" text-anchor="middle">'+t+'</text>'});[-5,0,5,10,15].forEach(function(t){h+='<text x="'+(P-8)+'" y="'+(by(t)+4)+'" text-anchor="end">'+(t<0?'−'+(-t):t)+'</text>'});
+  h+='<line x1="'+P+'" y1="'+by(0)+'" x2="'+xr+'" y2="'+by(0)+'" stroke="var(--ink)" stroke-width="1.2" stroke-dasharray="5 4"/>';
+  h+='<line x1="'+P+'" y1="'+by(bias).toFixed(1)+'" x2="'+xr+'" y2="'+by(bias).toFixed(1)+'" stroke="var(--court)" stroke-width="2"/><text x="'+(xr+4)+'" y="'+(by(bias)+4).toFixed(1)+'">'+fm(bias)+'</text>';
+  [lo,hi].forEach(function(v){h+='<line x1="'+P+'" y1="'+by(v).toFixed(1)+'" x2="'+xr+'" y2="'+by(v).toFixed(1)+'" stroke="var(--court)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="'+(xr+4)+'" y="'+(by(v)+4).toFixed(1)+'">'+fm(v)+'</text>'});
+  m.forEach(function(x,i){h+='<circle cx="'+bx(x).toFixed(1)+'" cy="'+by(d[i]).toFixed(1)+'" r="5" fill="var(--court)" opacity=".9"/>'});
+  h+='<text x="'+((P+xr)/2)+'" y="'+(H-6)+'" text-anchor="middle">mean of the two (cm)</text><text transform="translate(12 '+((H-P+T)/2)+') rotate(-90)" text-anchor="middle">App − ForcePlate (cm)</text>';el('agB').innerHTML=h;
+  el('agA').value=a;el('agK').value=k;el('agAo').textContent=(a>0?'+':a<0?'−':'')+Math.abs(a).toFixed(1).replace(/\.0$/,'');el('agKo').textContent='× '+k.toFixed(2);
+  el('agOut').innerHTML='<div><b>Pearson r</b><span>rise together<span class="z">一起變大</span></span><em>'+r.toFixed(3).replace(/^0/,'')+'</em></div>'+
+    '<div><b>Bias<span class="z">偏差</span></b><span>mean of App − ForcePlate<span class="z">App − ForcePlate 的平均數</span></span><em>'+fm(bias)+' cm</em></div>'+
+    '<div><b>Limits of agreement<span class="z">一致性界限</span></b><span>bias ± 1.96 × SD of the differences<span class="z">偏差 ± 1.96 × 差值的標準差</span></span><em>'+fm(lo)+' to '+fm(hi)+' cm</em></div>'}
+function fm(v){var s=Math.abs(v).toFixed(2);return (v<0&&+s!==0?'−':'')+s}
+function agSet(a,k){UI.demo.a=a;UI.demo.k=k;agDraw()}
+function agLog(){log({page_id:'p2',item_id:'agree_slider',event_type:'widget_use',selected_option:'add='+UI.demo.a+';times='+UI.demo.k});save()}
+el('agA').addEventListener('input',function(){agSet(+this.value,UI.demo.k)});el('agK').addEventListener('input',function(){agSet(UI.demo.a,+this.value)});
+el('agA').addEventListener('change',agLog);el('agK').addEventListener('change',agLog);
+document.querySelectorAll('[data-ag]').forEach(function(b){b.onclick=function(){var p=b.dataset.ag.split(',');agSet(+p[0],+p[1]);agLog()}});
+
+/* ---------- 00 · reveal cards ---------- */
+document.querySelectorAll('details.rv').forEach(function(dt){dt.addEventListener('toggle',function(){if(dt.open&&!UI.rv[dt.dataset.rv]){UI.rv[dt.dataset.rv]=1;log({page_id:'p0',item_id:'reveal_'+dt.dataset.rv,event_type:'widget_use',selected_option:'open'});progress();save()}})});
+
+/* ---------- 00 · what each model lets differ between blockers ---------- */
+var MDB=[[0.2105,0.2204,0.2148],[0.166,0.258,0.097],[0.2309,0.2246,0.1661],[0.3189,0.2358,0.0524],[0.0816,0.138,0.131],[0.1945,0.2156,0.1322],[0.1886,0.2238,0.1564],[0.2554,0.242,0.2074]],MDM=[0.2152,0.1737,0.2072,0.2023,0.1169,0.1808,0.1896,0.2349],MDF=[0.0157,0.0297,-0.0454],MDCUR=null,MDRAF=0;
+function mdTarget(m){return MDB.map(function(r,i){return r.map(function(v,j){return m==='B'?v:MDM[i]+MDF[j]})})}
+function mdPaint(Y){var W=640,H=300,L=58,R=70,T=16,Bm=56,X=[0,1,2].map(function(j){return L+40+j*(W-L-R-80)/2});function y(v){return H-Bm-(v-0)/(0.36-0)*(H-T-Bm)}
+  var h='<line x1="'+L+'" y1="'+(H-Bm)+'" x2="'+(W-R)+'" y2="'+(H-Bm)+'" stroke="var(--line)" stroke-width="1.5"/><line x1="'+L+'" y1="'+(H-Bm)+'" x2="'+L+'" y2="'+T+'" stroke="var(--line)" stroke-width="1.5"/>';
+  [0,0.1,0.2,0.3].forEach(function(t){h+='<text x="'+(L-8)+'" y="'+(y(t)+4)+'" text-anchor="end">'+t.toFixed(1)+'</text>'});
+  ['Ball 球','Hands 手','UpperBody 上半身'].forEach(function(t,j){h+='<text x="'+X[j]+'" y="'+(H-Bm+20)+'" text-anchor="middle">'+t+'</text>'});
+  Y.forEach(function(r,i){h+='<polyline fill="none" stroke="var(--court)" stroke-width="2" opacity=".75" points="'+r.map(function(v,j){return X[j]+','+y(v).toFixed(1)}).join(' ')+'"/>';r.forEach(function(v,j){h+='<circle cx="'+X[j]+'" cy="'+y(v).toFixed(1)+'" r="4" fill="var(--court)"/>'});});
+  var lab=Y.map(function(r,i){return{i:i,y:y(r[2])+4}}).sort(function(a,b){return a.y-b.y});for(var q=1;q<lab.length;q++)if(lab[q].y-lab[q-1].y<11)lab[q].y=lab[q-1].y+11;lab.forEach(function(o){h+='<text x="'+(X[2]+12)+'" y="'+o.y.toFixed(1)+'">B'+(o.i+1)+'</text>'});
+  h+='<text transform="translate(14 '+((H-Bm+T)/2)+') rotate(-90)" text-anchor="middle">initiation time (s)</text><text x="'+((L+W-R)/2)+'" y="'+(H-8)+'" text-anchor="middle">focus 焦點</text>';el('mdSvg').innerHTML=h}
+function mdDraw(anim){var m=UI.demo.md||'A',to=mdTarget(m);cancelAnimationFrame(MDRAF);
+  document.querySelectorAll('#mdMode button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.m===m?'true':'false')});
+  el('mdOut').innerHTML=m==='A'?'<div><b>Between blockers<span class="z">攔網者之間</span></b><span>only the starting level differs: the lines are parallel<span class="z">只有起點不同：線是平行的</span></span><em>Den df 173</em></div><div><b>The Focus test counts<span class="z">焦點的檢定數的是</span></b><span>trials 試作</span><em>F(2, 173) = 9.81</em></div>'
+    :'<div><b>Between blockers<span class="z">攔網者之間</span></b><span>the starting level and the focus effect differ: each line has its own shape<span class="z">起點和焦點效果都可以不同：每條線有自己的形狀</span></span><em>Den df 14</em></div><div><b>The Focus test counts<span class="z">焦點的檢定數的是</span></b><span>blockers 攔網者 · (8 − 1) × (3 − 1)</span><em>F(2, 14) = 4.90</em></div>';
+  var still=!anim||!MDCUR||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if(still){MDCUR=to;mdPaint(to);return}
+  var from=MDCUR,t0=performance.now();(function step(now){var k=Math.min(1,(now-t0)/600),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;MDCUR=from.map(function(r,i){return r.map(function(v,j){return v+(to[i][j]-v)*e})});mdPaint(MDCUR);if(k<1)MDRAF=requestAnimationFrame(step)})(t0)}
+el('mdMode').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;UI.demo.md=b.dataset.m;mdDraw(true);log({page_id:'p0',item_id:'model_view',event_type:'widget_use',selected_option:UI.demo.md});save()});
+
+/* ---------- chips for the APA self-check ---------- */
+function chipsHtml(sel,dis,res){return SIX.map(function(x){var k=x[0],on=!!sel[k],r='',v='';
+  if(res){var has=res[k]===1,ok=has===on;r=ok?' r-ok':' r-no';v='<span class="vd">'+(ok?(has?'✓ has it 有':'✓ missing 沒有'):(on?'✗ not there 句子沒有':'✗ you missed it 漏了'))+'</span>'}
+  return '<button type="button" data-k="'+k+'" aria-pressed="'+on+'" class="'+r.trim()+'"'+(dis?' disabled':'')+'>'+x[1]+(x[2]!==x[1]?' <span class="zh">'+x[2]+'</span>':'')+v+'</button>'}).join('')}
+
+/* ---------- APA: write → tick your own → model ---------- */
+function apaRender(k){var A=APA[k],U=UI.apa[k],b=el('apa_'+k);
+  var h='<div class="apaw"><textarea data-f="t" placeholder="'+esc(A.ph)+'"'+(U.sent?' disabled':'')+'>'+esc(U.t)+'</textarea>'+
+    '<div class="six">'+chipsHtml(U.ticks,U.sent,null)+'</div><div class="six-hint">Tap what <b>your</b> sentence has. 點選「你的」句子有的。</div>';
+  if(!U.sent)h+='<div class="row"><button class="btn" type="button" data-act="send">Submit 送出</button></div>';
+  else h+='<div class="model">'+A.model+'</div><div class="sm">'+A.note[0]+' '+A.note[1]+'</div>'+(A.src||'')+
+    '<textarea data-f="rev"'+(U.revSent?' disabled':'')+' aria-label="revision">'+esc(U.rev||U.t)+'</textarea>'+(U.revSent?'<div class="sm ok">✓ Saved 已儲存</div>':'<div class="row"><button class="btn ghost" type="button" data-act="rev">Save revision 儲存修訂</button></div>');
+  b.innerHTML=h+'</div>'}
+function apaMount(k){var b=el('apa_'+k);apaRender(k);
+  b.addEventListener('input',function(e){var f=e.target.dataset.f;if(f){UI.apa[k][f]=e.target.value;save()}});
+  b.addEventListener('click',function(e){var x=e.target.closest('button');if(!x)return;var U=UI.apa[k];
+    if(x.dataset.k&&!U.sent){U.ticks[x.dataset.k]=!U.ticks[x.dataset.k];apaRender(k);save();return}
+    if(x.dataset.act==='send'){if(needName())return;if(U.t.trim().length<30){gate('Write your sentence first.','請先寫你的句子。');return}
+      U.sent=true;log({page_id:APA[k].page,item_id:'apa_'+k,event_type:'apa_submit',attempt_no:1,selected_option:SIX.map(function(s){return s[0]+'='+(U.ticks[s[0]]?1:0)}).join(';'),other_text:U.t,data_origin:'self_report'});apaRender(k);progress();save();return}
+    if(x.dataset.act==='rev'){U.revSent=true;log({page_id:APA[k].page,item_id:'apa_'+k,event_type:'apa_revise',attempt_no:2,other_text:U.rev||'',data_origin:'self_report'});apaRender(k);save()}})}
+
+
+
+/* ---------- decisions: choose → write the reason → the next step opens ---------- */
+function dstate(id){if(!UI.dec[id])UI.dec[id]={v:'',t:'',sent:false,c:''};return UI.dec[id]}
+function decRender(D){var U=dstate(D.id),b=el('dec_'+D.id);if(!b)return;
+  var h='<p class="qt">'+(D.n?'<span class="qn">'+D.n+'</span>':'')+D.q[0]+'<span class="z">'+D.q[1]+'</span></p><div class="op chips">';
+  D.opts.forEach(function(o){var k=o[0]===D.key,pr=U.v===o[0],cls=U.sent?(k?'key':(pr&&o[0]!=='unsure'?'miss':'dim')):'';
+    h+='<button type="button" data-v="'+o[0]+'" class="'+cls+'" aria-pressed="'+(pr?'true':'false')+'"'+(U.sent?' disabled':'')+'>'+(U.sent&&k?'<span class="mk">✓</span>':'')+o[1]+(o[2]!==o[1]?'<span class="z">'+o[2]+'</span>':'')+'</button>'});
+  h+='</div><div class="apaw"><textarea data-f="t" aria-label="Your reason" placeholder="Your reason, in one sentence: because … 你的理由，一句話：因為…"'+(U.sent?' disabled':'')+'>'+esc(U.t)+'</textarea></div>';
+  if(!U.sent)h+='<div class="acts"><button class="btn" type="button" data-act="lock">Decide 決定</button></div>';
+  else{var of=(D.ofb&&D.ofb[U.v])?D.ofb[U.v]:null;
+    if(of)h+='<div class="fb no"><b>'+of[0]+'</b><span class="z">'+of[1]+'</span></div>';
+    h+='<div class="fb ok"><b>A reason that works 理由可以這樣寫</b>'+D.model[0]+'<span class="z">'+D.model[1]+'</span></div>'}
+  b.innerHTML=h}
+function decMount(D){var d=document.createElement('div');d.id='dec_'+D.id;d.className='q';el(D.m).appendChild(d);decRender(D);
+  d.addEventListener('input',function(e){if(e.target.dataset.f==='t'){dstate(D.id).t=e.target.value;save()}});
+  d.addEventListener('click',function(e){var x=e.target.closest('button');if(!x)return;var U=dstate(D.id);if(U.sent)return;
+    if(x.dataset.v!==undefined){U.v=x.dataset.v;var keep=U.t;decRender(D);save();return}
+    if(x.dataset.act==='lock'){if(needName())return;if(!U.v){gate('Choose one first.','請先選一個。');return}
+      if((U.t||'').trim().length<8){gate('Write your reason in one sentence.','用一句話寫下你的理由。');return}
+      U.sent=true;U.c=U.v==='unsure'?'unscored':(U.v===D.key?'correct':'incorrect');
+      log({page_id:D.page,item_id:D.id,event_type:'decision_lock',attempt_no:1,selected_option:U.v,correctness:U.c,other_text:U.t,data_origin:'self_report'});
+      decRender(D);afterShow();progress();save()}})}
+var TEACH=/[?&]teacher=1/.test(location.search);
+function decSent(ids){if(TEACH)return true;return ids.split(',').every(function(i){return UI.dec[i]&&UI.dec[i].sent})}
+function afterShow(){document.querySelectorAll('[data-after]').forEach(function(n){n.hidden=!decSent(n.dataset.after)});
+  document.querySelectorAll('[data-wait]').forEach(function(n){n.hidden=decSent(n.dataset.wait)})}
+
+/* ---------- 04 · the report: move each part into its place ---------- */
+var REP={
+ B:{page:'p4',n:'Q4.1',
+  sk:'A <span class="slot" data-s="name"></span> test showed longer time to exhaustion after training (<i>Mdn</i> = <span class="slot sm" data-s="mdn"></span> s) than before (<i>Mdn</i> = <span class="slot sm" data-s="mdn"></span> s), <span class="slot" data-s="stat"></span>, <span class="slot" data-s="p"></span>, <span class="slot" data-s="es"></span>.',
+  out:{name:['Wilcoxon signed-rank'],mdn:['446','401'],stat:['<i>W</i> = 1'],p:['<i>p</i> = .016'],es:['rank-biserial correlation = .94']},
+  chips:[['name','Test name','檢定名稱','Wilcoxon signed-rank','n2_w'],['mdn','Medians','中位數','401 · 446','n2_w'],['stat','Statistic','統計量','W 1.00','n2_w'],['df','df','自由度','','n2_w'],['p','Exact p','精確 p','.016','n2_w'],['es','Effect size','效果量','−0.944','n2_w']],
+  none:{df:['A rank test has no df.','等級檢定沒有自由度。']},
+  wait:['The parts appear after you fill the Wilcoxon cells in 03.','03 的 Wilcoxon 空格填好後，這裡才會出現。'],
+  cmp:'<h5 style="margin-top:18px">Step 2 · Compare 對比</h5><div class="tw"><table class="t src cmp"><thead><tr><th></th><th>Wilcoxon signed-rank</th><th>Paired t-test 成對樣本 t 檢定</th></tr></thead><tbody>'+
+   '<tr><td>Centre 集中趨勢</td><td><i>Mdn</i> = 446 s, 401 s</td><td class="df"><i>M</i> = 450 s, 409 s</td></tr>'+
+   '<tr><td>Statistic 統計量</td><td><i>W</i> = 1</td><td class="df"><i>t</i> = −1.66</td></tr>'+
+   '<tr><td>df 自由度</td><td>none 沒有</td><td class="df">7</td></tr>'+
+   '<tr><td>Exact p 精確 p</td><td><i>p</i> = .016</td><td class="df"><i>p</i> = .141</td></tr>'+
+   '<tr><td>Effect size 效果量</td><td>rank-biserial correlation = .94</td><td class="df"><i>d</i> = −0.59</td></tr></tbody></table></div>'+
+   '<div class="model">A paired <i>t</i>-test showed no significant change in time to exhaustion from before (<i>M</i> = 409 s) to after training (<i>M</i> = 450 s), <i>t</i>(7) = −1.66, <i>p</i> = .141, <i>d</i> = −0.59.</div>'+
+   '<p class="sm">Paired t-test numbers: the Student’s t row and Descriptives › Mean, in the same Jamovi window. 成對 t 檢定的數字：同一個 Jamovi 視窗的 Student’s t 那一列，和 Descriptives › Mean。</p>'},
+ C:{page:'p4',n:'Q4.2',
+  sk:'App and force-plate jump heights were strongly correlated, <i>r</i>(<span class="slot sm" data-s="df"></span>) = <span class="slot sm" data-s="stat"></span>, <span class="slot" data-s="p"></span>. A <span class="slot" data-s="name"></span> analysis showed that the app read <span class="slot sm" data-s="bias"></span> cm higher than the force plate (bias), 95% limits of agreement <span class="slot" data-s="loa"></span> cm, so the two methods are not interchangeable.',
+  out:{name:['Bland–Altman'],stat:['.99'],df:['10'],p:['<i>p</i> &lt; .001'],bias:['3.07'],loa:['[0.92, 5.21]']},
+  chips:[['name','Analysis name','分析名稱','Bland–Altman','n3_ba'],['stat','Statistic','統計量','r 0.985','n3_r'],['df','df','自由度','10','n3_r'],['p','p','p','< .001','n3_r'],['bias','Bias','偏差','3.07','n3_ba'],['loa','Limits of agreement','一致性界限','0.919 · 5.21','n3_ba']],
+  none:{},
+  wait:['The parts appear after you fill the Correlation and Bland–Altman cells in 03.','03 的 Correlation 和 Bland–Altman 空格填好後，這裡才會出現。'],
+  cmp:'<h5 style="margin-top:18px">Step 2 · Compare 對比</h5><div class="tw"><table class="t src cmp"><thead><tr><th></th><th>Correlation only 只報相關</th><th>Correlation + Bland–Altman</th></tr></thead><tbody>'+
+   '<tr><td>Question 問題</td><td>Do the readings rise together?<span class="z">讀數是否一起變大？</span></td><td class="df">How far apart are they, in cm?<span class="z">差幾公分？</span></td></tr>'+
+   '<tr><td>Correlation 相關</td><td><i>r</i>(10) = .99, <i>p</i> &lt; .001</td><td><i>r</i>(10) = .99, <i>p</i> &lt; .001</td></tr>'+
+   '<tr><td>Bias 偏差</td><td>not reported 沒有報告</td><td class="df">3.07 cm</td></tr>'+
+   '<tr><td>Limits of agreement 一致性界限</td><td>not reported 沒有報告</td><td class="df">[0.92, 5.21] cm</td></tr>'+
+   '<tr><td>Can the app replace the force plate?<span class="z">App 能取代測力板嗎？</span></td><td>cannot be answered 無法回答</td><td class="df">not interchangeable 不能互換</td></tr></tbody></table></div>'+
+   '<div class="model">App and force-plate jump heights were strongly correlated, <i>r</i>(10) = .99, <i>p</i> &lt; .001.</div>'}
+};
+function rstate(k){if(!UI.rep[k])UI.rep[k]={placed:{},none:{},tries:0,done:false};return UI.rep[k]}
+function repReady(k,c){if(TEACH)return true;var n=UI.num[c[4]];return !!(n&&(n.ok||n.att>=3))}
+var RSEL={B:'',C:''},RMSG={B:null,C:null};
+function repRender(k){var R=REP[k],U=rstate(k),b=el('rep_'+k);if(!b)return;
+  var avail=R.chips.filter(function(c){return repReady(k,c)});
+  var h='<h5><span class="qn">'+R.n+'</span>Step 1 · Main test report 主檢定報告</h5>';
+  if(!avail.length)h+='<p class="wait">'+R.wait[0]+'<span class="z">'+R.wait[1]+'</span></p>';
+  else{h+='<div class="parts">';
+    avail.forEach(function(c){var used=U.placed[c[0]]||U.none[c[0]];
+      h+='<button type="button" class="part'+(used?' used':'')+'" draggable="'+(used?'false':'true')+'" data-k="'+c[0]+'" aria-pressed="'+(RSEL[k]===c[0]?'true':'false')+'"'+(used?' disabled':'')+'><b>'+c[1]+(c[2]!==c[1]?' <span class="zh">'+c[2]+'</span>':'')+'</b>'+(c[3]?'<span class="v">'+c[3]+'</span>':'')+'</button>'});
+    h+='</div><p class="six-hint">Drag each part to its place in the sentence, or tap the part and then the place. 把每個組件拖到句子裡的位置，或先點組件、再點位置。</p>'}
+  h+='<div class="model rep">'+R.sk+'</div>';
+  var m=RMSG[k];if(m)h+='<div class="fb '+(m[2]?'ok':'no')+'"><b>'+m[0]+'</b><span class="z">'+m[1]+'</span></div>';
+  if(U.done)h+=R.cmp+(APA[k].src||'');
+  b.innerHTML=h;var cnt={};
+  b.querySelectorAll('.slot').forEach(function(s){var key=s.dataset.s;cnt[key]=(cnt[key]||0);if(U.placed[key]){s.classList.add('on');s.innerHTML=R.out[key][cnt[key]]}cnt[key]++})}
+function repPlace(k,chip,slot){var R=REP[k],U=rstate(k);if(!chip||U.placed[chip]||U.none[chip])return;if(needName())return;U.tries++;var ok=false;
+  if(R.none[chip]){U.none[chip]=1;RMSG[k]=[R.none[chip][0],R.none[chip][1],true];ok=true}
+  else if(chip===slot){U.placed[chip]=1;RMSG[k]=null;ok=true}
+  else RMSG[k]=['Not this place. Read the words around it.','不是這個位置。看看它前後的字。',false];
+  RSEL[k]='';log({page_id:R.page,item_id:'apa_'+k,event_type:'apa_place',attempt_no:U.tries,selected_option:chip+'>'+slot,correctness:ok?'correct':'incorrect'});
+  if(!U.done&&Object.keys(R.out).every(function(s){return U.placed[s]})){U.done=true;log({page_id:R.page,item_id:'apa_'+k,event_type:'apa_complete',attempt_no:U.tries,correctness:'complete',data_origin:'computed'})}
+  repRender(k);progress();save()}
+function repMount(k){var b=el('rep_'+k);repRender(k);
+  b.addEventListener('click',function(e){var c=e.target.closest('.part'),s=e.target.closest('.slot');
+    if(c&&!c.disabled){RSEL[k]=RSEL[k]===c.dataset.k?'':c.dataset.k;if(REP[k].none[c.dataset.k]&&RSEL[k]){repPlace(k,c.dataset.k,'');return}repRender(k);return}
+    if(s&&RSEL[k]&&!s.classList.contains('on'))repPlace(k,RSEL[k],s.dataset.s)});
+  b.addEventListener('dragstart',function(e){var c=e.target.closest('.part');if(!c)return;e.dataTransfer.setData('text/plain',c.dataset.k);e.dataTransfer.effectAllowed='move'});
+  b.addEventListener('dragover',function(e){var s=e.target.closest('.slot');if(s&&!s.classList.contains('on')){e.preventDefault();s.classList.add('over')}});
+  b.addEventListener('dragleave',function(e){var s=e.target.closest('.slot');if(s)s.classList.remove('over')});
+  b.addEventListener('drop',function(e){var s=e.target.closest('.slot');if(!s)return;e.preventDefault();repPlace(k,e.dataTransfer.getData('text/plain'),s.dataset.s)})}
+
+/* ---------- 04 · self-check: Week 1 and now ---------- */
+var SELF=[['s1','From a study design, I can decide which statistical method to use.','看到一個研究設計，我能決定用哪個統計方法。'],
+ ['s2','I can read a Jamovi output and write it as an APA sentence.','我能讀 Jamovi 報表，並寫成 APA 句子。'],
+ ['s3','When an AI gives me a statistical answer, I can judge whether it is right.','AI 給我統計答案時，我能判斷它對不對。'],
+ ['s4','I can read statistics materials and questions in English.','我能讀懂英文的統計教材和題目。']];
+function selfRow(id,lab){var U=UI.self,h='<div class="f"><b>'+lab+'</b><div class="chips" data-q="'+id+'">';
+  for(var i=1;i<=5;i++)h+='<button type="button" data-v="'+i+'" aria-pressed="'+(U.v[id]===i?'true':'false')+'"'+(U.sent?' disabled':'')+'>'+i+'</button>';return h+'</div></div>'}
+function selfRender(){var U=UI.self,b=el('selfBox');if(!b)return;
+  var h='<p class="sm" style="margin-top:6px">1 = not yet 還不行 · 5 = confident 很有把握</p>';
+  SELF.forEach(function(q){h+='<div class="selfq"><p>'+q[1]+'<span class="z">'+q[2]+'</span></p>'+selfRow(q[0]+'a','Week 1 第 1 週')+selfRow(q[0]+'b','Now 現在')+'</div>'});
+  h+='<div class="f" style="margin-top:14px"><b>One thing I am still not sure about 仍然不確定的一件事</b><textarea id="selfT"'+(U.sent||U.none?' disabled':'')+' placeholder="one line 寫一行">'+esc(U.t)+'</textarea></div>'+
+   '<label style="display:flex;gap:8px;align-items:center;margin-top:8px;font-size:14.5px"><input type="checkbox" id="selfNone"'+(U.none?' checked':'')+(U.sent?' disabled':'')+'> Nothing right now 目前沒有</label>';
+  h+=U.sent?'<div class="sm ok">✓ Saved 已儲存</div>':'<div class="row"><button class="btn" type="button" id="selfSave">Save 儲存</button><span class="sm" id="selfNote"></span></div>';
+  b.innerHTML=h;el('selfCnt').textContent=U.sent?'✓':'–'}
+el('selfBox').addEventListener('click',function(e){var U=UI.self;if(U.sent)return;var c=e.target.closest('.chips button');
+  if(c){U.v[c.parentNode.dataset.q]=+c.dataset.v;U.t=el('selfT').value;selfRender();save();return}
+  if(e.target.id==='selfSave'){if(needName())return;U.t=el('selfT').value.trim();var all=SELF.every(function(q){return U.v[q[0]+'a']&&U.v[q[0]+'b']});
+    if(!all||(!U.none&&U.t.length<3)){el('selfNote').className='sm bad';el('selfNote').textContent='Choose 1–5 on every line, and write one line or tick “Nothing right now”. 每一行都選 1–5，並寫一行或勾「目前沒有」。';return}
+    U.sent=true;log({item_id:'self_check',event_type:'self_check',attempt_no:1,selected_option:SELF.map(function(q){return q[0]+'='+U.v[q[0]+'a']+'>'+U.v[q[0]+'b']}).join(';'),reason_option:U.none?'none':'',other_text:U.none?'':U.t,data_origin:'self_report'});selfRender();progress();save();setTimeout(selfClose,700)}});
+el('selfBox').addEventListener('change',function(e){if(e.target.id==='selfNone'&&!UI.self.sent){UI.self.t=el('selfT').value;UI.self.none=e.target.checked;selfRender();save()}});
+el('selfBox').addEventListener('input',function(e){if(e.target.id==='selfT'){UI.self.t=e.target.value;save()}});
+function selfOpen(){el('selfDr').hidden=false;el('selfBtn').setAttribute('aria-expanded','true');stkClose();log({item_id:'self_check',event_type:'self_open'})}
+function selfClose(){el('selfDr').hidden=true;el('selfBtn').setAttribute('aria-expanded','false')}
+el('selfBtn').onclick=function(){el('selfDr').hidden?selfOpen():selfClose()};el('selfClose').onclick=selfClose;
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!el('selfDr').hidden)selfClose()});
+document.addEventListener('pointerdown',function(e){if(el('selfDr').hidden)return;if(e.target.closest('#selfDr')||e.target.closest('#selfBtn'))return;selfClose()});
+el('stuckBtn').addEventListener('click',function(){selfClose()});
+(function(){var f=document.createElement('div');f.id='fabs';document.body.appendChild(f);f.appendChild(el('stuckBtn'));f.appendChild(el('selfBtn'))})();
+function selfShow(){var on=PANELS[cur]==='p4';el('selfBtn').hidden=!on;if(!on)selfClose()}
+function selfReady(){if(UI.self.sent)return true;selfOpen();gate('Self-check: choose on every line, then Save.','自我評估：每一行都選好，再按儲存。');return false}
+
+/* ---------- stuck log ---------- */
+var WHERE=[['p0','00'],['dec2','Q1.1 Decide 決定'],['dec3','Q2.1 Decide 決定'],['n2_w','Q3.1 Wilcoxon'],['n3_r','Q3.2 Correlation 相關'],['gam','Q3.3 blandr install 安裝'],['n3_ba','Q3.3 Bland–Altman'],['icc','03 ICC'],['apa_B','Q4.1 Report 報告'],['apa_C','Q4.2 Report 報告'],['apply','Q4.3–Q4.5 Apply 應用'],['other','Other 其他']];
+var STYPE=[['lang','Language 語言'],['soft','Software 軟體'],['stat','Statistics 統計'],['other','Other 其他']];
+var SFIX=[['self','Myself 自己'],['page','Page 頁面'],['ai','AI'],['ta','TA 助教'],['peer','Classmate 同學'],['not','Not yet 還沒']];
+var SAI=[['right','Right 對'],['part','Partly 部分'],['wrong','Wrong 錯']];
+var SK={type:'',fix:'',ai:''};
+function chipRow(id,opts,f){el(id).innerHTML=opts.map(function(o){return '<button type="button" data-v="'+o[0]+'" aria-pressed="'+(SK[f]===o[0])+'">'+o[1]+'</button>'}).join('')}
+function stkDraw(){chipRow('stkType',STYPE,'type');chipRow('stkFix',SFIX,'fix');chipRow('stkAi',SAI,'ai');el('stkAiF').hidden=(SK.fix!=='ai')}
+el('stkWhere').innerHTML=WHERE.map(function(w){return '<option value="'+w[0]+'">'+w[1]+'</option>'}).join('');
+var DEFW={p0:'p0',p1:'dec2',p2:'dec3',p3:'n2_w',p4:'apa_B'};
+function stkOpen(pre){el('stuckDr').hidden=false;el('stuckBtn').setAttribute('aria-expanded','true');el('stkWhere').value=pre||DEFW[PANELS[cur]];SK={type:pre==='gam'?'soft':'',fix:'',ai:''};el('stkWhat').value='';el('stkNote').textContent='';stkDraw();el('stkWhat').focus();log({event_type:'stuck_open',selected_option:el('stkWhere').value})}
+function stkClose(){el('stuckDr').hidden=true;el('stuckBtn').setAttribute('aria-expanded','false')}
+el('stuckBtn').onclick=function(){el('stuckDr').hidden?stkOpen():stkClose()};el('stkClose').onclick=stkClose;
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!el('stuckDr').hidden)stkClose()});
+['stkType','stkFix','stkAi'].forEach(function(id,i){el(id).addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;SK[['type','fix','ai'][i]]=b.dataset.v;stkDraw()})});
+el('stkSave').onclick=function(){if(needName()){stkClose();return}var w=el('stkWhat').value.trim();
+  if(!SK.type||!SK.fix||w.length<3){el('stkNote').className='sm bad';el('stkNote').textContent='Kind, what happened, fixed by. 類型、發生什麼、怎麼解決。';return}
+  var r={w:el('stkWhere').value,type:SK.type,fix:SK.fix,ai:SK.fix==='ai'?SK.ai:'',what:w,t:now()};UI.stuck.push(r);UI.none=false;el('stkNone').checked=false;
+  log({item_id:'stuck',event_type:'stuck_log',attempt_no:UI.stuck.length,selected_option:r.type,reason_option:r.fix,confidence:r.ai,support_type:r.w,other_text:r.what,data_origin:'self_report'});
+  stkList();save();el('stkNote').className='sm ok';el('stkNote').textContent='✓';setTimeout(stkClose,600)};
+function stkList(){el('stuckCnt').textContent=UI.stuck.length;var nm={},tn={},fn={};WHERE.forEach(function(w){nm[w[0]]=w[1]});STYPE.forEach(function(w){tn[w[0]]=w[1]});SFIX.forEach(function(w){fn[w[0]]=w[1]});
+  el('stkList').innerHTML=UI.stuck.length?UI.stuck.map(function(r){return '<div><b>'+esc(nm[r.w])+'</b> · '+esc(tn[r.type])+' · '+esc(fn[r.fix])+'<br>'+esc(r.what)+'</div>'}).join(''):'<div style="background:var(--paper)">—</div>'}
+el('stkNone').addEventListener('change',function(){UI.none=this.checked;if(UI.none)log({item_id:'stuck',event_type:'stuck_none',data_origin:'self_report'});save()});
+
+document.addEventListener('pointerdown',function(e){if(el('stuckDr').hidden)return;if(e.target.closest('#stuckDr')||e.target.closest('#stuckBtn'))return;stkClose()});
+
+/* ---------- blandr install ---------- */
+function gamNote(){var n=el('gamNote');n.className='sm '+(UI.gam==='ok'?'ok':UI.gam==='no'?'bad':'');n.textContent=UI.gam==='ok'?'✓ Ready':UI.gam==='no'?'TA is coming 助教會過來':''}
+el('gamOk').onclick=function(){if(needName())return;UI.gam='ok';log({page_id:'p3',item_id:'blandr',event_type:'widget_use',selected_option:'installed'});gamNote();save()};
+el('gamNo').onclick=function(){if(needName())return;UI.gam='no';log({page_id:'p3',item_id:'blandr',event_type:'widget_use',selected_option:'failed'});gamNote();save();stkOpen('gam')};
+
+
+/* ---------- variable maps (Jamovi option panel) ---------- */
+var ICN={n:'<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="4" cy="4.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="4.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="8" r="2.6" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>',
+ c:'<svg viewBox="0 0 12 12" aria-hidden="true"><rect x="1" y="4" width="10" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 4V6M6 4V6.6M8.5 4V6" stroke="currentColor" stroke-width="1.1"/></svg>'};
+document.querySelectorAll('.vmap').forEach(function(m){var types={};
+  var L='<div class="vl">'+m.dataset.vars.split(',').map(function(v){var p=v.split(':');types[p[0]]=p[1];return '<span class="var">'+ICN[p[1]]+esc(p[0])+'</span>'}).join('')+'</div>';
+  var B='<div class="bx">'+m.dataset.boxes.split(';').map(function(bx){var p=bx.split('|'),its=(p[1]||'').split(',').filter(function(s){return s.trim()}),bad=its.some(function(s){return s.charAt(0)==='!'});
+    return '<div class="b'+(bad?' bad':'')+'"><span class="bl">'+esc(p[0])+'</span>'+its.map(function(s){var x=s.charAt(0)==='!',add=s.charAt(0)==='+',nm=(x||add)?s.slice(1):s,base=nm.split(/[ :→(^]/)[0];
+      return '<span class="var'+(x?' x':'')+'"'+(add?' style="outline:2px solid var(--court);outline-offset:1px"':'')+'>'+(types[base]?ICN[types[base]]:'')+esc(nm.replace('^',' | '))+'</span>'}).join('')+'</div>'}).join('')+'</div>';
+  m.innerHTML='<div class="vm">'+L+'<div class="arr">→</div>'+B+'</div>'});
+
+
+/* ---------- the 16-week track ---------- */
+var WEEKS=[['Data','資料'],['Describe','描述'],['Probability','機率'],['Testing','檢定'],['t · χ²','t・卡方'],['Correlation','相關'],['One-way','單因子'],['Two-way','二因子'],['ANCOVA · MANOVA · LMM','三個工具'],['ANCOVA · MANOVA · LMM in practice','三個工具實作'],['Ranks','無母數・一致性'],['Small n','小樣本'],['Regression','多元迴歸・中介'],['Writing','寫結果'],['Defend','簡報・答委員'],['Final','期末']];
+el('track16').innerHTML=WEEKS.map(function(w,i){var n=i+1,c=n<11?'done':n===11?'now':n===16?'fin':'';
+  return '<div class="seg '+c+'"><b>W'+n+'</b><span class="lab">'+w[0]+'</span><span class="lab zh">'+w[1]+'</span>'+(n===11?'<span class="here">you are here</span>':'')+'</div>'}).join('');
+
+
+/* ---------- links to the other weeks' pages ----------
+   The pages sit side by side in one GitHub Pages site (w3.html ... w11.html).
+   - Opened from that site (http/https): the links are relative, nothing to set.
+   - Opened as a downloaded file: the links need the site's address in SITE_BASE,
+     for example 'https://USERNAME.github.io/biostat2026/'. While SITE_BASE is empty, a downloaded copy shows the weeks without links.
+   A week with no entry has no link. */
+var SITE_BASE='https://ivyleionkei-debug.github.io/biostat2026/';
+var WEEK_LINKS={3:'w3.html',4:'w4.html',5:'w4.html' /* Weeks 4 and 5 share one page */,6:'w6.html',7:'w7.html',8:'w8.html',9:'w9.html',10:'w10.html'};
+var THIS_WEEK=11;
+function weekUrl(n){var u=WEEK_LINKS[n];if(!u)return '';if(/^https?:/.test(location.protocol))return u;return SITE_BASE?SITE_BASE.replace(/\/?$/,'/')+u:''}
+function weekGo(n,from){var u=weekUrl(n);if(!u)return;log({item_id:'week_link',event_type:'widget_use',selected_option:'W'+n,reason_option:from});save();window.open(u,'_blank','noopener')}
+(function(){var segs=el('track16').children;
+  WEEKS.forEach(function(w,i){var n=i+1,u=weekUrl(n),s=segs[i];if(!u||n===THIS_WEEK||!s)return;
+    var a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';a.setAttribute('aria-label','Week '+n+' '+w[0]+' '+w[1]+' (opens in a new tab)');
+    while(s.firstChild)a.appendChild(s.firstChild);s.appendChild(a);s.classList.add('lnk');
+    a.addEventListener('click',function(e){e.preventDefault();weekGo(n,'track')})});
+  var btn=el('wkBtn'),menu=el('wkMenu');
+  btn.textContent='Wk'+THIS_WEEK;
+  menu.innerHTML=WEEKS.map(function(w,i){var n=i+1,here=n===THIS_WEEK,u=weekUrl(n),t='<b>Week '+n+':</b> '+w[0]+' <span class="zh">'+w[1]+'</span>';
+    if(here)return '<span class="wi here" role="menuitem" aria-current="true">'+t+'</span>';
+    return u?'<a class="wi" role="menuitem" href="'+u+'" target="_blank" rel="noopener" data-w="'+n+'">'+t+'</a>':'<span class="wi off" role="menuitem" aria-disabled="true">'+t+'</span>'}).join('');
+  function shut(){menu.hidden=true;btn.setAttribute('aria-expanded','false')}
+  btn.addEventListener('click',function(){var o=menu.hidden;menu.hidden=!o;btn.setAttribute('aria-expanded',o?'true':'false')});
+  menu.addEventListener('click',function(e){var a=e.target.closest('a[data-w]');if(!a)return;e.preventDefault();shut();weekGo(+a.dataset.w,'menu')});
+  document.addEventListener('pointerdown',function(e){if(!menu.hidden&&!e.target.closest('.bar .wk'))shut()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!menu.hidden){shut();btn.focus()}});
+})();
+
+
+/* ---------- progress marks ---------- */
+function allLock(a){return a.every(function(i){return st(i).lock})}
+function allNum(a){return a.every(function(i){return UI.num[i]&&UI.num[i].att})}
+function stageDone(p){
+  if(p==='p0')return Object.keys(UI.rv).length>=5;
+  if(p==='p1')return decSent('d2_test');
+  if(p==='p2')return decSent('d3_tool');
+  if(p==='p3')return allNum(['n2_w','n3_r','n3_ba']);
+  if(p==='p4')return rstate('B').done&&rstate('C').done&&allLock(['q2_fried','q2_spear','q4_arch']);return false}
+function progress(){var bs=el('stops').children;PANELS.forEach(function(p,i){if(bs[i])bs[i].classList.toggle('done',stageDone(p))});
+  el('can3').hidden=!stageDone('p3');el('can4').hidden=!stageDone('p4')}
+
+ITEMS.forEach(mount);DEC.forEach(decMount);
+
+
+/* ---------- restore ---------- */
+(function(){var raw=null;try{raw=localStorage.getItem(STORE)}catch(e){}
+  if(raw){try{var o=JSON.parse(raw);if(o&&o.ev&&o.ev.length){SID=o.sid;SEQ=o.seq;EV=o.ev;ST=o.st||{};SENT=o.sent||0;el('who').value=o.name||'';if(o.ui)for(var k in o.ui)UI[k]=o.ui[k];log({event_type:'session_resume',data_origin:'computed'})}}catch(e){}}
+  if(!SID){SID=sid();log({event_type:'session_start',data_origin:'computed'})}})();
+function whoOk(){el('whoOk').textContent=who()?'✓':''}
+el('whoReset').onclick=function(){if(!confirm('Start a new session? 開始新的作答？'))return;RESETTING=true;try{localStorage.removeItem(STORE)}catch(e){}location.reload()};
+el('who').addEventListener('change',function(){if(who()){log({page_id:'p0',item_id:'name',event_type:'name_entered',data_origin:'self_report'});whoOk();save()}});
+
+
+/* ---------- export and send ---------- */
+var COLS=['schema_version','lesson_id','content_version','learner_name','session_id','event_id','sequence_no','event_time','timezone','elapsed_ms','page_id','item_id','item_version','event_type','attempt_no','selected_option','correctness','reason_option','confidence','support_type','hint_level','answer_revealed','prior_event_id','visible_duration_ms','data_origin','completion_status','other_text'];
+function csvq(v){var s=String(v===undefined||v===null?'':v);if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}
+function csv(){var rows=[COLS.join(',')];EV.forEach(function(e){e.learner_name=e.learner_name||who();rows.push(COLS.map(function(c){return csvq(e[c])}).join(','))});return rows.join('\r\n')+'\r\n'}
+function summary(){var tot=ITEMS.length+NUMS.length+DEC.length+3,ans=0;ITEMS.forEach(function(it){if(st(it.id).att.length)ans++});NUMS.forEach(function(N){if(UI.num[N.id]&&UI.num[N.id].att)ans++});DEC.forEach(function(D){if(dstate(D.id).sent)ans++});['B','C'].forEach(function(k){if(rstate(k).done)ans++});if(UI.self.sent)ans++;return{tot:tot,ans:ans,unf:tot-ans}}
+function exportLog(){visTick();Object.keys(VIS.acc).forEach(function(p){log({page_id:p,event_type:'visible_duration',visible_duration_ms:Math.round(VIS.acc[p]),data_origin:'computed'})});
+  var S=summary();log({event_type:'export',data_origin:'computed',completion_status:S.unf?'partial:'+S.unf+'_unanswered':'complete',other_text:'stuck='+UI.stuck.length+(UI.none?';none':'')});return S}
+function showSum(S){var b=el('sumbox');b.hidden=false;b.textContent='Done 完成 '+S.ans+' / '+S.tot+' · stuck 卡住 '+UI.stuck.length}
+function note(en,zh,cls){var n=el('exNote');n.className='note '+(cls||'');n.innerHTML=en+'<span class="z">'+zh+'</span>'}
+function stuckReady(){if(UI.stuck.length||UI.none)return true;gate('Stuck log: add a line, or tick “Not stuck today”.','卡住紀錄：寫一條，或勾「今天沒有卡住」。');return false}
+function fillName(e){if(!e.learner_name)e.learner_name=who()}
+function unsent(){return EV.filter(function(e){return e.sequence_no>SENT})}
+function payload(b){return JSON.stringify({lesson:LESSON,content:CONTENT,cols:COLS,events:b})}
+var flushT=null;
+function queueSend(){if(!SHEET_URL)return;clearTimeout(flushT);flushT=setTimeout(function(){sendNow()},1500)}
+function sendNow(cb){if(!SHEET_URL){if(cb)cb(false);return}var b=unsent();if(!b.length){if(cb)cb(true);return}var top=b[b.length-1].sequence_no;b.forEach(fillName);
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:payload(b)}).then(function(){SENT=Math.max(SENT,top);save();if(cb)cb(true)},function(){if(cb)cb(false)})}
+function confirmSheet(cb){var nm='w11cb'+Date.now(),sc=document.createElement('script'),done=false;function end(n){if(done)return;done=true;try{delete window[nm]}catch(e){window[nm]=undefined}sc.remove();cb(n)}
+  window[nm]=function(r){end(r&&r.n?r.n:0)};sc.onerror=function(){end(-1)};setTimeout(function(){end(-1)},8000);sc.src=SHEET_URL+'?session='+encodeURIComponent(SID)+'&cb='+nm;document.body.appendChild(sc)}
+window.addEventListener('pagehide',function(){if(!SHEET_URL||!navigator.sendBeacon)return;var b=unsent();if(!b.length)return;b.forEach(fillName);try{if(navigator.sendBeacon(SHEET_URL,new Blob([payload(b)],{type:'text/plain;charset=utf-8'}))){SENT=b[b.length-1].sequence_no;save()}}catch(e){}});
+el('exSend').onclick=function(){if(needName()||!stuckReady()||!selfReady())return;var S=exportLog();showSum(S);
+  if(!SHEET_URL){note('Sending is not set up. Press Save file and email it to the TA.','還沒設定送出。請按「儲存檔案」，email 給助教。','bad');return}
+  note('Sending…','送出中…');sendAndCheck(true)};
+function sendAndCheck(retry){sendNow(function(ok){if(!ok){note('No connection. Press Save file and email it to the TA.','沒有網路。請按「儲存檔案」，email 給助教。','bad');return}
+  setTimeout(function(){confirmSheet(function(n){if(n>=EV.length)note('Received ✓ You can close the page.','已收到 ✓ 可以關閉頁面。','ok');
+    else if(n>=0&&retry){SENT=0;save();note('Sending again…','再送一次…');sendAndCheck(false)}
+    else note('Not confirmed. Press Save file and email it to the TA.','未能確認。請按「儲存檔案」，email 給助教。','bad')})},1500)})}
+el('exSave').onclick=function(){if(needName()||!stuckReady()||!selfReady())return;var S=exportLog(),blob=new Blob(['﻿'+csv()],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='W11_'+who().replace(/[\\/:*?"<>|,;\s]+/g,'_')+'.csv';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);showSum(S);
+  note('Saved as '+a.download+'. Email it to the TA.','已儲存為 '+a.download+'，請 email 給助教。','ok')};
+el('exCopy').onclick=function(){if(needName()||!stuckReady()||!selfReady())return;var S=exportLog();showSum(S);var t='W11 · '+who()+' · '+now()+' · '+SID+'\n\n'+csv();
+  var done=function(){note('Copied. Paste it into an email to the TA.','已複製，貼進給助教的 email。','ok')};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,function(){note('Copy failed: use Save file.','複製失敗：請用「儲存檔案」。','bad')});else note('Copy failed: use Save file.','複製失敗：請用「儲存檔案」。','bad')};
+
+
+/* ---------- stops ---------- */
+var STOPS=[['00','Last week · Mixed model','上週・混合模型'],['01','Non-parametric tests','無母數檢定'],['02','Agreement','一致性'],['03','Jamovi','操作'],['04','Report · apply','報告・應用']];
+STOPS.forEach(function(s,k){var b=document.createElement('button');b.type='button';b.innerHTML='<span class="n">'+s[0]+'</span><span class="t">'+s[1]+' <span class="zh">'+s[2]+'</span></span>';b.setAttribute('aria-label',s[1]+' '+s[2]);b.onclick=function(){go(k)};el('stops').appendChild(b)});
+function go(k){var nk=Math.max(0,Math.min(PANELS.length-1,k));if(nk!==cur){visTick();log({page_id:PANELS[cur],event_type:'page_leave',visible_duration_ms:Math.round(VIS.acc[PANELS[cur]]||0),data_origin:'computed'});VIS.page=PANELS[nk];log({page_id:PANELS[nk],event_type:'page_enter'})}
+  cur=nk;PANELS.forEach(function(p,j){el(p).hidden=(j!==cur);el('stops').children[j].setAttribute('aria-current',j===cur?'true':'false')});
+  selfShow();el('prev').disabled=(cur===0);el('next').disabled=(cur===PANELS.length-1);window.scrollTo({top:0,behavior:'instant'})}
+el('prev').onclick=function(){go(cur-1)};el('next').onclick=function(){go(cur+1)};
+
+
+
+/* ---------- boot ---------- */
+repMount('B');repMount('C');
+function redrawAll(){ITEMS.forEach(render);DEC.forEach(decRender);NUMS.forEach(function(N){nRender(N.id)});repRender('B');repRender('C');selfRender();selfShow();rkDraw();agDraw();mdDraw(false);document.querySelectorAll('details.rv').forEach(function(d){if(UI.rv[d.dataset.rv])d.open=true});stkList();el('stkNone').checked=!!UI.none;gamNote();afterShow();
+  document.querySelectorAll('[data-tabs]').forEach(tabShow);whoOk();progress()}
+redrawAll();log({page_id:'p0',event_type:'page_enter'});go(0);
+
+</script>
+</body>
+</html>

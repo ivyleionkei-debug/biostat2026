@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Is the Difference Real?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#EDF0F1; --card:#F8FAFA; --sunk:#E2E8E9;
+  --ink:#15252A; --ink2:#3C5257; --muted:#6C8084; --line:#C7D4D6;
+  --accent:#0E6E6E; --accent-soft:#D2E5E3; --signal:#C2503E; --signal-soft:#F1DAD4;
+  --gold:#A87718; --gold-soft:#F0E4C8;
+  --r:10px; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#0E1518; --card:#162125; --sunk:#101A1D;
+  --ink:#E1EAEC; --ink2:#B4C6C9; --muted:#83979C; --line:#28383D;
+  --accent:#5CC6C0; --accent-soft:#123330; --signal:#F08E79; --signal-soft:#3B2019;
+  --gold:#D6A23F; --gold-soft:#332813; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#0E1518; --card:#162125; --sunk:#101A1D;
+  --ink:#E1EAEC; --ink2:#B4C6C9; --muted:#83979C; --line:#28383D;
+  --accent:#5CC6C0; --accent-soft:#123330; --signal:#F08E79; --signal-soft:#3B2019;
+  --gold:#D6A23F; --gold-soft:#332813; color-scheme:dark; }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans","Noto Sans TC",system-ui,-apple-system,sans-serif;
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;}
+.zh{font-family:"Noto Sans TC","IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-weight:600; text-wrap:balance; margin:0}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:16px; padding-block:0 44px}
+
+header.top{position:sticky; top:env(safe-area-inset-top,0px); z-index:20;
+  background:var(--paper); background:color-mix(in srgb, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px; margin:0 auto; padding:10px 16px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap}
+.brand{font-family:"Newsreader",Georgia,serif; font-size:17px; font-weight:600}
+.brand small{display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:400}
+.rail{display:flex; gap:4px; margin-left:auto; flex-wrap:wrap}
+.rail button{font:inherit; font-size:12.5px; cursor:pointer; background:transparent; color:var(--muted);
+  border:1px solid transparent; border-radius:99px; padding:5px 11px; display:flex; align-items:center; gap:7px}
+.rail button .n{font-family:"IBM Plex Mono",monospace; font-size:11px; opacity:.75}
+.rail button:hover{color:var(--ink); background:var(--sunk)}
+.rail button[aria-current="true"]{background:var(--accent); color:#fff; border-color:var(--accent)}
+.rail .lbl{display:none}
+@media(min-width:920px){ .rail .lbl{display:flex; flex-direction:column; line-height:1.14; text-align:left} }
+.rail .lbl b{font-weight:500; font-size:11.5px}
+.rail .lbl i{font-style:normal; font-size:9.5px; opacity:.8}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+
+.panel{padding-block:26px 0}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--accent); display:flex; gap:10px; align-items:center}
+.eyebrow::after{content:""; flex:1; height:1px; background:var(--line)}
+h2.title{font-size:clamp(25px,4.4vw,36px); line-height:1.15; margin:.35em 0 .1em}
+.title-zh{font-size:clamp(17px,2.6vw,21px); color:var(--ink2); font-weight:500; margin-bottom:14px}
+.cols{display:grid; grid-template-columns:1fr; gap:22px; align-items:start}
+@media(min-width:920px){ .cols{grid-template-columns:minmax(290px,.82fr) 1.18fr; gap:30px} }
+.arg p{margin:0 0 .85em}
+.arg .zh{color:var(--ink)}
+.arg .en{color:var(--ink2); font-size:14px}
+.arg .en em{font-style:normal; color:var(--ink); font-weight:500}
+.arg .zh b{font-weight:700; color:var(--accent)}
+.formula{font-family:"IBM Plex Mono",monospace; background:var(--sunk); border:1px solid var(--line);
+  border-radius:8px; padding:10px 12px; margin:12px 0; font-size:14px}
+.formula .say{display:block; font-family:"IBM Plex Sans",sans-serif; font-size:12.5px;
+  color:var(--muted); margin-top:5px; font-style:italic}
+.callout{border-left:3px solid var(--gold); background:var(--gold-soft);
+  padding:12px 14px; border-radius:0 var(--r) var(--r) 0; margin:16px 0 0}
+.callout .k{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--gold); display:block; margin-bottom:5px}
+.callout p{margin:0 0 .5em; font-size:14px}
+.callout p:last-child{margin:0}
+
+.rig{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:16px}
+.rig + .rig{margin-top:14px}
+.rig h3{font-size:14px; font-family:"IBM Plex Sans",sans-serif; font-weight:600; margin-bottom:10px}
+canvas{display:block; width:100%; height:auto; max-width:100%; border-radius:6px; touch-action:auto; scroll-margin-top:104px}
+canvas.grab{cursor:ew-resize; touch-action:pan-y}
+
+.ctrls{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:12px}
+button.act{font:inherit; font-size:13px; font-weight:500; cursor:pointer; background:var(--accent);
+  color:#fff; border:1px solid var(--accent); border-radius:7px; padding:7px 13px}
+button.act:hover{filter:brightness(1.08)}
+button.act.ghost{background:transparent; color:var(--accent)}
+button.act.ghost:hover{background:var(--accent-soft); filter:none}
+.slider{display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--muted); flex:1 1 200px; min-width:180px}
+.slider input[type=range]{flex:1; min-width:90px; accent-color:var(--accent)}
+.slider .v{font-family:"IBM Plex Mono",monospace; color:var(--ink); font-weight:500; min-width:3.2em; text-align:right}
+.seg{display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; flex-wrap:wrap}
+.seg button{font:inherit; font-size:12.5px; cursor:pointer; background:var(--card); color:var(--muted);
+  border:0; border-right:1px solid var(--line); padding:6px 11px}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent); color:#fff}
+
+.readout{display:grid; grid-template-columns:repeat(auto-fit,minmax(102px,1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-top:12px}
+.readout div{background:var(--card); padding:9px 11px}
+.readout .k{display:block; font-size:10.5px; letter-spacing:.06em; color:var(--muted); margin-bottom:3px}
+.readout .v{font-family:"IBM Plex Mono",monospace; font-size:19px; font-weight:500; line-height:1.15; font-variant-numeric:tabular-nums}
+.readout .v.sig{color:var(--signal)}
+.readout .v.acc{color:var(--accent)}
+.readout .sub{display:block; font-size:11px; color:var(--muted); margin-top:2px}
+.verdict{margin-top:12px; font-size:14px; padding:11px 13px; border-radius:8px;
+  background:var(--sunk); border:1px solid var(--line); min-height:3.1em}
+.verdict b{color:var(--signal)}
+.verdict .zh{display:block}
+.verdict .en{display:block; color:var(--muted); font-size:12.5px; margin-top:3px}
+.legend{display:flex; gap:14px; flex-wrap:wrap; font-size:11.5px; color:var(--muted); margin-top:9px}
+.legend span{display:flex; align-items:center; gap:5px}
+.legend i{width:11px; height:11px; border-radius:3px; display:inline-block}
+.src{font-size:11.5px; color:var(--muted); margin-top:10px; line-height:1.5}
+footer.foot{margin-top:34px; padding-top:16px; border-top:1px solid var(--line);
+  font-size:12px; color:var(--muted); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.nav{display:flex; gap:8px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+/* ---- v6 teaching-flow additions ---- */
+.flow{display:flex; flex-direction:column; align-items:flex-start; gap:4px; margin:6px 0 16px}
+.flow .node{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 14px; min-width:190px}
+.flow .node .k{display:block; font-size:10.5px; letter-spacing:.08em; color:var(--muted)}
+.flow .node b{display:block; font-family:"IBM Plex Mono",monospace; font-size:20px; font-weight:500; color:var(--ink)}
+.flow .node.pop b{color:var(--accent)}
+.flow .node.smp b{color:var(--signal)}
+.flow .node i{font-style:normal; font-size:11.5px; color:var(--muted)}
+.flow .arrow{font-size:18px; color:var(--muted); padding-left:80px; line-height:1}
+.key{border-left:3px solid var(--accent); background:var(--accent-soft); padding:10px 14px; border-radius:0 var(--r) var(--r) 0; margin:14px 0}
+.key p{margin:0 0 .4em; font-size:14.5px}
+.key p:last-child{margin:0}
+.key .zh{color:var(--ink)}
+.next{margin-top:16px; font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.06em; color:var(--accent); border-top:1px dashed var(--line); padding-top:10px}
+.formula.big{font-size:18px; padding:12px 14px}
+.formula .def{display:block; font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:12.5px; color:var(--ink2); margin-top:6px; font-style:normal}
+.formula .def:first-of-type{margin-top:9px}
+.warn{font-size:13px; color:var(--signal); background:var(--signal-soft); border-radius:7px; padding:8px 12px; margin:10px 0}
+.arg .note{font-size:12.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:8px; margin-top:10px}
+.steps{display:grid; gap:5px; margin:8px 0 12px}
+.steps div{display:flex; gap:10px; align-items:baseline; font-size:14px}
+.steps b{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:#fff; background:var(--accent); border-radius:99px; min-width:20px; height:20px; display:inline-flex; align-items:center; justify-content:center; font-weight:500}
+.logic{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12.5px; color:var(--ink2); margin:0 0 10px; padding:9px 12px; background:var(--sunk); border-radius:8px; border:1px solid var(--line)}
+.logic b{font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--ink)}
+.logic .sig{color:var(--signal)}
+.logic .acc{color:var(--accent)}
+.pdef{font-size:13px; margin:8px 0 0; padding:9px 12px; border-radius:8px; background:var(--card); border:1px dashed var(--line); color:var(--ink2)}
+.pdef b{color:var(--signal)}
+.cikey{margin:8px 0 12px; font-size:12px; color:var(--muted)}
+.cikey svg{display:block; width:100%; max-width:380px; height:auto}
+.rtab{width:100%; border-collapse:collapse; font-size:13px; margin-top:8px}
+.rtab th,.rtab td{padding:5px 8px; border-bottom:1px solid var(--line); text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.rtab th{font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:11px; letter-spacing:.06em; color:var(--muted); font-weight:500}
+.rtab th:first-child,.rtab td:first-child{text-align:left; font-family:"IBM Plex Sans","Noto Sans TC",sans-serif}
+.rtab td.bad{color:var(--signal); font-weight:600}
+.rtab td.iffy{color:var(--gold); font-weight:600}
+.rtab .tag{font-size:10.5px; letter-spacing:.06em; margin-left:6px; font-family:"IBM Plex Sans",sans-serif}
+details.how{margin-top:10px; font-size:12.5px; color:var(--muted)}
+details.how summary{cursor:pointer; color:var(--accent); font-weight:500}
+details.how p{margin:6px 0 0}
+.q{font-size:15px; color:var(--ink2); margin:2px 0 0; font-weight:500}
+.q.zh{color:var(--muted); font-weight:400; margin-bottom:14px}
+.trans{margin-top:18px; padding:12px 14px; border-radius:var(--r); background:var(--gold-soft); border:1px solid var(--line)}
+.trans p{margin:0 0 .35em; font-size:14.5px; font-weight:500}
+.trans p.zh{font-weight:400}
+.trans .to{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.08em; color:var(--accent); margin-top:8px}
+.pq{margin:12px 0; padding:14px 16px; border-radius:var(--r); background:var(--accent-soft); border-left:3px solid var(--accent); font-size:16px; line-height:1.45}
+.pq .zh{display:block; margin-top:8px; font-size:15px}
+.eqv{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0}
+.eqv div{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:9px 11px; font-size:12.5px; color:var(--ink2)}
+.eqv b{display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink); margin-bottom:3px}
+.eqv .r{font-family:"IBM Plex Mono",monospace; color:var(--accent); font-weight:500}
+.equiv{margin:12px 0 0; font-size:13px}
+.equiv div{display:flex; gap:10px; align-items:baseline; padding:6px 0; border-top:1px solid var(--line)}
+.equiv div:last-child{border-bottom:1px solid var(--line)}
+.equiv b{font-family:"IBM Plex Mono",monospace; font-weight:500; min-width:150px}
+.equiv .ok{color:var(--accent)} .equiv .no{color:var(--signal)}
+.tree{display:block; width:100%; max-width:420px; height:auto; margin:8px 0}
+.cmap{margin-top:34px; border-top:1px solid var(--line); padding-top:22px}
+.cmap h3{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-size:22px; margin-bottom:12px}
+.cmap .chain{display:flex; flex-wrap:wrap; gap:10px; align-items:stretch}
+.cmap .box{flex:1 1 160px; background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; font-size:13px; color:var(--ink2); position:relative}
+.cmap .box b{display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.06em; color:var(--accent); margin-bottom:4px}
+.cmap .box .zh{display:block; margin-top:4px; color:var(--muted)}
+.cmap .box.two{flex:2 1 340px}
+.cmap .box.two .pair{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px}
+.cmap .box.two .pair div{background:var(--sunk); border-radius:7px; padding:8px 10px}
+.cmap .arrow{align-self:center; color:var(--muted); font-size:18px}
+@media(max-width:700px){ .eqv{grid-template-columns:1fr} .cmap .arrow{display:none} }
+/* stage 2 · two-distribution layout */
+.clab{display:flex; flex-wrap:wrap; gap:2px 12px; align-items:baseline; font-size:12.5px; color:var(--ink2); margin:8px 0 2px}
+.clab b{font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--ink); font-size:12.5px}
+.clab .w{font-family:"IBM Plex Mono",monospace; font-weight:500}
+.clab .w.sd{color:var(--muted)} .clab .w.se{color:var(--accent)}
+.clab .zh{color:var(--muted)}
+.clab .expl{flex-basis:100%; font-size:11.5px; color:var(--muted); margin-top:-3px}
+.hub{margin:4px 0 2px; padding:8px 12px 6px; border-radius:8px; background:var(--sunk); border:1px dashed var(--line)}
+.xform{display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:center; gap:0 8px; text-align:center; font-size:12.5px; color:var(--ink2); line-height:1.3}
+.xform>span .zh{display:block; font-size:11px}
+@media(max-width:700px){ .xform{grid-template-columns:1fr} .xform .ar{transform:rotate(90deg)} }
+.xform .ar{color:var(--accent); font-size:15px; line-height:1}
+.hub .ctrls.hubrow{margin-top:8px; gap:6px 10px}
+.hub .slider{flex:1 1 150px; min-width:140px}
+.hub .fx{margin-top:5px}
+.xform b{font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--accent)}
+.xform .zh{color:var(--muted)}
+.fx{min-height:18px; font-size:12px; color:var(--muted); margin-top:6px; font-family:"IBM Plex Mono",monospace}
+.fx b{color:var(--signal); font-weight:500}
+.fx .zh{font-family:"Noto Sans TC","IBM Plex Sans",sans-serif; margin-left:8px}
+.eqv.three{grid-template-columns:1fr 1fr 1fr; margin-top:12px}
+.eqv.three div b{color:var(--accent)}
+.eqv.three div b.sd{color:var(--muted)} .eqv.three div b.p{color:var(--signal)}
+@media(max-width:700px){ .eqv.three{grid-template-columns:1fr} }
+h4.sub{font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:13px; letter-spacing:.04em; color:var(--accent); margin:16px 0 6px; font-weight:600}
+
+/* ---- phone layout (added v8.2) ---- */
+html{scroll-padding-top:104px}
+@media(max-width:919px){
+  .cols{display:flex; flex-direction:column}
+  .cols>div:not(.arg){order:-1}
+  .panel{scroll-margin-top:104px}
+}
+@media(max-width:700px){
+  body{font-size:14.5px}
+  .top-in{padding:7px 14px; gap:6px 10px}
+  .brand{font-size:15px}
+  .brand small{font-size:9.5px; letter-spacing:.10em}
+  .rail{gap:2px}
+  .rail button{padding:4px 10px; font-size:12px}
+  .wrap{padding-inline:12px}
+  .panel{padding-block:16px 0}
+  .rig{padding:12px 11px}
+  .rig h3{font-size:13.5px}
+  .arg .en{font-size:13.5px}
+  .readout{grid-template-columns:repeat(auto-fit,minmax(138px,1fr))}
+  .readout .v{font-size:17px}
+  .readout .k,.readout .sub{font-size:10.5px}
+  .hub{padding:8px 10px 6px}
+  .hub .slider{flex:1 1 100%; min-width:0}
+  .ctrls .act{flex:1 1 auto}
+  .legend{gap:5px 12px; font-size:11px}
+  .pq{font-size:15px; padding:12px 13px}
+  .formula.big{font-size:16px}
+  .equiv b{min-width:0; flex:0 0 46%}
+  .cmap .chain{flex-direction:column}
+}
+
+/* ---- Week 4 additions ---- */
+.rig .seg{margin-bottom:10px}
+.tbl-wrap{overflow-x:auto; margin:6px 0 10px}
+table.ctab{width:100%; border-collapse:collapse; font-size:13px; font-variant-numeric:tabular-nums}
+table.ctab th,table.ctab td{border:1px solid var(--line); padding:7px 9px; text-align:center}
+table.ctab th{font-weight:500; color:var(--ink2); background:var(--sunk); font-size:12px}
+table.ctab td .o{display:block; font-family:"IBM Plex Mono",monospace; font-size:18px; color:var(--ink)}
+table.ctab td .e{display:block; font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--gold); min-height:1.3em}
+table.ctab td .e.low{color:var(--signal); font-weight:600}
+table.ctab td.tot{color:var(--muted); font-family:"IBM Plex Mono",monospace}
+table.dmap{width:100%; border-collapse:collapse; font-size:12.5px; margin:10px 0 12px}
+table.dmap th,table.dmap td{border:1px solid var(--line); padding:8px 9px; vertical-align:top; text-align:left}
+table.dmap thead th{background:var(--sunk); font-weight:500; color:var(--ink2)}
+table.dmap tbody th{font-weight:500; color:var(--ink2); width:30%}
+table.dmap td b{display:block; color:var(--accent); font-weight:600}
+table.dmap td .zh{display:block; color:var(--muted); font-size:11.5px}
+table.dmap td.later{color:var(--muted); font-style:italic}
+.dq{margin:0 0 10px}
+.dq .k{display:block; font-size:11px; letter-spacing:.06em; color:var(--muted); margin-bottom:5px}
+.dq .seg{margin-bottom:0}
+.card5{border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:0 var(--r) var(--r) 0; background:var(--card); padding:12px 14px; margin-top:6px}
+.card5 .tn{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-size:21px; font-weight:600; color:var(--accent)}
+.card5 .tz{color:var(--ink2); font-size:13.5px; margin-bottom:8px}
+.card5 .lab{display:block; font-size:10.5px; letter-spacing:.08em; color:var(--muted); margin-top:10px; text-transform:uppercase}
+.card5 pre{margin:4px 0 0; padding:8px 10px; background:var(--sunk); border:1px solid var(--line); border-radius:7px; font-family:"IBM Plex Mono",monospace; font-size:12px; white-space:pre-wrap; word-break:break-word; color:var(--ink)}
+.card5 .apa{margin:4px 0 0; font-size:13.5px; line-height:1.55; color:var(--ink)}
+.card5 .apa i{font-style:italic}
+.card5 .ex{font-size:12px; color:var(--muted); margin-top:6px}
+.steps span{flex:1}
+@media(max-width:700px){ table.ctab td .o{font-size:16px} .card5 .tn{font-size:19px} }
+@media(max-width:700px){ #x2{grid-template-columns:1fr auto 1fr auto 1fr} #x2 .ar{transform:none} }
+/* ---- v2: concept-logic text ---- */
+.thread{display:flex; flex-wrap:wrap; gap:6px 8px; align-items:baseline; margin:14px 0 0; font-size:12.5px; color:var(--muted)}
+.thread .tq{font-weight:600; color:var(--ink); margin-right:4px}
+.thread .st{padding:3px 9px; border-radius:99px; border:1px solid var(--line); background:var(--card)}
+.thread .st[aria-current="true"]{background:var(--accent-soft); border-color:var(--accent); color:var(--ink)}
+.thread i.zh{font-style:normal; margin-left:5px; font-size:11px; color:var(--muted)}
+.lg{display:grid; gap:11px; margin:4px 0 14px}
+.lg .ln{border-left:2px solid var(--line); padding-left:12px}
+.lg .ln.k{border-left-color:var(--accent)}
+.lg .ln.k .en{font-weight:600}
+.arg .lg .ln p.en{margin:0; font-size:15px; line-height:1.5; color:var(--ink)}
+.arg .lg .ln p.zh{margin:3px 0 0; font-size:12.5px; line-height:1.5; color:var(--muted)}
+.arg .lg .ln.calc p.en{font-family:"IBM Plex Mono",monospace; font-size:14px; background:var(--sunk); border-radius:6px; padding:7px 10px}
+.dfn{background:var(--card); border:1px solid var(--line); border-radius:8px; padding:9px 12px; margin-top:8px}
+.dfn b.t{display:block; font-size:12.5px; font-weight:600; color:var(--accent); margin-bottom:2px}
+.arg .dfn p.en{margin:0; font-size:13.5px; color:var(--ink2)}
+.arg .dfn p.zh{margin:2px 0 0; font-size:12px; color:var(--muted)}
+table.dmap th .zh{display:block; font-size:11px; color:var(--muted); font-weight:400}
+@media(max-width:700px){ .arg .lg .ln p.en{font-size:14.5px} .thread .st{font-size:11.5px} }
+.core{margin:14px 0 0; padding:10px 14px; border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 var(--r) var(--r) 0}
+.core p.en{margin:0; font-size:14.5px; font-weight:500; color:var(--ink)}
+.core p.zh{margin:3px 0 0; font-size:12.5px; color:var(--muted)}
+/* ---- v4: APA box, mini table ---- */
+.apa-box{margin-top:14px; border:1px solid var(--line); border-radius:var(--r); background:var(--card); padding:12px 14px}
+.apa-box b.t{display:block; font-size:11px; letter-spacing:.08em; color:var(--muted); font-weight:600; margin-bottom:6px}
+.apa-box p.sent{margin:0 0 8px; font-size:14px; line-height:1.6; color:var(--ink)}
+.apa-box b.hl{font-weight:600; background:var(--gold-soft); color:var(--ink); border-radius:4px; padding:0 3px; box-decoration-break:clone; -webkit-box-decoration-break:clone}
+.apa-key{margin:0; padding:0; list-style:none; display:grid; gap:4px}
+.apa-key li{font-size:12px; color:var(--ink2); line-height:1.45}
+.apa-key li b{font-weight:600; color:var(--ink); margin-right:4px}
+.apa-key li .zh{display:block; font-size:11.5px; color:var(--muted)}
+.goal{margin:4px 0 14px; border:1px solid var(--accent); border-radius:var(--r); background:var(--accent-soft); padding:10px 12px}
+.goal b.t{display:block; font-size:11px; letter-spacing:.08em; color:var(--accent); font-weight:600; margin-bottom:7px}
+.goal .g3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px}
+.goal .g3>div{background:var(--card); border-radius:6px; padding:7px 9px; min-width:0}
+.goal .k{display:block; font-size:11.5px; font-weight:600; color:var(--ink2); line-height:1.35}
+.goal .v{display:block; margin-top:4px; font-size:13.5px; font-weight:500; color:var(--ink); line-height:1.4; overflow-wrap:anywhere}
+.goal .zh{display:block; font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:11px; font-weight:400; color:var(--muted)}
+.goal p.gl{margin:8px 0 0; font-size:12.5px; color:var(--ink2)}
+.apa-box.read{border-color:var(--gold)}
+@media(max-width:560px){ .goal .g3{grid-template-columns:1fr} }
+table.mini{width:100%; border-collapse:collapse; font-size:12.5px; margin:2px 0 12px; font-variant-numeric:tabular-nums}
+table.mini th,table.mini td{border-bottom:1px solid var(--line); padding:5px 7px; text-align:right}
+table.mini th:first-child,table.mini td:first-child{text-align:left}
+table.mini th{font-weight:500; color:var(--muted); font-size:11.5px}
+table.mini tr.sum td{font-weight:600; color:var(--accent); border-bottom:0}
+/* ---- v5: stage 0 framework ---- */
+.flow4{display:grid; gap:4px; justify-items:center; margin:4px 0 14px}
+.flow4 .fb{width:100%; max-width:360px; text-align:center; background:var(--sunk); border:1px solid var(--line); border-radius:8px; padding:8px 12px; font-size:14px; font-weight:500; color:var(--ink)}
+.flow4 .fb .zh{display:block; font-size:12px; font-weight:400; color:var(--muted)}
+.flow4 .fb i{display:block; font-style:normal; font-size:12px; font-weight:400; color:var(--ink2); margin-top:4px}
+.flow4 .fa{color:var(--muted); font-size:16px; line-height:1}
+.flow4 .fsplit{display:grid; grid-template-columns:1fr 1fr; gap:8px; width:100%; max-width:360px}
+.flow4 .fb.ok{background:var(--card)}
+.flow4 .fb.rare{background:var(--signal-soft); border-color:var(--signal)}
+.excard{border:1px solid var(--line); border-radius:8px; background:var(--card); padding:10px 12px; margin-top:10px}
+.excard b.t{display:block; font-size:12.5px; color:var(--accent); margin-bottom:4px}
+.excard p{margin:0}
+.excard p.en{font-size:13px; color:var(--ink); margin-top:5px}
+.excard p.en b{font-weight:600; margin-right:4px}
+.excard p.zh{font-size:12px; color:var(--muted)}
+.excard p.q{color:var(--accent)}
+/* ---- v1.1: Stage 5 answer form ---- */
+.ans{max-width:800px}
+.ans-intro{margin:0 0 12px}
+.ans-intro p.en{margin:0; font-size:14.5px; color:var(--ink)}
+.ans-intro p.zh{margin:2px 0 8px; font-size:12.5px; color:var(--muted)}
+.ans-prog{display:flex; flex-wrap:wrap; gap:4px; margin:0 0 14px}
+.ans-prog button{font:inherit; font-size:11.5px; cursor:pointer; border:1px solid var(--line); background:var(--card); color:var(--muted); border-radius:99px; padding:3px 9px; min-width:30px}
+.ans-prog button[disabled]{cursor:default; opacity:.45}
+.ans-prog button.done{border-color:var(--accent); color:var(--accent)}
+.ans-prog button[aria-current="true"]{background:var(--accent); border-color:var(--accent); color:#fff}
+.ans-prog .sep{align-self:center; color:var(--accent); font-size:11px; font-weight:600; letter-spacing:.04em; padding:0 2px 0 6px}
+.ans-card{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:16px}
+.ans-card h3{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-size:21px; margin:0 0 2px}
+.ans-card .h3zh{color:var(--ink2); font-size:14px; margin:0 0 10px}
+.ans-badge{display:inline-block; font-size:11px; letter-spacing:.06em; font-weight:600; color:var(--signal); background:var(--signal-soft); border-radius:99px; padding:2px 9px; margin:0 6px 8px 0}
+.ans-badge.ok{color:var(--accent); background:var(--accent-soft)}
+.ans-study{border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 8px 8px 0; padding:10px 13px; margin:6px 0 12px}
+.ans-study p{margin:0}
+.ans-study p.en{font-size:15px; color:var(--ink); line-height:1.5}
+.ans-study p.zh{font-size:12.5px; color:var(--muted); margin-top:4px}
+.ans-task{font-size:13.5px; color:var(--ink2); margin:0 0 4px}
+.ans-task.zh{font-size:12px; color:var(--muted); margin:0 0 10px}
+.fld{margin:12px 0 0}
+.fld>label,.fld>.lab{display:block; font-size:13.5px; font-weight:600; color:var(--ink); margin-bottom:5px}
+.fld>label .zh,.fld>.lab .zh{display:block; font-size:12px; font-weight:400; color:var(--muted)}
+.fld input[type=text],.fld select,.fld textarea{font:inherit; font-size:15px; width:100%; max-width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:7px; background:var(--paper); color:var(--ink)}
+.fld textarea{min-height:64px; resize:vertical; line-height:1.5}
+.fld input:disabled,.fld select:disabled,.fld textarea:disabled{opacity:.75; background:var(--sunk)}
+.fld.miss input,.fld.miss select,.fld.miss textarea{border-color:var(--signal); box-shadow:0 0 0 2px var(--signal-soft)}
+.fld .hint{font-size:12px; color:var(--muted); margin-top:4px}
+.fld.cond{padding-left:12px; border-left:2px solid var(--gold)}
+.pair2{display:grid; grid-template-columns:1fr 1fr; gap:0 12px}
+@media(max-width:620px){ .pair2{grid-template-columns:1fr} }
+.ans-msg{margin:14px 0 0; font-size:13px; color:var(--signal); background:var(--signal-soft); border-radius:7px; padding:9px 12px}
+.ans-msg ul{margin:4px 0 0; padding-left:18px}
+.ans-msg.ok{color:var(--accent); background:var(--accent-soft)}
+.ans-nav{display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; margin-top:16px}
+.ans-nav .act[disabled]{opacity:.4; cursor:default}
+.ans-card details.how{margin-top:12px}
+.ans-card details.how li{margin:4px 0}
+.ans-card details.how li .zh{display:block; font-size:11.5px}
+.ans-sum{width:100%; border-collapse:collapse; font-size:13px; margin:8px 0}
+.ans-sum th,.ans-sum td{border-bottom:1px solid var(--line); padding:6px 7px; text-align:left; vertical-align:top}
+.ans-sum th{font-weight:500; color:var(--muted); font-size:11.5px}
+.ans-sum td.y{color:var(--accent); font-weight:600}
+.ans-sum td.n{color:var(--signal); font-weight:600}
+.ans-sum .zh{display:block; font-size:11.5px; color:var(--muted)}
+.ans-out{width:100%; min-height:90px; font-family:"IBM Plex Mono",monospace; font-size:11px; margin-top:8px; border:1px solid var(--line); border-radius:7px; background:var(--sunk); color:var(--ink); padding:8px}
+.ans-link{font:inherit; font-size:12.5px; background:none; border:0; color:var(--accent); text-decoration:underline; cursor:pointer; padding:0}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">差異是真的嗎？<small>Week 4 · is the difference real?</small></div>
+    <nav class="rail" id="rail" aria-label="stages"></nav>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="core"><p class="en">Assume H₀ (no difference) first, then ask: how far is the observed result from what H₀ predicts? If a result this far would rarely happen when H₀ is true, reject H₀.</p><p class="zh">先假設 H₀（沒有差別），再問：觀察到的結果離 H₀ 的預期有多遠？如果 H₀ 成立時，這麼遠的結果很少出現，就拒絕 H₀。</p></div>
+<section class="panel" id="p0">
+  <div class="eyebrow">stage 0 · the framework</div>
+  <h2 class="title">Hypothesis testing: the framework</h2>
+  <div class="title-zh zh">假設檢定：框架</div>
+  <div class="cols">
+    <div class="arg">
+<div class="lg"><div class="ln"><p class="en">Hypothesis testing is a decision-making framework built on probability. Its job: turn a research question into a statistical form that data can test.</p><p class="zh">假設檢定是用機率建立的決策框架。它的功能：把研究問題轉化成可以用資料檢驗的統計形式。</p></div><div class="ln"><p class="en">H₀ (null hypothesis): no effect / no difference. Example: the exercise group and the control group have the same mean heart rate.</p><p class="zh">H₀（虛無假設）：無效果／無差異。例子：運動組與控制組的平均心率沒有差異。</p></div><div class="ln"><p class="en">H₁ (alternative hypothesis): an effect / a difference exists. Example: the mean heart rate of the exercise group differs from the control group.</p><p class="zh">H₁（對立假設）：有效果／有差異。例子：運動組的平均心率與控制組不同。</p></div><div class="ln"><p class="en">The logic is refutation: we do not test H₁ directly. We assume H₀ is true, look at the data, and judge whether they are common or rare under H₀.</p><p class="zh">邏輯是反證法：我們不直接檢驗 H₁，而是先假設 H₀ 為真，看數據，再判斷數據在 H₀ 下常見還是罕見。</p></div><div class="ln k"><p class="en">Common under H₀ → no reason to reject H₀. Rare under H₀ → reject H₀ and lean towards H₁.</p><p class="zh">在 H₀ 下常見 → 沒有理由拒絕 H₀；在 H₀ 下罕見 → 拒絕 H₀，傾向 H₁。</p></div></div>
+    </div>
+    <div class="rig">
+      <h3>The logic of a hypothesis test <span class="zh" style="color:var(--muted);font-weight:400">· 假設檢定的邏輯</span></h3>
+      <div class="flow4">
+        <div class="fb">If H₀ is true<span class="zh">假設 H₀ 為真</span></div><div class="fa">↓</div>
+        <div class="fb">Look at the data<span class="zh">看數據</span></div><div class="fa">↓</div>
+        <div class="fb">Common or rare under H₀?<span class="zh">在 H₀ 下常見還是罕見？</span></div><div class="fa">↓</div>
+        <div class="fsplit"><div class="fb ok">Common<span class="zh">常見</span><i>No reason to reject H₀<br>沒有理由拒絕 H₀</i></div><div class="fb rare">Rare<span class="zh">罕見</span><i>Reject H₀ → lean to H₁<br>拒絕 H₀ → 傾向 H₁</i></div></div>
+      </div>
+<div class="excard"><b class="t">Example 1 · Mindfulness RCT 正念隨機對照試驗</b>
+<p class="en"><b>Research question</b> Does the length of mindfulness practice influence depression, anxiety and stress?</p><p class="zh">研究問題：正念練習的長短會不會影響憂鬱、焦慮與壓力？</p>
+<p class="en"><b>H₀</b> Practice length has no effect: no difference between groups.</p><p class="zh">H₀：練習長短沒有效果，兩組沒有差異。</p>
+<p class="en"><b>H₁</b> Practice length affects depression, anxiety or stress: the groups differ.</p><p class="zh">H₁：練習長短有影響，兩組有差異。</p>
+<p class="en q"><b>Reformulated</b> If H₀ is true, how likely are the data we observed?</p><p class="zh">問題轉化：如果 H₀ 為真，觀察到的數據出現的可能性有多大？</p></div><div class="excard"><b class="t">Example 2 · Diet crossover RCT 飲食交叉試驗</b>
+<p class="en"><b>Research question</b> Under healthy dietary guidelines, do minimally processed (MPF) and ultra-processed foods (UPF) change weight differently?</p><p class="zh">研究問題：在健康飲食指引下，最少加工食物（MPF）與高度加工食物（UPF）對體重變化的影響是否不同？</p>
+<p class="en"><b>H₀</b> MPF and UPF show no difference in weight change (%).</p><p class="zh">H₀：MPF 與 UPF 的體重變化（%）沒有差異。</p>
+<p class="en"><b>H₁</b> MPF and UPF differ in weight change (%).</p><p class="zh">H₁：MPF 與 UPF 的體重變化（%）有差異。</p>
+<p class="en q"><b>Reformulated</b> If H₀ is true, how likely are the data we observed?</p><p class="zh">問題轉化：如果 H₀ 為真，觀察到的數據出現的可能性有多大？</p></div>
+    </div>
+  </div>
+</section>
+<section class="panel" id="p1" hidden>
+  <div class="eyebrow">stage 1 · paired t-test</div>
+  <h2 class="title">H₀, H₁ and the p-value: the paired t-test</h2>
+  <div class="title-zh zh">H₀、H₁ 與 p 值：配對 t 檢定</div>
+  <div class="cols">
+    <div class="arg">
+<div class="lg"><div class="ln"><p class="en">Research question: did the heart rate of these 6 people differ before and after burpees?</p><p class="zh">研究問題：6 個人做 burpee 之前和之後，心率有沒有差別？</p></div><div class="ln"><p class="en">What we want to show is H₁: burpees change heart rate. But H₁ does not say by how much, so no probability can be computed from it.</p><p class="zh">我們想證明的是 H₁：burpee 會改變心率。但 H₁ 沒有說差多少，所以沒辦法直接計算機率。</p></div><div class="ln"><p class="en">So we first assume H₀: heart rate before = heart rate after, i.e. the mean difference = 0. H₀ gives one exact number, so we can ask: if H₀ were true, how rare would these data be?</p><p class="zh">所以先假設 H₀：burpee 前的心率 = burpee 後的心率，也就是差值的平均 = 0。H₀ 給出一個確定的數字，我們才能計算：「如果 H₀ 成立，看到這樣的資料有多罕見？」</p></div></div><div class="goal"><b class="t">Goal: p · 目標：p</b><div class="g3"><div><span class="k">Statistic 統計量<span class="zh">how far from H₀ 離 H₀ 多遠</span></span><span class="v"><i>t</i> = mean diff ÷ SE</span></div><div><span class="k">df 自由度</span><span class="v">pairs − 1 = 6 − 1 = 5</span></div><div><span class="k">Reference distribution 參考分佈</span><span class="v"><i>t</i> distribution, both tails<span class="zh">t 分配，兩邊尾巴</span></span></div></div><p class="gl">statistic + df + reference distribution → p → decision<span class="zh">統計量 + 自由度 + 參考分佈 → p → 決定</span></p></div><div class="lg"><div class="ln"><p class="en">Differences (after − before): 90, 60, 100, 50, 40, 50 → mean diff = 65.00, SD = 24.29. The software does the arithmetic:</p><p class="zh">差值（後 − 前）：90、60、100、50、40、50 → 平均差 = 65.00，SD = 24.29。計算由軟體完成：</p></div><div class="ln calc"><p class="en">SE = SD ÷ √n = 24.29 ÷ √6 = 9.92<br><i>t</i> = mean diff ÷ SE = 65.00 ÷ 9.92 = 6.55</p></div></div><div class="dfn"><b class="t">H₀ · null hypothesis 虛無假設</b><p class="en">The “no difference” statement. It gives one exact value (difference = 0), so a probability can be computed.</p><p class="zh">「沒有差別」的假設，給出一個確定的數值（差 = 0），讓我們可以計算機率。</p></div><div class="dfn"><b class="t">H₁ · alternative hypothesis 對立假設</b><p class="en">The claim the researcher wants to support: there is a difference (higher or lower: two-sided).</p><p class="zh">研究者想支持的說法（有差別；高或低都算，即雙尾）。</p></div><div class="dfn"><b class="t">t</b><p class="en">How many SEs the observed difference is from H₀. t = difference ÷ SE.</p><p class="zh">觀察到的差距離 H₀ 有幾個 SE。t = 差距 ÷ SE。</p></div><div class="dfn"><b class="t">p-value p 值</b><p class="en">If H₀ were true, the probability of a result at least this extreme. Small p → reject H₀. Statistics cannot prove H₀ false; it only shows the data are rare under H₀.</p><p class="zh">假設 H₀ 成立，得到至少這麼極端結果的機率。p 很小 → 拒絕 H₀。統計無法「證明」H₀ 是錯的，只能說資料在 H₀ 下很罕見。</p></div><div class="dfn"><b class="t">Paired samples 配對樣本</b><p class="en">Every value is matched with another value from the same person. df = number of pairs − 1.</p><p class="zh">每個數值都對應到同一個人的另一個數值；自由度 = 配對數 − 1。</p></div><div class="apa-box read"><b class="t">How to read 怎麼讀</b><p class="sent"><b class="hl"><i>t</i>(5) = 6.55, <i>p</i> = .001</b></p><ul class="apa-key"><li><b><i>t</i>(5) = 6.55</b> the mean difference is 6.55 SEs from H₀’s 0; 5 = df.<span class="zh">平均差離 H₀ 的 0 有 6.55 個 SE；括號內的 5 是自由度。</span></li><li><b><i>p</i> = .001</b> if H₀ were true, a result at least this extreme would occur with probability .001 (both tails of the <i>t</i> distribution, df = 5).<span class="zh">如果 H₀ 成立，得到至少這麼極端結果的機率是 .001（自由度 5 的 t 分配，兩邊尾巴）。</span></li><li><b>Decision 決定</b> <i>p</i> &lt; .05 → reject H₀: heart rate after set 4 was significantly higher than at baseline.<span class="zh"><i>p</i> &lt; .05 → 拒絕 H₀：第 4 組後的心率顯著高於基線。</span></li><li><b>APA rules 規則</b> <i>t</i>, <i>p</i> in italics; df in brackets; statistic to two decimals; <i>p</i> to three decimals with no leading 0 (p cannot exceed 1); exact <i>p</i>, except <i>p</i> &lt; .001.<span class="zh"><i>t</i>、<i>p</i> 用斜體；自由度寫在括號內；統計量兩位小數；<i>p</i> 三位小數、小數點前不寫 0（p 不會大於 1）；寫精確 <i>p</i>，只有小於 .001 時寫 <i>p</i> &lt; .001。</span></li></ul></div><div class="apa-box"><b class="t">APA report 報告格式</b><p class="sent">In the burpee group, heart rate rose from baseline (<i>M</i> = 70.00, <i>SD</i> = 8.94) to set 4 (<i>M</i> = 135.00, <i>SD</i> = 28.11), <b class="hl"><i>t</i>(5) = 6.55</b>, <b class="hl"><i>p</i> = .001</b>, <b class="hl"><i>M</i><sub>diff</sub> = 65.00 bpm</b>, <b class="hl">95% CI [39.51, 90.49]</b>, <b class="hl"><i>d</i><sub>z</sub> = 2.68</b>.</p><ul class="apa-key"><li><b><i>M</i>, <i>SD</i></b> mean and SD of each measurement<span class="zh">每次測量的平均數與標準差</span></li><li><b><i>t</i>(5)</b> t value; df in brackets<span class="zh">t 值，括號內是自由度</span></li><li><b><i>p</i></b> probability of a result this extreme if H₀ were true (three decimals, no leading 0)<span class="zh">H₀ 成立時得到這麼極端結果的機率（三位小數，不寫 0）</span></li><li><b><i>M</i><sub>diff</sub></b> mean difference, with its unit<span class="zh">平均差（附單位）</span></li><li><b>95% CI</b> range of plausible mean differences<span class="zh">平均差的 95% 信賴區間</span></li><li><b><i>d</i><sub>z</sub></b> effect size: mean difference ÷ SD of the differences (how big)<span class="zh">效果量：平均差 ÷ 差值的 SD（差距有多大）</span></li></ul></div>
+    </div>
+    <div class="rig">
+      <h3>Baseline → set 4, same six people <span class="zh" style="color:var(--muted);font-weight:400">· 同樣 6 個人</span></h3>
+      <canvas id="c3a" height="230" data-hm="210" aria-label="baseline and set 4 heart rate for six people"></canvas>
+      <div class="hub">
+        <div class="ctrls hubrow">
+          <button class="act" id="b3sub">Each person minus themselves 每人減自己</button>
+          <button class="act ghost" id="b3reset">Reset 重設</button>
+        </div>
+        <div class="fx" id="f3">pairs shown · press subtract<span class="zh">按「每人減自己」</span></div>
+      </div>
+      <h3 style="margin-top:10px">The differences 差值 <span class="zh" style="color:var(--muted);font-weight:400">· set 4 − baseline (bpm)</span></h3>
+      <canvas id="c3b" height="130" data-hm="130" aria-label="within-person differences with mean and confidence interval"></canvas>
+      <div class="readout">
+        <div><span class="k">mean diff 平均差</span><span class="v sig" id="r3m">65.0</span></div>
+        <div><span class="k">SE 標準誤</span><span class="v acc" id="r3se">9.92</span></div>
+        <div><span class="k">t(df)</span><span class="v" id="r3t">t(5) = 6.55</span></div>
+        <div><span class="k">95% CI (bpm)</span><span class="v" id="r3ci">[39.5, 90.5]</span></div>
+      </div>
+      <p class="src">Paired t(5) = 6.55, p = .001, d<sub>z</sub> = 2.68 · demonstration data (A–K)<br><span class="zh">示範資料</span></p>
+    </div>
+  </div>
+</section>
+<section class="panel" id="p2" hidden>
+  <div class="eyebrow">stage 2 · independent t-test</div>
+  <h2 class="title">Independent t-test: two groups of different people</h2>
+  <div class="title-zh zh">獨立樣本 t 檢定：兩組不同的人</div>
+  <div class="cols">
+    <div class="arg">
+<div class="lg"><div class="ln"><p class="en">New question: after set 4, did heart rate differ between the burpee group (6 people) and the rest group (5 other people)?</p><p class="zh">新的研究問題：第 4 組後，burpee 組（6 人）和休息組（另外 5 人）的心率有沒有差別？</p></div><div class="ln"><p class="en">H₀: heart rate of the burpee group = heart rate of the rest group (μ_I = μ_C). Burpee M = 135.00 (SD 28.11); rest M = 66.00 (SD 5.48); difference 69.00.</p><p class="zh">H₀：burpee 組的心率 = 休息組的心率（μ_I = μ_C）。burpee 組 M = 135.00（SD 28.11）；休息組 M = 66.00（SD 5.48）；差距 69.00。</p></div></div><div class="goal"><b class="t">Same goal: p, a different tool · 同一個目標：p，換了工具</b><div class="g3"><div><span class="k">Statistic 統計量<span class="zh">how far from H₀ 離 H₀ 多遠</span></span><span class="v"><i>t</i> = difference ÷ SE_diff</span></div><div><span class="k">df 自由度</span><span class="v">estimated by Welch = 5.45<span class="zh">由 Welch 估計</span></span></div><div><span class="k">Reference distribution 參考分佈</span><span class="v"><i>t</i> distribution, both tails<span class="zh">t 分配，兩邊尾巴</span></span></div></div><p class="gl">statistic + df + reference distribution → p → decision<span class="zh">統計量 + 自由度 + 參考分佈 → p → 決定</span></p></div><div class="lg"><div class="ln"><p class="en">Different people, so each group has its own SE. Variances add, SEs do not: the two means wobble independently and rarely reach their extremes in the same direction.</p><p class="zh">不同的人，所以兩組各有自己的 SE。可以相加的是變異數，不是 SE：兩個平均數各自獨立地晃動，很少同時晃到最極端、又同一個方向。</p></div><div class="ln calc"><p class="en">SE_I = SD_I ÷ √n_I = 28.11 ÷ √6 = 11.47<br>SE_C = SD_C ÷ √n_C = 5.48 ÷ √5 = 2.45<br>SE_diff = √(SE_I² + SE_C²) = √(11.47² + 2.45²) = 11.73<br><i>t</i> = difference ÷ SE_diff = 69.00 ÷ 11.73 = 5.88<br>95% CI = difference ± <i>t</i>* × SE_diff = 69.00 ± <i>t</i>* × 11.73 = [39.58, 98.42]</p></div><div class="ln"><p class="en">Baseline HR: difference 4.00, t(8.39) = 0.91, p = .388, CI [−6.06, 14.06]. The CI still allows 14 bpm: not significant ≠ equal.</p><p class="zh">基線心率：差距 4.00，t(8.39) = 0.91，p = .388，CI [−6.06, 14.06]。CI 仍容許差 14 bpm：不顯著 ≠ 相等。</p></div><div class="ln"><p class="en">Stage 1’s before/after data analysed as two groups would give SE = 12.04: wrong, because the same people need the paired test.</p><p class="zh">如果把第 1 部分同一群人的前後資料當成兩組來算，SE = 12.04，這是錯的：同一群人要用配對檢定。</p></div></div><div class="dfn"><b class="t">Standard error (SE) 標準誤</b><p class="en">How much a mean, or a difference between two means, would move if the study were repeated.</p><p class="zh">研究重做時，平均數（或兩組平均數之差）會晃動多少。</p></div><div class="dfn"><b class="t">Welch’s t-test Welch t 檢定</b><p class="en">Does not assume the two SDs are equal (28.11 vs 5.48 here). The default for a thesis. In Jamovi’s Independent Samples T-Test, “Student’s” is the version that assumes equal SDs.</p><p class="zh">不假設兩組 SD 相同（這裡是 28.11 對 5.48），論文預設用它。在 Jamovi 的 Independent Samples T-Test，「Student’s」是假設兩組 SD 相同的版本。</p></div><div class="dfn"><b class="t">Not significant ≠ equal 不顯著 ≠ 相等</b><p class="en">p > .05 only says the data are compatible with “no difference”. Read the CI to see what else they are compatible with.</p><p class="zh">p > .05 只代表資料和「沒有差別」相容，要看 CI 容許的範圍。</p></div><div class="apa-box read"><b class="t">How to read 怎麼讀</b><p class="sent"><b class="hl">Welch’s <i>t</i>(5.45) = 5.88, <i>p</i> = .002</b></p><ul class="apa-key"><li><b>Welch’s</b> name the test: it does not assume equal SDs (28.11 vs 5.48).<span class="zh">寫明檢定名稱：它不假設兩組 SD 相同（28.11 對 5.48）。</span></li><li><b><i>t</i>(5.45) = 5.88</b> the difference is 5.88 SEs from 0. Welch estimates df from both SDs and ns, so it is not a whole number: report two decimals.<span class="zh">差距離 0 有 5.88 個 SE。Welch 由兩組的 SD 和 n 估計自由度，所以不是整數，報兩位小數。</span></li><li><b><i>p</i> = .002</b> if H₀ were true, a difference at least this extreme would occur with probability .002 (both tails, df = 5.45).<span class="zh">如果 H₀ 成立，得到至少這麼極端差距的機率是 .002（兩邊尾巴，自由度 5.45）。</span></li><li><b>95% CI</b> [39.58, 98.42] excludes 0 ⇔ <i>p</i> &lt; .05.<span class="zh">[39.58, 98.42] 不含 0 ⇔ <i>p</i> &lt; .05。</span></li><li><b>Decision 決定</b> reject H₀: after set 4, heart rate was significantly higher in the burpee group than in the rest group.<span class="zh">拒絕 H₀：第 4 組後，burpee 組的心率顯著高於休息組。</span></li></ul></div><div class="apa-box"><b class="t">APA report 報告格式</b><p class="sent">Heart rate after set 4 was higher in the burpee group (<i>M</i> = 135.00, <i>SD</i> = 28.11) than in the rest group (<i>M</i> = 66.00, <i>SD</i> = 5.48), <b class="hl">Welch’s <i>t</i>(5.45) = 5.88</b>, <b class="hl"><i>p</i> = .002</b>, <b class="hl"><i>M</i><sub>diff</sub> = 69.00 bpm</b>, <b class="hl">95% CI [39.58, 98.42]</b>, <b class="hl"><i>d</i> = 3.41</b>.</p><ul class="apa-key"><li><b>Welch’s <i>t</i>(5.45)</b> name the test; t value with Welch df<span class="zh">寫明檢定名稱；t 值與 Welch 自由度</span></li><li><b><i>p</i></b> exact p, three decimals<span class="zh">精確 p 值，三位小數</span></li><li><b><i>M</i><sub>diff</sub></b> difference between the group means (I − C)<span class="zh">兩組平均數之差（I − C）</span></li><li><b>95% CI</b> range of plausible differences<span class="zh">差距的 95% 信賴區間</span></li><li><b><i>d</i></b> effect size: d = difference ÷ √((SD_I² + SD_C²) ÷ 2), as on Jamovi’s Welch row<span class="zh">效果量：d = 差距 ÷ √((SD_I² + SD_C²) ÷ 2)，即 Jamovi Welch 那一列</span></li></ul></div>
+    </div>
+    <div class="rig">
+      <h3>A · the people 個人數值 <span class="zh" style="color:var(--muted);font-weight:400">· width = SD</span></h3>
+      <canvas id="c2a" height="170" data-hm="160" aria-label="two groups of individual heart rates"></canvas>
+      <div class="hub">
+        <div class="xform" id="x2">
+          <span><b id="x2d">69.0</b><span class="zh">difference 差距</span></span><span class="ar">÷</span>
+          <span><b id="x2s">11.73</b><span class="zh">SE 標準誤</span></span><span class="ar">=</span>
+          <span><b id="x2t">5.88</b><span class="zh">t</span></span>
+        </div>
+        <div class="seg" id="s2pre" role="group" aria-label="presets" style="margin-top:8px">
+          <button type="button" data-p="h4" aria-pressed="true">HR4 data</button>
+          <button type="button" data-p="b" aria-pressed="false">Baseline data</button>
+          <button type="button" data-p="one" aria-pressed="false">SE ≈ 1</button>
+        </div>
+        <div class="ctrls hubrow">
+          <label class="slider">gap 差距 <input type="range" id="s2d" min="0" max="100" step="0.5" value="69"><span class="v" id="v2d">69.00</span></label>
+          <label class="slider">SD_I <input type="range" id="s2a" min="1" max="60" step="0.1" value="28.1"><span class="v" id="v2a">28.11</span></label>
+          <label class="slider">SD_C <input type="range" id="s2c" min="1" max="30" step="0.1" value="5.5"><span class="v" id="v2c">5.48</span></label>
+        </div>
+        <div class="fx" id="f2">n_I = 6 · n_C = 5 (fixed 固定)</div>
+      </div>
+      <h3 style="margin-top:10px">B · the gap if H₀ were true 如果 H₀ 成立，差距的分配 <span class="zh" style="color:var(--muted);font-weight:400">· width = SE</span></h3>
+      <canvas id="c2b" height="200" data-hm="184" aria-label="sampling distribution of the difference under H0 with the confidence interval"></canvas>
+      <div class="legend">
+        <span><i style="background:var(--signal)"></i>tails as far as our gap 尾巴 = p</span>
+        <span><i style="background:var(--accent)"></i>95% CI of our gap 我們差距的 95% CI</span>
+      </div>
+      <div class="readout">
+        <div><span class="k">Welch t(df)</span><span class="v" id="r2t">—</span></div>
+        <div><span class="k">p (two-sided 雙尾)</span><span class="v sig" id="r2p">—</span></div>
+        <div><span class="k">95% CI (bpm)</span><span class="v acc" id="r2ci">—</span></div>
+        <div><span class="k">CI contains 0? 含 0？</span><span class="v" id="r2z">—</span></div>
+      </div>
+      <p class="src">Chart B: the t-distribution (Welch df) scaled by SE · model, not simulation<br><span class="zh">圖 B：依 SE 縮放的 t 分配（模型）</span></p>
+    </div>
+  </div>
+</section>
+<section class="panel" id="p3" hidden>
+  <div class="eyebrow">stage 3 · chi-square test</div>
+  <h2 class="title">Chi-square test: the dependent variable is yes or no</h2>
+  <div class="title-zh zh">卡方檢定：依變項是「有／沒有」</div>
+  <div class="cols">
+    <div class="arg">
+<div class="lg"><div class="ln"><p class="en">The DV is re-sprain yes or no: there is no mean, so we compare numbers of people. (Hypothetical data: 40 taped, 40 not taped, one season.)</p><p class="zh">依變項（DV）是「有／沒有再扭傷」，沒有平均數，只能比較人數。（假設資料：40 人有貼紮、40 人沒有，一個球季。）</p></div><div class="ln"><p class="en">H₀: taping has no effect, i.e. the re-sprain proportion is the same in both groups. H₀ does not say that half re-sprain.</p><p class="zh">H₀：貼紮沒有作用，也就是兩組的再扭傷比例一樣。H₀ 不是說一半的人再扭傷。</p></div></div><div class="goal"><b class="t">Same goal: p, a different tool · 同一個目標：p，換了工具</b><div class="g3"><div><span class="k">Statistic 統計量<span class="zh">how far from H₀ 離 H₀ 多遠</span></span><span class="v"><i>χ</i>² = Σ (O − E)² ÷ E</span></div><div><span class="k">df 自由度</span><span class="v">(rows − 1)(columns − 1) = 1</span></div><div><span class="k">Reference distribution 參考分佈</span><span class="v"><i>χ</i>² distribution, right tail (χ² is never negative)<span class="zh">χ² 分配，只看右邊尾巴（平方不會是負數）</span></span></div></div><p class="gl">statistic + df + reference distribution → p → decision<span class="zh">統計量 + 自由度 + 參考分佈 → p → 決定</span></p></div><div class="lg"><div class="ln"><p class="en">Expected counts under H₀: (1) the only estimate of the re-sprain rate is the data: overall rate = re-sprains ÷ N = 22 ÷ 80 = 27.50%; (2) if H₀ is true, both groups have this 27.50%; (3) E = group n × overall rate = 40 × 27.50% = 11.00 re-sprain, 40 − 11 = 29.00 do not.</p><p class="zh">H₀ 下的期望次數：①唯一的再扭傷率估計來自資料本身：整體比例 = 再扭傷人數 ÷ N = 22 ÷ 80 = 27.50%；②如果 H₀ 成立，兩組都是這個 27.50%；③期望次數 = 每組人數 × 整體比例 = 40 × 27.50% = 11.00 人再扭傷，40 − 11 = 29.00 人沒有。</p></div><div class="ln calc"><p class="en">E = row total × column total ÷ N = 40 × 22 ÷ 80 = 11.00</p></div></div><div class="tbl-wrap"><table class="mini"><thead><tr><th>cell 格</th><th>O 觀察</th><th>E 期望</th><th>(O − E)² ÷ E</th></tr></thead><tbody>
+<tr><td>taped · re-sprain 有貼紮·再扭傷</td><td>6</td><td>11.00</td><td>(6 − 11.00)² ÷ 11.00 = 2.27</td></tr>
+<tr><td>taped · no 有貼紮·沒有</td><td>34</td><td>29.00</td><td>(34 − 29.00)² ÷ 29.00 = 0.86</td></tr>
+<tr><td>not taped · re-sprain 無貼紮·再扭傷</td><td>16</td><td>11.00</td><td>(16 − 11.00)² ÷ 11.00 = 2.27</td></tr>
+<tr><td>not taped · no 無貼紮·沒有</td><td>24</td><td>29.00</td><td>(24 − 29.00)² ÷ 29.00 = 0.86</td></tr>
+<tr class="sum"><td>χ² = Σ</td><td></td><td></td><td>2.27 + 0.86 + 2.27 + 0.86 = 6.27</td></tr></tbody></table></div><div class="lg"><div class="ln"><p class="en">The link with the t-test: a count wobbles by chance by about √E, so (O − E) ÷ √E is “how many SEs this cell is from H₀”. χ² squares these distances and adds them up: 6.27.</p><p class="zh">和 t 檢定的關係：人數受機會影響的晃動大約是 √E，所以 (O − E) ÷ √E 就是「這一格離 H₀ 有幾個 SE」。χ² 把四格的距離平方後加總：6.27。</p></div><div class="ln"><p class="en">One team of 20 (1 of 10 vs 6 of 10): E = 3.50 < 5. Then √E is a poor measure of chance, and the χ² p (.019) is unreliable. Use Fisher’s exact test: p = .057.</p><p class="zh">一支隊 20 人（1/10 對 6/10）：E = 3.50 < 5。這時 √E 不能準確代表機會的晃動，χ² 的 p（.019）不可靠，要改用 Fisher 精確檢定：p = .057。</p></div></div><div class="dfn"><b class="t">Expected count 期望次數</b><p class="en">Row total × column total ÷ N: the number of people a cell should have if H₀ is true. It plays the role of H₀’s “0” in the t-test.</p><p class="zh">列總和 × 欄總和 ÷ N：H₀ 成立時，每一格應有的人數。它的角色等於 t 檢定中 H₀ 預期的「0」。</p></div><div class="apa-box read"><b class="t">How to read 怎麼讀</b><p class="sent"><b class="hl"><i>χ</i>²(1, <i>N</i> = 80) = 6.27, <i>p</i> = .012</b></p><ul class="apa-key"><li><b><i>χ</i>² = 6.27</b> the total squared distance of the observed counts from H₀’s expected counts.<span class="zh">觀察次數離 H₀ 期望次數的平方距離總和。</span></li><li><b>(1, <i>N</i> = 80)</b> df = 1 and the total number of people, both in brackets.<span class="zh">括號內是自由度 1 和總人數 N = 80。</span></li><li><b><i>p</i> = .012</b> if H₀ were true, a χ² at least this large would occur with probability .012 (right tail, df = 1).<span class="zh">如果 H₀ 成立，得到至少這麼大 χ² 的機率是 .012（右邊尾巴，自由度 1）。</span></li><li><b>Decision 決定</b> reject H₀: the re-sprain proportion differed between taped and untaped athletes.<span class="zh">拒絕 H₀：有貼紮和沒貼紮的運動員，再扭傷比例不同。</span></li><li><b>Fisher’s exact test, <i>p</i> = .057</b> when any E &lt; 5. It computes <i>p</i> directly, so there is no statistic or df to report.<span class="zh">有期望次數 &lt; 5 時使用；它直接計算 p，所以沒有統計量和自由度要報告。</span></li></ul></div><div class="apa-box"><b class="t">APA report 報告格式</b><p class="sent">Re-sprain was less frequent with taping (6 of 40, 15.00%) than without taping (16 of 40, 40.00%), <b class="hl"><i>χ</i>²(1, <i>N</i> = 80) = 6.27</b>, <b class="hl"><i>p</i> = .012</b>. One team (N = 20): expected counts below 5, <b class="hl">Fisher’s exact test, <i>p</i> = .057</b>.</p><ul class="apa-key"><li><b>counts and %</b> what was observed in each group<span class="zh">每組觀察到的人數與百分比</span></li><li><b><i>χ</i>²(1, <i>N</i> = 80)</b> χ² value; df and total N in brackets<span class="zh">χ² 值，括號內是自由度與總人數</span></li><li><b><i>p</i></b> exact p, three decimals<span class="zh">精確 p 值，三位小數</span></li><li><b>Fisher’s exact test</b> name it when any expected count < 5<span class="zh">有期望次數 < 5 時寫明改用 Fisher</span></li></ul></div>
+    </div>
+    <div class="rig">
+      <h3>Taping × re-sprain (hypothetical) <span class="zh" style="color:var(--muted);font-weight:400">· 貼紮 × 再扭傷（假設資料）</span></h3>
+      <div class="seg" id="s4set" role="group" aria-label="study">
+        <button type="button" data-s="big" aria-pressed="true">Season study N = 80 球季研究</button>
+        <button type="button" data-s="small" aria-pressed="false">One team N = 20 一支隊</button>
+      </div>
+      <div class="tbl-wrap"><table class="ctab" id="t4"></table></div>
+      <canvas id="c4" height="150" data-hm="150" aria-label="proportion re-sprained by taping"></canvas>
+      <div class="hub">
+        <div class="ctrls hubrow">
+          <button class="act" id="b4exp">Show expected 顯示期望次數</button>
+          
+        </div>
+        <div class="fx" id="f4">observed counts 觀察次數</div>
+      </div>
+      <div class="readout">
+        <div><span class="k">smallest expected 最小期望</span><span class="v" id="r4e">—</span></div>
+        <div><span class="k">χ²(1, N)</span><span class="v" id="r4c">—</span></div>
+        <div><span class="k">χ² p</span><span class="v" id="r4p">—</span></div>
+        <div><span class="k">Fisher p (exact 精確)</span><span class="v acc" id="r4f">—</span></div>
+      </div>
+      <div class="verdict" id="v4"></div>
+      <p class="src">Hypothetical counts · χ² without continuity correction (R: correct = FALSE)<br><span class="zh">假設資料 · 未校正 χ²</span></p>
+    </div>
+  </div>
+</section>
+<section class="panel" id="p4" hidden>
+  <div class="eyebrow">stage 4 · choosing the test</div>
+  <h2 class="title">Choosing the test</h2>
+  <div class="title-zh zh">如何選擇檢定</div>
+  <div class="cols">
+    <div class="arg">
+
+
+
+
+<div class="lg"><div class="ln"><p class="en">The DV is the outcome measured in the study; the IV is the variable that defines the groups or conditions.</p><p class="zh">依變項（DV）是研究中量出來的結果；自變項（IV）是決定分組或條件的變項。</p></div><div class="ln k"><p class="en">Two questions decide the test: is the DV a number or a category, and does the IV separate different people or the same people?</p><p class="zh">兩個問題決定檢定：依變項是數值還是類別？自變項分出的是不同的人，還是同一群人？</p></div></div><div class="tbl-wrap"><table class="dmap">
+        <thead><tr><th></th><th>IV: different people<span class="zh">自變項：不同的人</span></th><th>IV: same people<span class="zh">自變項：同一群人</span></th></tr></thead>
+        <tbody>
+          <tr><th>DV: number<span class="zh">依變項：數值（bpm, cm, g）</span></th><td><b>Independent t (Welch)</b><span class="zh">獨立樣本 t</span></td><td><b>Paired t</b><span class="zh">配對 t</span></td></tr>
+          <tr><th>DV: category<span class="zh">依變項：類別（有／沒有）</span></th><td><b>χ² test</b> · expected &lt; 5 → <b>Fisher</b><span class="zh">卡方 · 期望 &lt; 5 用 Fisher</span></td><td class="later">McNemar (not in this course)<span class="zh">本課不教</span></td></tr>
+          <tr><th>IV with 3 + groups<span class="zh">自變項三組以上</span></th><td class="later" colspan="2">→ Week 7 (ANOVA)</td></tr>
+          <tr><th>no IV: two measured numbers<span class="zh">沒有自變項：兩個量出來的數值</span></th><td class="later" colspan="2">→ Week 6 (correlation)</td></tr>
+        </tbody>
+      </table></div><div class="dfn"><b class="t">DV · dependent variable 依變項</b><p class="en">The outcome measured in the study: heart rate, time, injured or not.</p><p class="zh">研究中量出來的結果，例如心率、時間、有沒有受傷。</p></div><div class="dfn"><b class="t">IV · independent variable 自變項</b><p class="en">The variable that defines the groups or conditions. It need not be manipulated: sex or diagnosis can be an IV.</p><p class="zh">決定分組或條件的變項。不一定是實驗操弄出來的，例如性別、診斷組別也可以是自變項。</p></div>
+    </div>
+    <div class="rig">
+      <h3>Answer the two questions 回答兩個問題</h3>
+      <div class="dq"><span class="k">1 · DV: number or category? 依變項是數值還是類別？</span>
+        <div class="seg" id="s5o" role="group" aria-label="outcome type">
+          <button type="button" data-o="num" aria-pressed="true">number 數值</button>
+          <button type="button" data-o="cat" aria-pressed="false">category 類別</button>
+        </div></div>
+      <div class="dq"><span class="k">2 · IV: different or same people? 自變項分出不同的人還是同一群人？</span>
+        <div class="seg" id="s5w" role="group" aria-label="same or different people">
+          <button type="button" data-w="diff" aria-pressed="true">different people 不同的人</button>
+          <button type="button" data-w="same" aria-pressed="false">same people 同一群人</button>
+        </div></div>
+      <div class="dq" id="dq3" hidden><span class="k">3 · smallest expected count 最小期望次數</span>
+        <div class="seg" id="s5e" role="group" aria-label="expected counts">
+          <button type="button" data-e="ok" aria-pressed="true">all ≥ 5 都 ≥ 5</button>
+          <button type="button" data-e="low" aria-pressed="false">any &lt; 5 有 &lt; 5</button>
+        </div></div>
+      <div class="card5" id="k5"></div>
+      <p class="src">APA 7: italic <i>t</i>, <i>p</i>, <i>M</i>, <i>SD</i>, <i>d</i>; p to three decimals, no leading zero.<br><span class="zh">APA 第 7 版格式</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="p5" hidden>
+  <div class="eyebrow">stage 5 · answer here</div>
+  <h2 class="title">Your answers: Part 1 and Part 2</h2>
+  <div class="title-zh zh">作答：Part 1 與 Part 2</div>
+  <div class="ans">
+    <div class="ans-prog" id="ansProg" aria-label="answer screens"></div>
+    <div class="ans-card" id="ansBody"></div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div>Fall 2026 生物統計與實驗設計 · Week 4 · NTNU · v1.2</div>
+  <div class="nav">
+    <button class="act ghost" id="prev">← Back 上一步</button>
+    <button class="act" id="next">Next 下一步 →</button>
+  </div>
+</footer>
+</div>
+
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+function mean(a){for(var i=0,s=0;i<a.length;i++)s+=a[i];return s/a.length}
+function sd(a){var m=mean(a),s=0;for(var i=0;i<a.length;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function erf(x){var s=x<0?-1:1;x=Math.abs(x);
+  var a1=.254829592,a2=-.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=.3275911;
+  var t=1/(1+p*x);var y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);return s*y}
+function Phi(z){return .5*(1+erf(z/Math.SQRT2))}
+function lgam(x){var c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,.001208650973866179,-.000005395239384953];
+  var y=x,t=x+5.5;t-=(x+.5)*Math.log(t);var s=1.000000000190015;for(var j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x)}
+function bcf(a,b,x){var F=1e-300,qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<F)d=F;d=1/d;var h=d;
+  for(var m=1;m<=300;m++){var m2=2*m,aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<F)d=F;c=1+aa/c;if(Math.abs(c)<F)c=F;d=1/d;h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<F)d=F;c=1+aa/c;if(Math.abs(c)<F)c=F;d=1/d;var del=d*c;h*=del;if(Math.abs(del-1)<3e-13)break}return h}
+function ibeta(x,a,b){if(x<=0)return 0;if(x>=1)return 1;
+  var bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2)?bt*bcf(a,b,x)/a:1-bt*bcf(b,a,1-x)/b}
+function p2t(t,df){return ibeta(df/(df+t*t),df/2,.5)}           /* two-sided p of t */
+function tq(df){var lo=0,hi=60;for(var i=0;i<90;i++){var m=(lo+hi)/2;if(p2t(m,df)>.05)lo=m;else hi=m}return(lo+hi)/2}
+function tpdf(t,df){return Math.exp(lgam((df+1)/2)-lgam(df/2))/Math.sqrt(df*Math.PI)*Math.pow(1+t*t/df,-(df+1)/2)}
+function lf(n){return lgam(n+1)}
+function fp(x){return x.toFixed(2).replace('-','−')}
+function pAPA(p){if(p<.001)return'< .001';return'= '+p.toFixed(3).replace(/^0/,'')}
+function pTxt(p){return p<.001?'< .001':p.toFixed(3).replace(/^0/,'')}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+var T={};
+function theme(){T={ink:css('--ink'),ink2:css('--ink2'),muted:css('--muted'),line:css('--line'),acc:css('--accent'),
+  accs:css('--accent-soft'),sig:css('--signal'),sigs:css('--signal-soft'),gold:css('--gold'),card:css('--card'),sunk:css('--sunk')}}
+theme();
+var CW=600,FS=1,NARROW=false;
+function SH(l,s){return NARROW?s:l}
+function fit(cv){if(!cv.dataset.h)cv.dataset.h=cv.getAttribute('height');
+  var d=window.devicePixelRatio||1,w=cv.clientWidth||600;NARROW=w<560;CW=w;FS=w<420?1.08:1;
+  var h=parseInt((NARROW&&cv.dataset.hm)?cv.dataset.hm:cv.dataset.h,10);
+  cv.width=Math.round(w*d);cv.height=Math.round(h*d);var g=cv.getContext('2d');g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,w,h);return{g:g,w:w,h:h}}
+function lbl(g,t,x,y,c,sz,al){g.fillStyle=c;g.font=((sz||11)*FS).toFixed(1)+'px "IBM Plex Mono", monospace';
+  al=al||'center';g.textAlign=al;var m=g.measureText(t).width,L=(al==='left')?x:(al==='right')?x-m:x-m/2;
+  if(L+m>CW-2)x-=(L+m-(CW-2));if(L<2)x+=(2-L);g.fillText(t,x,y)}
+function line(g,x1,y1,x2,y2,c,w,dash){g.strokeStyle=c;g.lineWidth=w||1;g.setLineDash(dash||[]);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([])}
+function el(id){return document.getElementById(id)}
+function segSet(box,attr,val){[].forEach.call(box.children,function(b){b.setAttribute('aria-pressed',b.dataset[attr]===val?'true':'false')})}
+var RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function tween(ms,step,done){if(RM){step(1);if(done)done();return}var t0=performance.now();
+  (function f(now){var k=Math.min(1,(now-t0)/ms),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;step(e);if(k<1)requestAnimationFrame(f);else if(done)done()})(t0)}
+
+/* ---------- data (demonstration, de-identified) ---------- */
+var ID=['A','B','C','D','E','F','G','H','I','J','K'];
+var GR=['C','C','C','C','C','I','I','I','I','I','I'];
+var HR={h4:[60,70,70,60,70,160,120,180,120,120,110], b:[60,70,60,70,70,70,60,80,70,80,60]};
+
+/* ---------- rail ---------- */
+var STAGES=[{n:'0',e:'Framework',z:'假設檢定框架'},{n:'1',e:'Paired t-test',z:'配對 t 檢定'},{n:'2',e:'Independent t-test',z:'獨立樣本 t 檢定'},{n:'3',e:'Chi-square test',z:'卡方檢定'},{n:'4',e:'Choosing the test',z:'選擇檢定'},{n:'5',e:'Answer here',z:'作答'}];var NS=STAGES.length;
+var cur=0,rail=el('rail');
+STAGES.forEach(function(s,k){var b=document.createElement('button');b.type='button';
+  b.innerHTML='<span class="n">'+s.n+'</span><span class="lbl"><b>'+s.e+'</b><i class="zh">'+s.z+'</i></span>';
+  b.setAttribute('aria-current',k===0?'true':'false');b.onclick=function(){go(k)};rail.appendChild(b)});
+function go(k){cur=Math.max(0,Math.min(NS-1,k));
+  for(var j=0;j<NS;j++){el('p'+j).hidden=(j!==cur);rail.children[j].setAttribute('aria-current',j===cur?'true':'false')}
+  el('prev').disabled=(cur===0);el('next').disabled=(cur===NS-1);redraw();if(cur===5)ansRender();window.scrollTo({top:0,behavior:'instant'})}
+el('prev').onclick=function(){go(cur-1)};el('next').onclick=function(){go(cur+1)};
+document.addEventListener('keydown',function(e){if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||e.target.isContentEditable)return;
+  if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);else if(/^[0-5]$/.test(e.key))go(+e.key)});
+
+/* ---------- stage 2 · t = gap / SE ---------- */
+var P2={h4:{d:69,a:28.106939,c:5.477226},b:{d:4,a:8.944272,c:5.477226},one:{d:1,a:1.8,c:1.6}};
+var S2={d:69,a:28.106939,c:5.477226,pre:'h4'},NI=6,NC=5;
+function welch(d,a,c){var vi=a*a/NI,vc=c*c/NC,se=Math.sqrt(vi+vc),df=Math.pow(vi+vc,2)/(vi*vi/(NI-1)+vc*vc/(NC-1)),
+  t=d/se,p=p2t(Math.abs(t),df),q=tq(df);return{se:se,df:df,t:t,p:p,lo:d-q*se,hi:d+q*se}}
+function s2sync(){el('s2d').value=S2.d;el('s2a').value=S2.a.toFixed(1);el('s2c').value=S2.c.toFixed(1);
+  el('v2d').textContent=S2.d.toFixed(2);el('v2a').textContent=S2.a.toFixed(2);el('v2c').textContent=S2.c.toFixed(2)}
+function s2read(){var r=welch(S2.d,S2.a,S2.c);
+  el('x2d').textContent=S2.d.toFixed(2);el('x2s').textContent=r.se.toFixed(2);el('x2t').textContent=r.t.toFixed(2);
+  el('r2t').textContent='t('+r.df.toFixed(2)+') = '+r.t.toFixed(2);el('r2p').textContent=pTxt(r.p);
+  el('r2ci').textContent='['+fp(r.lo)+', '+fp(r.hi)+']';
+  var z=r.lo<=0&&r.hi>=0;el('r2z').textContent=z?'yes 含 → p ≥ .05':'no 不含 → p < .05';el('r2z').className='v '+(z?'':'sig');
+  el('f2').innerHTML='n_I = 6 · n_C = 5 (fixed 固定) · gap = <b>'+r.t.toFixed(2)+'</b> SE from 0<span class="zh">差距離 0 有 '+r.t.toFixed(2)+' 個 SE</span>';
+  return r}
+function d2a(){var cv=el('c2a');if(!cv.clientWidth)return;var o=fit(cv),g=o.g,w=o.w,h=o.h;
+  var pad=12,base=h-24,top=20,lo=20,hi=240,mC=66,mI=66+S2.d;function X(v){return pad+(v-lo)/(hi-lo)*(w-2*pad)}
+  function curve(m,s,col){var pk=1/(s*Math.sqrt(2*Math.PI)),ref=1/(1.8*Math.sqrt(2*Math.PI)),sc=(base-top)/Math.max(pk,ref*.28);
+    sc=(base-top)/Math.max(pk,1/(5*Math.sqrt(2*Math.PI)));
+    g.beginPath();for(var px=0;px<=w-2*pad;px+=2){var v=lo+px/(w-2*pad)*(hi-lo),y=base-Math.exp(-.5*Math.pow((v-m)/s,2))/(s*Math.sqrt(2*Math.PI))*sc;
+      if(px===0)g.moveTo(pad+px,y);else g.lineTo(pad+px,y)}
+    g.strokeStyle=col;g.lineWidth=2;g.stroke();g.lineTo(w-pad,base);g.lineTo(pad,base);g.closePath();g.globalAlpha=.12;g.fillStyle=col;g.fill();g.globalAlpha=1}
+  curve(mC,S2.c,T.acc);curve(mI,S2.a,T.sig);
+  line(g,pad,base+.5,w-pad,base+.5,T.line,1);for(var t=40;t<=240;t+=40)lbl(g,t,X(t),h-7,T.muted,10);
+  if(S2.pre==='h4'||S2.pre==='b'){var v=HR[S2.pre];for(var i=0;i<11;i++){g.beginPath();g.arc(X(v[i]),base-4-(i%3)*5,3.2,0,7);g.fillStyle=GR[i]==='I'?T.sig:T.acc;g.fill()}}
+  lbl(g,'C '+SH('rest 休息 ','')+'x̄ 66',X(mC),top-6,T.acc,10.5);
+  lbl(g,'I '+SH('burpee ','')+'x̄ '+fp(mI),Math.min(X(mI),w-40),top+8,T.sig,10.5);
+  lbl(g,'HR (bpm)',w-pad,base-6,T.muted,10,'right')}
+function d2b(r){var cv=el('c2b');if(!cv.clientWidth)return;var o=fit(cv),g=o.g,w=o.w,h=o.h;r=r||welch(S2.d,S2.a,S2.c);
+  var pad=12,base=h-62,top=22,R=Math.max(4.6*r.se,Math.abs(S2.d)*1.18,r.hi*1.05,Math.abs(r.lo)*1.05);R=Math.max(R,3);
+  function X(v){return pad+(v+R)/(2*R)*(w-2*pad)}var pk=tpdf(0,r.df)/r.se,sc=(base-top)/pk,D=Math.abs(S2.d);
+  function Y(v){return base-tpdf(v/r.se,r.df)/r.se*sc}
+  /* tails */
+  [[-R,-D],[D,R]].forEach(function(seg){if(seg[1]-seg[0]<=0)return;g.beginPath();g.moveTo(X(seg[0]),base);
+    for(var v=seg[0];v<=seg[1];v+=R/200)g.lineTo(X(v),Y(v));g.lineTo(X(seg[1]),Y(seg[1]));g.lineTo(X(seg[1]),base);g.closePath();g.fillStyle=T.sig;g.globalAlpha=.55;g.fill();g.globalAlpha=1});
+  g.beginPath();for(var v=-R;v<=R;v+=R/200){var y=Y(v);if(v===-R)g.moveTo(X(v),y);else g.lineTo(X(v),y)}g.strokeStyle=T.ink2;g.lineWidth=1.6;g.stroke();
+  line(g,pad,base+.5,w-pad,base+.5,T.line,1);
+  var step=R>60?20:R>30?10:R>12?5:R>6?2:1;for(var t=-Math.floor(R/step)*step;t<=R;t+=step)lbl(g,(t>0?'+':'')+t,X(t),base+14,T.muted,10);
+  line(g,X(0),top-10,X(0),h-8,T.muted,1,[2,3]);lbl(g,'0 = H₀',X(0),top-12,T.muted,10);
+  line(g,X(S2.d),top,X(S2.d),base,T.sig,2,[5,3]);lbl(g,SH('our gap ','')+fp(S2.d),X(S2.d),top+10,T.sig,11,S2.d>0?'left':'right');
+  /* CI bar */
+  var cy=base+36;line(g,X(r.lo),cy,X(r.hi),cy,T.acc,3);line(g,X(r.lo),cy-6,X(r.lo),cy+6,T.acc,2);line(g,X(r.hi),cy-6,X(r.hi),cy+6,T.acc,2);
+  g.beginPath();g.arc(X(S2.d),cy,4.5,0,7);g.fillStyle=T.acc;g.fill();
+  lbl(g,'95% CI ['+fp(r.lo)+', '+fp(r.hi)+']',X((r.lo+r.hi)/2),cy+17,T.acc,10.5);
+  lbl(g,SH('p = red area 紅色面積 = '+pTxt(r.p),'p = '+pTxt(r.p)),w-pad,top-12,T.sig,10.5,'right')}
+var s2anim=false;
+function s2all(){var r=s2read();d2a();d2b(r)}
+el('s2pre').onclick=function(e){var b=e.target.closest('button');if(!b)return;var k=b.dataset.p,P=P2[k],f={d:S2.d,a:S2.a,c:S2.c};
+  S2.pre=k;segSet(this,'p',k);tween(420,function(q){S2.d=f.d+(P.d-f.d)*q;S2.a=f.a+(P.a-f.a)*q;S2.c=f.c+(P.c-f.c)*q;s2sync();s2all()},function(){S2.d=P.d;S2.a=P.a;S2.c=P.c;s2sync();s2all()})};
+['s2d','s2a','s2c'].forEach(function(id){el(id).oninput=function(){S2.d=+el('s2d').value;S2.a=+el('s2a').value;S2.c=+el('s2c').value;
+  S2.pre='';segSet(el('s2pre'),'p','');el('v2d').textContent=S2.d.toFixed(2);el('v2a').textContent=S2.a.toFixed(2);el('v2c').textContent=S2.c.toFixed(2);s2all()}});
+
+/* ---------- stage 3 · paired ---------- */
+var PB=[70,60,80,70,80,60],P4=[160,120,180,120,120,110],PID=['F','G','H','I','J','K'];
+var DIF=P4.map(function(v,i){return v-PB[i]});
+var S3={mode:'pair',shown:0};
+function s3stats(){var n=6,m=mean(DIF);
+  if(S3.mode==='pair'){var s=sd(DIF),se=s/Math.sqrt(n),q=tq(5);return{m:m,se:se,df:5,t:m/se,lo:m-q*se,hi:m+q*se}}
+  var a=sd(P4),b=sd(PB),vi=a*a/n,vc=b*b/n,se2=Math.sqrt(vi+vc),df=Math.pow(vi+vc,2)/(vi*vi/5+vc*vc/5),q2=tq(df);
+  return{m:m,se:se2,df:df,t:m/se2,lo:m-q2*se2,hi:m+q2*se2}}
+function s3read(){var r=s3stats();el('r3m').textContent=fp(r.m);el('r3se').textContent=r.se.toFixed(2);
+  el('r3t').textContent='t('+(S3.mode==='pair'?'5':r.df.toFixed(2))+') = '+r.t.toFixed(2);el('r3ci').textContent='['+fp(r.lo)+', '+fp(r.hi)+']';
+  el('f3').innerHTML=S3.mode==='pair'?(S3.shown?'paired · SE = SD_diff / √6 = <b>'+r.se.toFixed(2)+'</b><span class="zh">配對</span>':'pairs shown · press subtract<span class="zh">按「每人減自己」</span>')
+    :'two groups (wrong) · SE = √(28.1²/6 + 8.9²/6) = <b>'+r.se.toFixed(2)+'</b><span class="zh">當成兩組（錯）：人和人的差異留在 SE 裡</span>'}
+function d3a(){var cv=el('c3a');if(!cv.clientWidth)return;var o=fit(cv),g=o.g,w=o.w,h=o.h;
+  var top=18,base=h-26,lo=40,hi=200,xl=w*.3,xr=w*.7;function Y(v){return base-(v-lo)/(hi-lo)*(base-top)}
+  for(var t=40;t<=200;t+=40){line(g,34,Y(t),w-10,Y(t),T.line,.6);lbl(g,t,4,Y(t)+4,T.muted,10,'left')}
+  lbl(g,SH('baseline 基線','baseline'),xl,h-8,T.ink2,11);lbl(g,SH('after set 4 第 4 組後','set 4'),xr,h-8,T.ink2,11);
+  var pair=S3.mode==='pair';
+  for(var i=0;i<6;i++){var j=i*6-15;
+    if(pair)line(g,xl,Y(PB[i]),xr,Y(P4[i]),T.sig,1.6);
+    g.beginPath();g.arc(xl+(pair?0:j),Y(PB[i]),5,0,7);g.fillStyle=T.muted;g.fill();
+    g.beginPath();g.arc(xr+(pair?0:j),Y(P4[i]),5,0,7);g.fillStyle=T.sig;g.fill();
+  }
+  if(!pair){lbl(g,SH('no lines: the pairing is thrown away 沒有連線：配對資訊被丟掉','pairing thrown away'),w/2,top+2,T.signal||T.sig,10.5)}}
+function d3b(){var cv=el('c3b');if(!cv.clientWidth)return;var o=fit(cv),g=o.g,w=o.w,h=o.h;
+  var pad=14,lo=0,hi=120,y0=40;function X(v){return pad+(v-lo)/(hi-lo)*(w-2*pad)}
+  line(g,pad,y0+14,w-pad,y0+14,T.line,1);for(var t=0;t<=120;t+=20)lbl(g,t,X(t),y0+28,T.muted,10);
+  line(g,X(0),6,X(0),y0+14,T.muted,1,[2,3]);
+  var st={};if(S3.mode==='pair')for(var i=0;i<S3.shown;i++){var k=st[DIF[i]]=(st[DIF[i]]||0)+1;g.beginPath();g.arc(X(DIF[i]),y0+6-(k-1)*11,5,0,7);g.fillStyle=T.sig;g.fill()}
+  if(S3.mode==='two'||S3.shown===6){var r=s3stats(),cy=h-24;line(g,X(r.lo),cy,X(r.hi),cy,T.acc,3);line(g,X(r.lo),cy-6,X(r.lo),cy+6,T.acc,2);line(g,X(r.hi),cy-6,X(r.hi),cy+6,T.acc,2);
+    g.beginPath();g.arc(X(r.m),cy,4.5,0,7);g.fillStyle=T.acc;g.fill();lbl(g,'65.00 · 95% CI ['+fp(r.lo)+', '+fp(r.hi)+']',X(r.m),cy+16,T.acc,10.5)}}
+function s3all(){s3read();d3a();d3b()}
+el('b3sub').onclick=function(){S3.mode='pair';S3.shown=0;s3all();
+  var i=0;(function add(){S3.shown=++i;s3all();if(i<6)setTimeout(add,RM?0:260)})()};
+el('b3reset').onclick=function(){S3.mode='pair';S3.shown=0;s3all()};
+
+/* ---------- stage 4 · chi-square ---------- */
+var TAB={big:[[6,34],[16,24]],small:[[1,9],[6,4]]};
+var S4={set:'big',exp:false,sim:null};
+function chi(t){var r=[t[0][0]+t[0][1],t[1][0]+t[1][1]],c=[t[0][0]+t[1][0],t[0][1]+t[1][1]],N=r[0]+r[1],E=[[0,0],[0,0]],x=0;
+  for(var i=0;i<2;i++)for(var j=0;j<2;j++){E[i][j]=r[i]*c[j]/N;x+=Math.pow(t[i][j]-E[i][j],2)/E[i][j]}
+  var p=2*(1-Phi(Math.sqrt(x)));
+  /* Fisher two-sided: sum of table probabilities <= observed */
+  function hp(a){var b=r[0]-a,cc=c[0]-a,d=r[1]-cc;if(b<0||cc<0||d<0)return 0;return Math.exp(lf(r[0])+lf(r[1])+lf(c[0])+lf(c[1])-lf(N)-lf(a)-lf(b)-lf(cc)-lf(d))}
+  var po=hp(t[0][0]),fs=0;for(var a=0;a<=Math.min(r[0],c[0]);a++){var q=hp(a);if(q<=po*(1+1e-7))fs+=q}
+  return{r:r,c:c,N:N,E:E,x:x,p:p,f:Math.min(1,fs),emin:Math.min(E[0][0],E[0][1],E[1][0],E[1][1])}}
+function s4table(){var t=TAB[S4.set],R=chi(t),tb=el('t4');
+  function cell(i,j){var e=R.E[i][j];return'<td><span class="o">'+t[i][j]+'</span><span class="e'+(e<5?' low':'')+'">'+(S4.exp?'E = '+e.toFixed(2):'')+'</span></td>'}
+  tb.innerHTML='<thead><tr><th></th><th>re-sprain 再扭傷</th><th>no re-sprain 沒有</th><th>total</th></tr></thead><tbody>'+
+    '<tr><th>taped 有貼紮</th>'+cell(0,0)+cell(0,1)+'<td class="tot">'+R.r[0]+'</td></tr>'+
+    '<tr><th>not taped 無貼紮</th>'+cell(1,0)+cell(1,1)+'<td class="tot">'+R.r[1]+'</td></tr>'+
+    '<tr><th>total</th><td class="tot">'+R.c[0]+'</td><td class="tot">'+R.c[1]+'</td><td class="tot">'+R.N+'</td></tr></tbody>';return R}
+function s4read(){var R=s4table();el('r4e').textContent=R.emin.toFixed(2)+(R.emin<5?' < 5':' ≥ 5');el('r4e').className='v '+(R.emin<5?'sig':'');
+  el('r4c').textContent='χ²(1, N = '+R.N+') = '+R.x.toFixed(2);el('r4p').textContent=pTxt(R.p);el('r4f').textContent=pTxt(R.f);
+  el('f4').innerHTML=S4.exp?'E = row total × column total ÷ N<span class="zh">期望次數</span>':'observed counts<span class="zh">觀察次數</span>';
+  var t=TAB[S4.set],pa=Math.round(t[0][0]/R.r[0]*100),pb=Math.round(t[1][0]/R.r[1]*100);
+  el('v4').innerHTML=R.emin>=5?'<span class="zh">所有期望次數 ≥ 5 → 用 χ² 檢定。</span><span class="en">All expected counts ≥ 5, so the χ² test is fine: '+pa+'% vs '+pb+'% re-sprained, <i>χ</i>²(1, <i>N</i> = '+R.N+') = '+R.x.toFixed(2)+', <i>p</i> '+pAPA(R.p)+'.</span>'
+    :'<span class="zh">有期望次數 &lt; 5 → χ² 的 p = '+pTxt(R.p)+' 太樂觀，要報告 <b>Fisher p = '+pTxt(R.f)+'</b>。</span><span class="en">Expected count '+R.emin.toFixed(2)+' is below 5: the χ² p is too optimistic. Report Fisher\'s exact test, <i>p</i> '+pAPA(R.f)+'. '+pa+'% vs '+pb+'% is a large gap, but with 20 athletes it is not clear evidence.</span>';
+  d4(R)}
+function d4(R){var cv=el('c4');if(!cv.clientWidth)return;var o=fit(cv),g=o.g,w=o.w,h=o.h,t=TAB[S4.set];
+  var padL=NARROW?64:110,padR=40,rows=[34,86],bh=30;function X(p){return padL+p*(w-padL-padR)}
+  [['taped','有貼紮',0],['not taped','無貼紮',1]].forEach(function(r){var y=rows[r[2]],p=t[r[2]][0]/(t[r[2]][0]+t[r[2]][1]);
+    g.fillStyle=T.sunk;g.fillRect(X(0),y,X(1)-X(0),bh);g.fillStyle=T.sig;g.fillRect(X(0),y,X(p)-X(0),bh);
+    lbl(g,SH(r[0]+' '+r[1],r[1]),4,y+bh/2+4,T.ink2,11,'left');lbl(g,Math.round(p*100)+'%',X(p)+5,y+bh/2+4,T.sig,11.5,'left')});
+  for(var q=0;q<=1;q+=.25)lbl(g,Math.round(q*100)+'%',X(q),h-8,T.muted,10);
+  lbl(g,SH('proportion re-sprained · 再扭傷比例','% re-sprained'),padL,16,T.muted,10.5,'left')}
+el('s4set').onclick=function(e){var b=e.target.closest('button');if(!b)return;S4.set=b.dataset.s;S4.sim=null;segSet(this,'s',S4.set);s4read()};
+el('b4exp').onclick=function(){S4.exp=!S4.exp;this.textContent=S4.exp?'Hide expected 隱藏期望次數':'Show expected 顯示期望次數';s4read()};
+
+
+/* ---------- stage 5 · decision ---------- */
+var S5={o:'num',w:'diff',e:'ok'};
+var CARD={
+ ind:{n:'Independent t-test (Welch)',z:'獨立樣本 t 檢定（Welch）',r:'t.test(HR4 ~ Group, data = df)   # DV ~ IV',
+   j:'T-Tests → Independent Samples T-Test\nDV (HR4) → Dependent Variables · IV (Group) → Grouping Variable\nTests: tick Welch’s · Mean difference, Confidence interval, Effect size',
+   a:'Heart rate after set 4 was higher in the burpee group (<i>M</i> = 135.00, <i>SD</i> = 28.11) than in the rest group (<i>M</i> = 66.00, <i>SD</i> = 5.48), Welch’s <i>t</i>(5.45) = 5.88, <i>p</i> = .002, <i>M</i><sub>diff</sub> = 69.00 bpm, 95% CI [39.58, 98.42], <i>d</i> = 3.41.',
+   x:'Stage 2 · burpee (I) vs rest (C)'},
+ pair:{n:'Paired t-test',z:'配對 t 檢定',r:'dI <- subset(df, Group == "I")\nt.test(dI$HR4, dI$Baseline_HR, paired = TRUE)',
+   j:'Data → Filters: Group == "I"\nT-Tests → Paired Samples T-Test · HR4 and Baseline_HR → Paired Variables\nMean difference, Confidence interval, Effect size',
+   a:'In the burpee group, heart rate rose from baseline (<i>M</i> = 70.00, <i>SD</i> = 8.94) to set 4 (<i>M</i> = 135.00, <i>SD</i> = 28.11), <i>t</i>(5) = 6.55, <i>p</i> = .001, <i>M</i><sub>diff</sub> = 65.00 bpm, 95% CI [39.51, 90.49], <i>d</i><sub>z</sub> = 2.68.',
+   x:'Stage 1 · six burpee people measured twice'},
+ chi:{n:'Chi-square test (χ²)',z:'卡方檢定',r:'tab <- xtabs(Count ~ Taping + Resprain, data = dc)\nchisq.test(tab)$expected\nchisq.test(tab, correct = FALSE)',
+   j:'Frequencies → Independent Samples χ² test of association\nIV (Taping) → Rows · DV (Resprain) → Columns · Count → Counts\nCells: Expected counts, Row %',
+   a:'Re-sprain was less frequent with taping (6 of 40, 15.00%) than without taping (16 of 40, 40.00%), <i>χ</i>²(1, <i>N</i> = 80) = 6.27, <i>p</i> = .012.',
+   x:'Stage 3 · season study (hypothetical)'},
+ fis:{n:'Fisher’s exact test',z:'Fisher 精確檢定',r:'chisq.test(tab2)$expected\nfisher.test(tab2)',
+   j:'Frequencies → Independent Samples χ² test of association\nStatistics: tick Fisher’s exact test · Cells: Expected counts',
+   a:'In one team, 1 of 10 taped and 6 of 10 untaped athletes re-sprained; because expected counts were below 5, Fisher’s exact test was used, <i>p</i> = .057.',
+   x:'Stage 3 · one team (hypothetical)'},
+ mcn:{n:'McNemar test',z:'McNemar 檢定（本課不教）',r:'',j:'',a:'Same people, a yes/no DV measured twice. Not covered in this course.',x:'本課不教'}};
+function s5read(){el('dq3').hidden=!(S5.o==='cat'&&S5.w==='diff');
+  var k=S5.o==='num'?(S5.w==='diff'?'ind':'pair'):(S5.w==='same'?'mcn':(S5.e==='ok'?'chi':'fis')),C=CARD[k];
+  el('k5').innerHTML='<div class="tn">'+C.n+'</div><div class="tz zh">'+C.z+'</div>'+
+    (C.r?'<span class="lab">R</span><pre>'+C.r+'</pre>':'')+(C.j?'<span class="lab">Jamovi</span><pre>'+C.j+'</pre>':'')+
+    '<span class="lab">APA sentence 報告句</span><p class="apa">'+C.a+'</p><p class="ex">'+C.x+'</p>'}
+['s5o','s5w','s5e'].forEach(function(id){el(id).onclick=function(e){var b=e.target.closest('button');if(!b)return;
+  var key=Object.keys(b.dataset)[0];S5[key]=b.dataset[key];segSet(this,key,S5[key]);s5read()}});
+
+
+/* ---------- stage 5 · answer form (v1.1) ---------- */
+var ANS_VER='W4_Lecture1.2';
+var ANS_STORE='w4-lecture-1.2-answers';
+var ANS_KEY=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob('eyIxIjogWyJudW0iLCAiZGlmZiIsICJ3ZWxjaCIsICIiLCAiMTAwLW0gdGltZSAocykgwrcgdHJhaW5pbmcgZ3JvdXAiLCAiVHdvIGdyb3VwcyBvZiBkaWZmZXJlbnQgc3dpbW1lcnMgKDEyICsgMTIpLiIsICLlhanntYTkuI3lkIznmoTmuLjms7PpgbjmiYvvvIgxMiArIDEy77yJ44CCIl0sICIyIjogWyJudW0iLCAic2FtZSIsICJwYWlyZWQiLCAiIiwgInRlbmRvbiBzdGlmZm5lc3MgKE4vbW0pIMK3IGxvYWRpbmcgc3BlZWQiLCAiVGhlIHNhbWUgMjAgYXRobGV0ZXMgaW4gYm90aCBjb25kaXRpb25zOiAyMCBwYWlycywgbm90IDQwIG1lYXN1cmVtZW50cy4iLCAi5ZCM5LiA576kIDIwIOS6uuWBmuWFqeeoruaineS7tu+8mjIwIOWwje+8jOS4jeaYryA0MCDnrYbmuKzph4/jgIIiXSwgIjMiOiBbImNhdCIsICJkaWZmIiwgImNoaSIsICIiLCAiZmVsbCAoeWVzIC8gbm8pIMK3IGdyb3VwIiwgIkEgeWVzL25vIERWIGFuZCBkaWZmZXJlbnQgcGVvcGxlLiBTbWFsbGVzdCBleHBlY3RlZCBjb3VudCA9IHJvdyB0b3RhbCDDlyBjb2x1bW4gdG90YWwgw7cgTiA9IDE5IMOXIDQwIMO3IDgwID0gOS41MCDiiaUgNSwgc28gz4fCsi4iLCAi5L6d6K6K6aCF5piv5pyJ77yP5rKS5pyJ77yM6ICM5LiU5piv5LiN5ZCM55qE5Lq644CC5pyA5bCP5pyf5pyb5qyh5pW4ID0g5YiX57i95ZKMIMOXIOashOe4veWSjCDDtyBOID0gMTkgw5cgNDAgw7cgODAgPSA5LjUwIOKJpSA177yM5omA5Lul55SoIM+HwrLjgIIiXSwgIjQiOiBbIm51bSIsICJkaWZmIiwgIndlbGNoIiwgIiIsICJwZWFrIGhpcCBmbGV4aW9uIGFuZ2xlICjCsCkgwrcgc2V4IiwgIlNleCBpcyBhbiBJViBldmVuIHRob3VnaCBpdCBpcyBub3QgbWFuaXB1bGF0ZWQ7IG1lbiBhbmQgd29tZW4gYXJlIGRpZmZlcmVudCBwZW9wbGUuIiwgIuaAp+WIpeS4jeaYr+aTjeW8hOWHuuS+hueahO+8jOS9huS7jeaYr+iHquiuiumghe+8m+eUt+aAp+WSjOWls+aAp+aYr+S4jeWQjOeahOS6uuOAgiJdLCAiNSI6IFsibnVtIiwgInNhbWUiLCAibm90bWFwIiwgIjNwbHVzIiwgInBlYWsgdmVydGljYWwgZm9yY2UgKE4pIMK3IHNwZWVkICg0IGNvbmRpdGlvbnMpIiwgIkZvdXIgc3BlZWRzIGluIHRoZSBzYW1lIHBlb3BsZTogbm90IGEgdC10ZXN0LiBXZWVrIDcuIiwgIuWQjOS4gOe+pOS6uui3keWbm+eorumAn+W6pu+8muS4jeaYryB0IOaqouWumu+8jOesrCA3IOmAseOAgiJdLCAiNiI6IFsibnVtIiwgIm5vbmUiLCAibm90bWFwIiwgIm5vaXYiLCAidHdvIG1lYXN1cmVkIG51bWJlcnM6IHBlYWsgZm9yY2UgYW5kIHNwcmludCB0aW1lIMK3IG5vIElWIiwgIlR3byBtZWFzdXJlZCBudW1iZXJzIGFuZCBubyBncm91cHM6IGEgcmVsYXRpb25zaGlwLiBXZWVrIDYuIiwgIuWFqeWAi+mHj+WHuuS+hueahOaVuOWAvOOAgeaykuacieWIhue1hO+8mumAmeaYr+mXnOS/gueglOeptu+8jOesrCA2IOmAseOAgiJdfQ=='),function(c){return c.charCodeAt(0)})));
+var DV_ITEMS=[
+ ['24 age-group swimmers are randomly assigned to HIIT + dry-land training or usual training (12 each). After 8 weeks: 100-m butterfly time (s).','24 名分齡組游泳選手隨機分派到 HIIT + 陸上訓練組或一般訓練組（各 12 人）。8 週後：100 公尺蝶式時間（秒）。'],
+ ['20 athletes do slow and fast eccentric heel drops on two days, in counterbalanced order. Achilles tendon stiffness (N/mm) by ultrasound after each.','20 名運動員在兩天分別做慢速和快速的離心提踵，順序對抗平衡。每次之後用超音波測阿基里斯腱勁度（N/mm）。'],
+ ['80 older adults are randomly assigned to resistance training or control (40 each). Did each person fall at least once in 6 months? Falls: 5 vs 14.','80 名高齡者隨機分派到阻力訓練組或控制組（各 40 人）。6 個月內每個人是否至少跌倒一次？跌倒人數：5 對 14。'],
+ ['10 male and 10 female cyclists after a standard bike fit: peak hip flexion angle (°).','10 名男性和 10 名女性自行車手在標準化單車調整後：髖關節屈曲角度峰值（°）。'],
+ ['16 football players run at 40%, 60%, 80% and 100% of maximal speed. Peak vertical ground reaction force (N) at each speed.','16 名足球員以最大速度的 40%、60%、80% 和 100% 跑步。每種速度的垂直地面反作用力峰值（N）。'],
+ ['15 rugby players: isometric mid-thigh pull peak force (N) and 10-m sprint time (s).','15 名橄欖球員：等長大腿中段拉峰值力量（N）與 10 公尺衝刺時間（秒）。']];
+var Q1_STUDY={
+ a:['(a) Motor learning. Thirty novice golfers are randomly assigned to external-focus instructions (n = 15) or internal-focus instructions (n = 15). After two days of practice, putting error (cm from the hole) is measured in a 24-hour retention test.','(a) 動作學習。30 名高爾夫新手隨機分派到外在焦點指導（n = 15）或內在焦點指導（n = 15）。練習兩天後，在 24 小時保留測驗中測量推桿誤差（離洞口幾公分）。'],
+ b:['(b) Biomechanics. Fourteen recreational runners run on a treadmill twice, once in cushioned shoes and once in minimalist shoes, in counterbalanced order. An IMU on the tibia records peak tibial acceleration (g). The data file has 28 measurements.','(b) 生物力學。14 名休閒跑者在跑步機上跑兩次，一次穿緩衝鞋、一次穿極簡鞋，順序對抗平衡。脛骨上的 IMU 記錄脛骨加速度峰值（g）。資料檔共有 28 筆測量。'],
+ c:['(c) Exercise adherence. Sixty inactive adults are randomly assigned to supervised HIIT (n = 30) or home-based HIIT (n = 30). The outcome is whether each person dropped out before week 8. Dropouts: 4 of 30 supervised, 12 of 30 home-based.','(c) 運動持續性。60 名不常運動的成人隨機分派到有人指導的 HIIT（n = 30）或居家 HIIT（n = 30）。結果是每個人是否在第 8 週前退出。退出人數：有人指導組 30 人中 4 人，居家組 30 人中 12 人。']};
+
+var OPT={
+ type:[['','Choose 請選擇',''],['num','Number','數值'],['cat','Category','類別'],['unsure','Not sure','不確定']],
+ people:[['','Choose 請選擇',''],['diff','Different people','不同的人'],['same','Same people','同一群人'],['none','No IV','沒有自變項'],['unsure','Not sure','不確定']],
+ people3:[['','Choose 請選擇',''],['diff','Different people','不同的人'],['same','Same people','同一群人'],['unsure','Not sure','不確定']],
+ test:[['','Choose 請選擇',''],['welch','Welch t','獨立樣本 t'],['paired','Paired t','配對 t'],['chi','χ² test','卡方檢定'],['fisher','Fisher','Fisher 精確檢定'],['notmap','Not in our map yet','不在對照表裡'],['unsure','Not sure','不確定']],
+ test3:[['','Choose 請選擇',''],['welch','Welch t','獨立樣本 t'],['paired','Paired t','配對 t'],['chi','χ² test','卡方檢定'],['unsure','Not sure','不確定']],
+ reason:[['','Choose 請選擇',''],['3plus','3+ groups or conditions','三組／三種條件以上'],['2iv','2+ IVs','兩個以上自變項'],['noiv','No IV','沒有自變項']],
+ study:[['','Choose 請選擇',''],['a','(a) golfers','高爾夫'],['b','(b) runners','跑者'],['c','(c) HIIT dropout','HIIT 退出']],
+ peer:[['','Choose 請選擇',''],['allright','All answered correctly','大家都答對'],['wrong','Someone answered wrong','有人答錯']],
+ change:[['','Choose 請選擇',''],['kept','I kept my answer','維持原答案'],['changed','I would change it','我會改答案']]};
+var LBL={
+name:['Name','姓名'],group:['Group number','組別'],
+ dv:['DV: what is measured?','依變項（DV）：量的是什麼？'],type:['Number or category?','數值（可以算平均）還是類別（只能數人數，例如有／沒有）？'],iv:['IV: what makes the groups or conditions?','自變項（IV）：什麼決定分組或條件？'],
+ people:['Same or different people?','同一群人（每個人都做每種條件）還是不同的人？'],test:['Test','檢定'],reason:['Not in our map yet, because','不在對照表裡，原因是'],
+ emin:['Smallest expected count, if you can (optional)','最小期望次數（算得出來再寫，可不填）'],stuck:['Not sure: where are you stuck? (one line)','不確定：卡在哪裡？（一句）'],
+ study:['My study','我負責的研究'],why:['Why (one line)','理由（一句）'],
+ peer:['Ask each other: did anyone answer your study wrong?','組內互問：有人答錯你的研究嗎？'],explain:['What did you explain? Use the DV type or the design.','你怎麼解釋？用依變項類型或研究設計說明。'],
+ change:['After the discussion','討論之後'],whatchg:['What would you change, and why?','你會改什麼？為什麼？'],
+ ref:['Reference (first author, year, journal)','文獻（第一作者、年份、期刊）'],rq:['Research question','研究問題'],
+ dv2:['DV (several DVs: pick the one that answers the research question)','依變項（有很多個時，選能回答研究問題的那一個）'],iv2:['IV (write “none” for a relationship or agreement study)','自變項（關係研究或一致性研究寫「none」）']};
+
+var ANS=ansLoad();
+function ansLoad(){try{var s=localStorage.getItem(ANS_STORE);if(s){var o=JSON.parse(s);if(o&&o.v)return o}}catch(e){}return {v:{},lock:{},t:{},cur:0}}
+function ansStore(){try{localStorage.setItem(ANS_STORE,JSON.stringify(ANS))}catch(e){}}
+function now(){return new Date().toISOString()}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function gv(f){return ANS.v[f]||''}
+
+/* screens: Part 1 = six studies (individual), Part 2 = Q1 only (groups of 3–4); v1.2: Q2 removed */
+var NDV=6,NREQ=3;
+var SCR=[{id:'start',p:0,chip:'Start 開始',t:['Start','開始']}];
+for(var i=1;i<=NDV;i++)SCR.push({id:'dv'+i,p:1,chip:(i>NREQ?'★':'')+i,item:i,t:['Study '+i,'第 '+i+' 題']});
+SCR.push({id:'save1',p:1,chip:'Save 儲存',t:['Save Part 1','儲存 Part 1']});
+SCR.push({id:'q1',p:2,chip:'Q1',t:['Question 1','第 1 題']},{id:'q1p',p:2,chip:'Q1 互問',t:['Question 1 peer round','第 1 題互問']},
+ {id:'save2',p:2,chip:'Save 儲存',t:['Save Part 2','儲存 Part 2']});
+function sIdx(id){for(var i=0;i<SCR.length;i++)if(SCR[i].id===id)return i;return 0}
+
+/* locks */
+function dis(f){var p=f.split('.')[0],k=f.split('.')[1];
+  if(p==='meta')return ((k==='name'&&(ANS.lock.p1||ANS.lock.p2))||(k==='group'&&ANS.lock.p2))?' disabled':'';
+  if(/^dv/.test(p))return ANS.lock.p1?' disabled':'';
+  if(p==='q1'||p==='q2')return ANS.lock[p]?' disabled':'';
+  if(p==='q1p'||p==='q2p')return ANS.lock.p2?' disabled':'';
+  return ''}
+
+/* field builders */
+function lab(k){var L=LBL[k];return esc(L[0])+'<span class="zh">'+esc(L[1])+'</span>'}
+function missCls(f){return ANS.checked&&needed(f)&&!String(gv(f)).trim()?' miss':''}
+function fT(f,k,long,cond){var id='f_'+f.replace(/\./g,'_');
+  return '<div class="fld'+(cond?' cond':'')+missCls(f)+'" data-fld="'+f+'"'+(cond?' data-show="'+cond+'"':'')+'><label for="'+id+'">'+lab(k)+'</label>'+
+   (long?'<textarea id="'+id+'" data-f="'+f+'"'+dis(f)+'>'+esc(gv(f))+'</textarea>':'<input type="text" id="'+id+'" data-f="'+f+'" value="'+esc(gv(f))+'"'+dis(f)+' autocomplete="off">')+'</div>'}
+function fS(f,k,opt,cond){var id='f_'+f.replace(/\./g,'_'),v=gv(f);
+  return '<div class="fld'+(cond?' cond':'')+missCls(f)+'" data-fld="'+f+'"'+(cond?' data-show="'+cond+'"':'')+'><label for="'+id+'">'+lab(k)+'</label><select id="'+id+'" data-f="'+f+'"'+dis(f)+'>'+
+   OPT[opt].map(function(o){return '<option value="'+o[0]+'"'+(o[0]===v?' selected':'')+'>'+esc(o[1])+(o[2]&&o[0]?'　'+esc(o[2]):'')+'</option>'}).join('')+'</select></div>'}
+function stuckF(p){return fT(p+'.stuck','stuck',false,'unsure:'+p)}
+
+/* conditions: "f=val" or "unsure:prefix" */
+function condOn(c){if(!c)return true;
+  if(c.indexOf('unsure:')===0){var p=c.slice(7)+'.';for(var f in ANS.v)if(f.indexOf(p)===0&&ANS.v[f]==='unsure')return true;return false}
+  var m=c.split('=');return gv(m[0])===m[1]}
+function condApply(){[].forEach.call(el('ansBody').querySelectorAll('[data-show]'),function(d){d.hidden=!condOn(d.getAttribute('data-show'))})}
+
+/* required fields per screen: [field, label key] */
+function reqList(id){var r=[];function add(f,k){r.push([f,k])}
+  if(/^dv\d+$/.test(id)){var p=id,i=+id.slice(2),touched=false;
+    for(var f in ANS.v)if(f.indexOf(p+'.')===0&&ANS.v[f]&&f!==p+'.emin')touched=true;
+    if(i<=NREQ||touched){add(p+'.dv','dv');add(p+'.type','type');add(p+'.iv','iv');add(p+'.people','people');add(p+'.test','test');
+      if(gv(p+'.test')==='notmap')add(p+'.reason','reason');if(condOn('unsure:'+p))add(p+'.stuck','stuck')}}
+  else if(id==='q1'){add('meta.group','group');['study','dv','type','iv','people','test','why'].forEach(function(k){add('q1.'+k,k)});if(condOn('unsure:q1'))add('q1.stuck','stuck')}
+  else if(id==='q2'){add('q2.ref','ref');add('q2.rq','rq');add('q2.dv','dv2');add('q2.type','type');add('q2.iv','iv2');add('q2.people','people');add('q2.test','test');
+    if(gv('q2.test')==='notmap')add('q2.reason','reason');if(condOn('unsure:q2'))add('q2.stuck','stuck')}
+  else if(id==='q1p'||id==='q2p'){add(id+'.peer','peer');if(gv(id+'.peer')==='wrong')add(id+'.explain','explain');add(id+'.change','change');if(gv(id+'.change')==='changed')add(id+'.whatchg','whatchg')}
+  return r}
+function needed(f){for(var i=0;i<SCR.length;i++){var r=reqList(SCR[i].id);for(var j=0;j<r.length;j++)if(r[j][0]===f)return true}return f==='meta.name'}
+function missing(id){return reqList(id).filter(function(x){return !String(gv(x[0])).trim()})}
+/* everything still open before a part can be saved: [{i: screen index, what: [labels]}] */
+function openItems(part){var out=[];
+  if(!String(gv('meta.name')).trim())out.push({i:0,what:[LBL.name]});
+  SCR.forEach(function(s,i){if(s.p!==part||/^save/.test(s.id))return;var mm=missing(s.id),rq=reqList(s.id),m=mm.map(function(x){return LBL[x[1]]});
+    if(mm.length&&mm.length===rq.length)m=[['not answered','未作答']];
+    if((s.id==='q1p'||s.id==='q2p')&&!ANS.lock[s.id.slice(0,2)])m.unshift(['Start the peer round (locks your answer)','開始互問（鎖定答案）']);
+    if(m.length)out.push({i:i,what:m})});
+  return out}
+function done(i){var s=SCR[i];if(s.id==='start')return !!String(gv('meta.name')).trim();if(s.id==='save1')return !!ANS.lock.p1;if(s.id==='save2')return !!ANS.lock.p2;
+  if(s.item>NREQ&&!missing(s.id).length){for(var f in ANS.v)if(f.indexOf(s.id+'.')===0&&ANS.v[f])return true;return false}
+  if(s.id==='q1p'||s.id==='q2p')return !!ANS.lock[s.id.slice(0,2)]&&!missing(s.id).length;
+  return !missing(s.id).length}
+
+/* screen bodies */
+var B1='<span class="ans-badge">Part 1 · on your own · no AI 個人作答，不用 AI</span>';
+var B2='<span class="ans-badge">Part 2 · groups of 3–4 · no AI 3–4 人一組，不用 AI</span>';
+function scrStart(){return '<span class="ans-badge ok">Start 開始</span><h3>Who is answering?</h3><p class="h3zh zh">作答者</p>'+fT('meta.name','name')+
+  '<p class="src">Part 1: six short studies, on your own. Part 2: one question in groups of 3–4.<br><span class="zh">Part 1：六個短研究，個人作答。Part 2：一個問題，3–4 人一組。</span></p>'+
+  '<p class="src"><button type="button" class="ans-link" id="ansReset">'+(ANS.resetArm?'Press again to clear every answer on this device 再按一次，清除本機所有答案':'Start again on this device 清除本機答案，重新開始')+'</button></p>'}
+function scrDV(i){var p='dv'+i,it=DV_ITEMS[i-1];
+  return B1+(i>NREQ?'<span class="ans-badge ok">★ optional 選答</span>':'')+
+  '<h3>Study '+i+' of '+NDV+'</h3><p class="h3zh zh">第 '+i+' 題，共 '+NDV+' 題'+(i>NREQ?'（★ 題可以不答）':'')+'</p>'+
+  '<div class="ans-study"><p class="en">'+esc(it[0])+'</p><p class="zh">'+esc(it[1])+'</p></div>'+
+  '<p class="ans-task">Fill the five boxes. If no test fits, choose “Not in our map yet” and give the reason.</p><p class="ans-task zh">填五格。如果沒有適合的檢定，選「不在對照表裡」並寫原因。</p>'+
+  '<div class="pair2">'+fT(p+'.dv','dv')+fS(p+'.type','type','type')+fT(p+'.iv','iv')+fS(p+'.people','people','people')+'</div>'+
+  fS(p+'.test','test','test')+fS(p+'.reason','reason','reason',p+'.test=notmap')+(i===3?fT(p+'.emin','emin'):'')+stuckF(p)+
+  '<p class="src"><button type="button" class="ans-link" data-goto-stage="4">Open the Stage 4 map 查看 Stage 4 對照表</button></p>'}
+function tName(v){var o=OPT.test.concat(OPT.reason,OPT.people,OPT.type);for(var i=0;i<o.length;i++)if(o[i][0]===v&&v)return o[i][1];return v||'—'}
+function openList(part){var o=openItems(part);if(!o.length)return '';
+  return '<div class="ans-msg">Not answered yet. Answer these before you save. If you cannot answer, choose “Not sure”.<br>還有沒回答的地方，儲存前請完成。答不出來就選「不確定」。<ul>'+
+   o.map(function(x){return '<li><button type="button" class="ans-link" data-si="'+x.i+'">'+esc(SCR[x.i].t[0])+' '+esc(SCR[x.i].t[1])+'</button>：'+x.what.map(function(w){return esc(w[0])+' '+esc(w[1])}).join('；')+'</li>'}).join('')+'</ul></div>'}
+function scrSave1(){var h=B1+'<h3>Save Part 1</h3><p class="h3zh zh">儲存 Part 1</p>';
+  if(!ANS.lock.p1){var o=openItems(1);
+    h+=o.length?openList(1):'<p class="ans-task">Everything is answered. Saving locks Part 1 and downloads one file. Then you will see the answers to check your work.</p><p class="ans-task zh">全部答完了。儲存後 Part 1 會鎖定，並下載一個檔案，接著會顯示參考答案讓你核對。</p>';
+    return h+'<div class="ans-nav"><button type="button" class="act" id="ansSave1"'+(o.length?' disabled':'')+'>Save Part 1 and download 儲存並下載</button></div>'}
+  h+='<div class="ans-msg ok">Saved '+esc(ANS.t.p1save.replace('T',' ').slice(0,16))+'. Hand the downloaded file to the TA.<br>已儲存。把下載的檔案交給助教。</div>'+savedTools('p1');
+  h+='<h3 style="margin-top:18px;font-size:18px">Check your answers</h3><p class="h3zh zh">核對答案</p><div class="tbl-wrap"><table class="ans-sum"><thead><tr><th>#</th><th>Your answer 你的答案</th><th>Answer 參考答案</th><th></th></tr></thead><tbody>';
+  for(var i=1;i<=NDV;i++){var p='dv'+i,K=ANS_KEY[i];
+    if(i>NREQ&&!gv(p+'.test')){h+='<tr><td>★'+i+'</td><td>not answered 未作答</td><td>'+esc(K[4])+'<span class="zh">'+esc(K[6])+'</span></td><td></td></tr>';continue}
+    var okT=gv(p+'.type')===K[0],okP=gv(p+'.people')===K[1],okX=gv(p+'.test')===K[2]&&(K[2]!=='notmap'||gv(p+'.reason')===K[3]),all=okT&&okP&&okX;
+    var mine=tName(gv(p+'.type'))+' · '+tName(gv(p+'.people'))+' · '+tName(gv(p+'.test'))+(gv(p+'.test')==='notmap'?' ('+tName(gv(p+'.reason'))+')':'');
+    var key=tName(K[0])+' · '+tName(K[1])+' · '+tName(K[2])+(K[2]==='notmap'?' ('+tName(K[3])+')':'');
+    h+='<tr><td>'+(i>NREQ?'★':'')+i+'</td><td>'+esc(mine)+'</td><td>'+esc(key)+'<span class="zh">'+esc(K[4])+'</span><span class="zh">'+esc(K[5])+'</span><span class="zh">'+esc(K[6])+'</span></td><td class="'+(all?'y':'n')+'">'+(all?'✓':'✗ '+[okT?'':'type 類型',okP?'':'people 人',okX?'':'test 檢定'].filter(Boolean).join(', '))+'</td></tr>'}
+  return h+'</tbody></table></div><p class="src">★ items: an IV that is not manipulated, 4 conditions, no IV.<br><span class="zh">★ 題：不是操弄出來的自變項、四種條件、沒有自變項。</span></p>'}
+function dirs(list){return '<details class="how"><summary>Directions you might think in 可以往這些方向想</summary><ul>'+list.map(function(d){return '<li>'+esc(d[0])+'<span class="zh">'+esc(d[1])+'</span></li>'}).join('')+'</ul></details>'}
+function scrQ1(){var s=gv('q1.study'),h=B2+'<h3>Question 1: DV, IV and the test</h3><p class="h3zh zh">第 1 題：依變項、自變項與檢定</p>'+fT('meta.group','group')+
+  '<p class="ans-task">Each member takes ONE study: member 1 (a), member 2 (b), member 3 (c); a fourth member also takes (a). Answer on your own first.</p><p class="ans-task zh">每人負責一個研究：組員 1 做 (a)、組員 2 做 (b)、組員 3 做 (c)；第 4 位組員也做 (a)。先自己作答。</p>'+fS('q1.study','study','study');
+  h+=s?'<div class="ans-study"><p class="en">'+esc(Q1_STUDY[s][0])+'</p><p class="zh">'+esc(Q1_STUDY[s][1])+'</p></div>':'';
+  return h+'<div class="pair2">'+fT('q1.dv','dv')+fS('q1.type','type','type')+fT('q1.iv','iv')+fS('q1.people','people','people3')+'</div>'+fS('q1.test','test','test3')+fT('q1.why','why')+stuckF('q1')+
+   dirs([['Name the DV first. Can you average it (cm, g), or do you count it (yes/no)?','先說出依變項：它可以算平均（cm、g），還是只能數人數（有／沒有）？'],['Name the IV. Does it separate different people, or is every person measured in every condition?','說出自變項：它分出不同的人，還是每個人都在每種條件下被測？'],['Count people, not measurements. What does one row of the data file look like?','數人，不是數測量次數。資料檔的一列長什麼樣子？'],['For a yes/no DV: what count would you expect in each cell if the IV made no difference?','依變項是有／沒有時：如果自變項沒有影響，每一格應該有幾個人？']])+
+   (ANS.lock.q1?'<p class="src">Locked when the peer round started. 互問開始時已鎖定。</p>':'')}
+function scrPeer(q){var p=q+'p',Q=q==='q1'?['Question 1','第 1 題']:['Question 2','第 2 題'];
+  var h=B2+'<h3>'+Q[0]+': ask each other</h3><p class="h3zh zh">'+Q[1]+'：組內互問</p>'+
+  '<p class="ans-task">'+(q==='q1'?'Read your study to each of the other members and ask them for the DV, the IV and the test.':'Describe your study in two sentences to each of the other members, without the paper’s test name, and ask them for the DV, the IV and the test.')+' If an answer is wrong, explain why, using the DV type and the design.</p>'+
+  '<p class="ans-task zh">'+(q==='q1'?'把你的研究唸給其他組員聽，請他們說出依變項、自變項和檢定。':'用兩句話向其他組員描述你的研究（不要說出論文用的檢定），請他們說出依變項、自變項和檢定。')+'答錯的，你要用依變項類型和研究設計解釋為什麼。</p>';
+  if(!ANS.lock[q]){var m=missing(q);
+    return h+(m.length?'<div class="ans-msg">Finish '+Q[0]+' first 請先完成'+Q[1]+'：<ul>'+m.map(function(x){return '<li>'+esc(LBL[x[1]][0])+' '+esc(LBL[x[1]][1])+'</li>'}).join('')+'</ul><button type="button" class="ans-link" data-si="'+sIdx(q)+'">Go to '+Q[0]+' 回到'+Q[1]+'</button></div>':
+      '<p class="ans-task">Starting the peer round locks your '+Q[0]+' answer, so your first answer is kept. Write any change here afterwards.</p><p class="ans-task zh">開始互問後，'+Q[1]+'的答案會鎖定，保留你第一次的答案；想改的地方之後寫在這裡。</p>')+
+      '<div class="ans-nav"><button type="button" class="act" data-lock="'+q+'"'+(m.length?' disabled':'')+'>Lock my answer and start the peer round 鎖定答案，開始互問</button></div>'}
+  return h+fS(p+'.peer','peer','peer')+fT(p+'.explain','explain',true,p+'.peer=wrong')+fS(p+'.change','change','change')+fT(p+'.whatchg','whatchg',true,p+'.change=changed')}
+function scrSave2(){var h=B2+'<h3>Save Part 2</h3><p class="h3zh zh">儲存 Part 2</p>';
+  if(!ANS.lock.p2){var o=openItems(2);
+    h+=o.length?openList(2):'<p class="ans-task">Everything is answered. Saving locks Part 2 and downloads one file.</p><p class="ans-task zh">全部答完了。儲存後 Part 2 會鎖定，並下載一個檔案。</p>';
+    return h+'<div class="ans-nav"><button type="button" class="act" id="ansSave2"'+(o.length?' disabled':'')+'>Save Part 2 and download 儲存並下載</button></div>'}
+  return h+'<div class="ans-msg ok">Saved '+esc(ANS.t.p2save.replace('T',' ').slice(0,16))+'. Hand the downloaded file to the TA.<br>已儲存。把下載的檔案交給助教。</div>'+savedTools('p2')}
+function savedTools(p){return '<div class="ans-nav" style="justify-content:flex-start"><button type="button" class="act ghost" data-redl="'+p+'">Download the file again 再下載一次</button><button type="button" class="act ghost" data-show-csv="'+p+'">Show the file as text 顯示檔案內容</button></div><textarea class="ans-out" id="out_'+p+'" hidden readonly></textarea>'+
+  '<p class="src">If the download did not work: press “Show the file as text”, copy everything, and send it to the TA.<br><span class="zh">如果沒有下載成功：按「顯示檔案內容」，全部複製，傳給助教。</span></p>'}
+
+/* csv */
+var FORDER={p1:[],p2:[]};
+for(var j=1;j<=NDV;j++)['dv','type','iv','people','test','reason','emin','stuck'].forEach(function(k){FORDER.p1.push('dv'+j+'.'+k)});
+['study','dv','type','iv','people','test','why','stuck'].forEach(function(k){FORDER.p2.push('q1.'+k)});
+['peer','explain','change','whatchg'].forEach(function(k){FORDER.p2.push('q1p.'+k)});
+function live(f){var s=f.split('.'),p=s[0],k=s[1];
+  if(k==='reason')return gv(p+'.test')==='notmap';if(k==='stuck')return condOn('unsure:'+p);
+  if(k==='explain')return gv(p+'.peer')==='wrong';if(k==='whatchg')return gv(p+'.change')==='changed';return true}
+function csvRows(part){var rows=[],head=['name','group','part','item','field','answer','first_input','locked_at','saved_at','page'];
+  function lockAt(item){if(part==='p1')return ANS.t.p1save||'';if(item==='q1')return ANS.t.q1lock||'';if(item==='q2')return ANS.t.q2lock||'';return ANS.t.p2save||''}
+  FORDER[part].forEach(function(k){var s=k.split('.');if(!String(gv(k)).trim()||!live(k))return;
+    rows.push([gv('meta.name'),part==='p2'?gv('meta.group'):'',part==='p1'?'Part 1':'Part 2',s[0],s[1],gv(k),ANS.t.first||'',lockAt(s[0]),ANS.t[part+'save']||'',ANS_VER])});
+  return [head].concat(rows).map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(',')}).join('\r\n')}
+function fileName(part){var n=(gv('meta.name')||'noname');if(part==='p2'&&gv('meta.group'))n='G'+gv('meta.group')+'_'+n;
+  return 'W4_'+(part==='p1'?'Part1':'Part2')+'_'+n.replace(/[\\\/:*?"<>|\s]+/g,'')+'.csv'}
+function download(part){var blob=new Blob(['﻿'+csvRows(part)],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=fileName(part);document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500)}
+
+/* render + events: free navigation; the save screens list what is still open */
+function ansRender(){var s=SCR[ANS.cur]||SCR[0],b=el('ansBody');
+  el('ansProg').innerHTML=SCR.map(function(x,i){
+    return (i===1?'<span class="sep">Part 1</span>':i===sIdx('q1')?'<span class="sep">Part 2</span>':'')+'<button type="button" data-si="'+i+'" class="'+(done(i)?'done':'')+'" aria-current="'+(i===ANS.cur?'true':'false')+'">'+esc(x.chip)+'</button>'}).join('');
+  var h=s.id==='start'?scrStart():s.item?scrDV(s.item):s.id==='save1'?scrSave1():s.id==='q1'?scrQ1():s.id==='q1p'?scrPeer('q1'):scrSave2();
+  h+='<div class="ans-nav"><button type="button" class="act ghost" id="ansBack"'+(ANS.cur===0?' disabled':'')+'>← Back 上一題</button>'+(ANS.cur<SCR.length-1?'<button type="button" class="act" id="ansNext">Next 下一題 →</button>':'')+'</div>';
+  b.innerHTML=h;condApply()}
+function ansGo(k){ANS.cur=Math.max(0,Math.min(SCR.length-1,k));if(/^save/.test(SCR[ANS.cur].id))ANS.checked=true;ANS.resetArm=false;ansStore();ansRender();window.scrollTo({top:0,behavior:'instant'})}
+function ansField(e){var f=e.target.getAttribute('data-f');if(!f||ANS.v[f]===e.target.value)return;ANS.v[f]=e.target.value;if(!ANS.t.first)ANS.t.first=now();
+  var d=e.target.closest('.fld');if(d&&String(e.target.value).trim())d.classList.remove('miss');condApply();ansStore();
+  if(f==='q1.study'){ansRender();var n=el('f_q1_study');if(n)n.focus()}
+  var i=ANS.cur;[].forEach.call(el('ansProg').querySelectorAll('button[data-si]'),function(bt){bt.className=done(+bt.getAttribute('data-si'))?'done':''})}
+el('ansBody').addEventListener('input',ansField);
+el('ansBody').addEventListener('change',ansField);
+el('ansBody').addEventListener('click',function(e){var t=e.target.closest('button');if(!t||t.disabled)return;
+  if(t.id==='ansNext')ansGo(ANS.cur+1);else if(t.id==='ansBack')ansGo(ANS.cur-1);
+  else if(t.getAttribute('data-si'))ansGo(+t.getAttribute('data-si'));
+  else if(t.getAttribute('data-lock')){var q=t.getAttribute('data-lock');if(missing(q).length)return;ANS.lock[q]=true;ANS.t[q+'lock']=now();ansStore();ansRender()}
+  else if(t.id==='ansSave1'){if(openItems(1).length)return;ANS.lock.p1=true;ANS.t.p1save=now();ansStore();download('p1');ansRender()}
+  else if(t.id==='ansSave2'){if(openItems(2).length)return;ANS.lock.p2=true;ANS.t.p2save=now();ansStore();download('p2');ansRender()}
+  else if(t.getAttribute('data-redl'))download(t.getAttribute('data-redl'));
+  else if(t.getAttribute('data-show-csv')){var o=el('out_'+t.getAttribute('data-show-csv'));o.value=csvRows(t.getAttribute('data-show-csv'));o.hidden=false;o.select()}
+  else if(t.getAttribute('data-goto-stage'))go(+t.getAttribute('data-goto-stage'));
+  else if(t.id==='ansReset'){if(ANS.resetArm){ANS={v:{},lock:{},t:{},cur:0};ansStore();ansRender()}else{ANS.resetArm=true;ansRender()}}});
+el('ansProg').addEventListener('click',function(e){var t=e.target.closest('button[data-si]');if(t)ansGo(+t.getAttribute('data-si'))});
+
+/* ---------- boot ---------- */
+function redraw(){if(cur===1)s3all();else if(cur===2)s2all();else if(cur===3)s4read();else if(cur===4)s5read()}
+s2sync();s2read();s3read();s4read();s5read();
+go(0);
+var rz;window.addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(redraw,120)});
+if(window.matchMedia){var mq=window.matchMedia('(prefers-color-scheme: dark)');(mq.addEventListener?mq.addEventListener('change',function(){theme();redraw()}):0)}
+new MutationObserver(function(){theme();redraw()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1480 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Same Study, Three What-Ifs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#EDF0F1; --card:#F8FAFA; --sunk:#E2E8E9;
+  --ink:#15252A; --ink2:#3C5257; --muted:#6C8084; --line:#C7D4D6;
+  --accent:#0E6E6E; --accent-soft:#D2E5E3; --signal:#C2503E; --signal-soft:#F1DAD4;
+  --gold:#A87718; --gold-soft:#F0E4C8;
+  --r:10px; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#0E1518; --card:#162125; --sunk:#101A1D;
+  --ink:#E1EAEC; --ink2:#B4C6C9; --muted:#83979C; --line:#28383D;
+  --accent:#5CC6C0; --accent-soft:#123330; --signal:#F08E79; --signal-soft:#3B2019;
+  --gold:#D6A23F; --gold-soft:#332813; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#0E1518; --card:#162125; --sunk:#101A1D;
+  --ink:#E1EAEC; --ink2:#B4C6C9; --muted:#83979C; --line:#28383D;
+  --accent:#5CC6C0; --accent-soft:#123330; --signal:#F08E79; --signal-soft:#3B2019;
+  --gold:#D6A23F; --gold-soft:#332813; color-scheme:dark; }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-padding-top:96px}
+body{background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans","Noto Sans TC",system-ui,-apple-system,sans-serif;
+  font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased}
+.zh{font-family:"Noto Sans TC","IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-weight:600; text-wrap:balance; margin:0}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+.wrap{max-width:1180px; margin:0 auto; padding:0 16px 44px}
+
+/* header + rail */
+header.top{position:sticky; top:0; z-index:20; background:var(--paper);
+  background:color-mix(in srgb, var(--paper) 92%, transparent); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.brand{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-size:17px; font-weight:600; line-height:1.2}
+.brand small{display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.12em; color:var(--muted); font-weight:400}
+.rail{display:flex; gap:4px; margin-left:auto; flex-wrap:wrap}
+.rail button{font:inherit; font-size:12.5px; cursor:pointer; background:transparent; color:var(--muted); border:1px solid transparent; border-radius:99px; padding:5px 11px; display:flex; align-items:center; gap:7px}
+.rail button .n{font-family:"IBM Plex Mono",monospace; font-size:11px; opacity:.75}
+.rail button:hover{color:var(--ink); background:var(--sunk)}
+.rail button[aria-current="true"]{background:var(--accent); color:#fff; border-color:var(--accent)}
+.rail .lbl{display:none}
+@media(min-width:980px){ .rail .lbl{display:flex; flex-direction:column; line-height:1.14; text-align:left} }
+.rail .lbl b{font-weight:500; font-size:11.5px}
+.rail .lbl i{font-style:normal; font-size:9.5px; opacity:.85}
+
+/* stage */
+.panel{padding-top:22px}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em; color:var(--accent); display:flex; gap:10px; align-items:center}
+.eyebrow::after{content:""; flex:1; height:1px; background:var(--line)}
+h2.title{font-size:clamp(25px,4.2vw,34px); line-height:1.15; margin:.3em 0 .05em}
+.title-zh{font-size:clamp(16px,2.4vw,20px); color:var(--ink2); font-weight:500}
+.chain{display:flex; flex-wrap:wrap; gap:4px 6px; align-items:center; margin:12px 0 4px; font-size:11.5px; color:var(--muted)}
+.chain span.nd{padding:3px 9px; border-radius:99px; border:1px solid var(--line); background:var(--card); white-space:nowrap}
+.chain span.nd.on{background:var(--accent-soft); border-color:var(--accent); color:var(--ink); font-weight:500}
+.chain span.ar{opacity:.6}
+
+/* cards */
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:16px; margin-top:16px}
+.card > h3{font-size:19px; line-height:1.25}
+.card > h3 .zh{display:block; font-family:"Noto Sans TC",sans-serif; font-size:14px; font-weight:500; color:var(--ink2); margin-top:2px}
+.cg{display:grid; grid-template-columns:1fr; gap:16px; margin-top:12px; align-items:start}
+/* summary + practice layout */
+.sg{display:grid; grid-template-columns:1fr; gap:16px; margin-top:14px; align-items:start}
+.prac{min-width:0; container-type:inline-size}
+.prac > .card:first-child, .prac > .grid2:first-child{margin-top:0}
+@container (min-width:860px){ .cg{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:22px} .grid2{grid-template-columns:1fr 1fr} }
+@media(min-width:1024px){ .sg{grid-template-columns:minmax(300px,.8fr) minmax(0,1.4fr); gap:20px}
+  .sum{position:sticky; top:72px; max-height:calc(100vh - 88px); overflow:auto; overscroll-behavior:contain} }
+.sum details{background:var(--card); border:1.5px solid var(--accent); border-radius:var(--r); padding:10px 14px 12px}
+.sum summary{cursor:pointer; font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-size:19px; font-weight:600; color:var(--accent)}
+.sum h4{font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:12.5px; letter-spacing:.04em; color:var(--accent); margin:14px 0 6px; font-weight:600}
+.sum ol.pr,.sum ul.pr{margin:8px 0 0; padding-left:20px; display:grid; gap:7px}
+.sum .pr li{font-size:14px; font-weight:600; color:var(--ink); line-height:1.4}
+.sum .pr li .zh,.sum .lead .zh,.sum .note2 .zh,.sum .tpl .zh{display:block; font-weight:400; font-size:12.5px; color:var(--ink2); margin-top:1px}
+.sum .pr li b{color:var(--accent)}
+.sum .lead{margin:8px 0 0; font-size:14px; font-weight:600}
+.sum .note2{margin:10px 0 0; font-size:12.5px; color:var(--ink2); background:var(--sunk); border-radius:7px; padding:7px 10px}
+.sum .tpl{margin:0; font-size:13px; font-family:"IBM Plex Sans",sans-serif}
+.sum .read div{grid-template-columns:86px 1fr; font-size:12.5px}
+.sum .trust{grid-template-columns:1fr; gap:6px}
+.sum .trust div{font-size:12.5px; padding:7px 10px}
+table.rvt{width:100%; border-collapse:collapse; font-size:12px}
+table.rvt th,table.rvt td{border-bottom:1px solid var(--line); padding:5px 6px; text-align:left; vertical-align:top}
+table.rvt th{font-weight:500; color:var(--ink2); background:var(--sunk); font-size:11px}
+table.rvt .zh{display:block; font-size:10.5px; color:var(--muted)}
+table.rvt td.tl b{display:block; color:var(--ink); font-weight:600}
+table.rvt .wk{display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--muted); margin-top:1px}
+table.rvt tr.new td{background:var(--gold-soft)}
+table.rvt tr.new .wk{color:var(--gold); font-weight:600}
+table.rvt tr.later td{color:var(--muted)}
+table.rvt tr.hit td{background:var(--accent-soft); box-shadow:inset 0 2px 0 var(--accent), inset 0 -2px 0 var(--accent)}
+.terms{display:grid; gap:6px}
+.terms div{background:var(--sunk); border-radius:7px; padding:6px 9px; font-size:12.5px; color:var(--ink)}
+.terms b{color:var(--accent); font-size:13px}
+.terms .zh{display:block; color:var(--ink2); font-size:12px}
+.terms .eg{display:block; font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted); margin-top:2px}
+.study{border-left:3px solid var(--accent); background:var(--sunk); border-radius:0 8px 8px 0; padding:9px 12px; font-size:14.5px; color:var(--ink)}
+.study .zh{display:block; font-size:13px; color:var(--ink2); margin-top:2px}
+.tag{display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em; color:var(--accent); margin-bottom:4px}
+.src{font-size:11.5px; color:var(--muted); margin-top:8px; line-height:1.45}
+.src .zh{display:block}
+.core{margin-top:12px; padding:10px 14px; border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 8px 8px 0}
+.core p{margin:0; font-size:15px; font-weight:600; color:var(--ink)}
+.core p.zh{font-size:13px; font-weight:500; color:var(--ink2); margin-top:2px}
+.result{margin-top:10px; font-family:"IBM Plex Mono",monospace; font-size:14px; background:var(--sunk); border:1px solid var(--line); border-radius:8px; padding:8px 11px}
+.result .zh{display:block; font-family:"Noto Sans TC",sans-serif; font-size:12px; color:var(--muted)}
+
+/* data sheet */
+table.sheet{width:100%; border-collapse:collapse; font-size:12.5px; font-variant-numeric:tabular-nums}
+table.sheet th,table.sheet td{border-bottom:1px solid var(--line); padding:4px 8px; text-align:left}
+table.sheet th{font-weight:500; color:var(--ink2); background:var(--sunk); vertical-align:bottom}
+table.sheet td.n{text-align:right; font-family:"IBM Plex Mono",monospace}
+table.sheet th .rl{display:block; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.06em; color:var(--accent); font-weight:600}
+table.sheet tr.new td{animation:flash 1.4s ease-out}
+@keyframes flash{0%{background:var(--gold-soft)}100%{background:transparent}}
+.lv{display:flex; flex-wrap:wrap; gap:5px; align-items:center; margin:8px 0 0; font-size:12px; color:var(--muted)}
+.lv b{font-weight:600; color:var(--ink2)}
+.lv span.chip{padding:2px 9px; border-radius:99px; background:var(--accent-soft); color:var(--ink); font-size:12px}
+.lv span.chip.new{background:var(--gold-soft); animation:pop .5s ease-out}
+@keyframes pop{0%{transform:scale(.6)}100%{transform:scale(1)}}
+canvas{display:block; width:100%; height:auto; border-radius:6px; margin-top:10px}
+
+/* buttons, controls */
+button.act{font:inherit; font-size:13px; font-weight:500; cursor:pointer; background:var(--accent); color:#fff; border:1px solid var(--accent); border-radius:7px; padding:7px 13px}
+button.act:hover{filter:brightness(1.08)}
+button.act:disabled{opacity:.45; cursor:default; filter:none}
+button.act.ghost{background:transparent; color:var(--accent)}
+button.act.ghost:hover{background:var(--accent-soft)}
+.ctrls{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:10px}
+.seg{display:inline-flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; flex-wrap:wrap}
+.seg button{font:inherit; font-size:12.5px; cursor:pointer; background:var(--card); color:var(--ink2); border:0; border-right:1px solid var(--line); padding:6px 10px}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent); color:#fff}
+.seg button:disabled{opacity:.4; cursor:default}
+.slider{display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--ink2); flex:1 1 230px; min-width:200px}
+.slider input[type=range]{flex:1; min-width:90px; accent-color:var(--accent)}
+.slider .v{font-family:"IBM Plex Mono",monospace; color:var(--ink); min-width:3.4em; text-align:right}
+.readout{display:grid; grid-template-columns:repeat(auto-fit,minmax(96px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-top:10px}
+.readout div{background:var(--card); padding:8px 10px}
+.readout .k{display:block; font-size:10.5px; color:var(--muted); margin-bottom:2px}
+.readout .v{font-family:"IBM Plex Mono",monospace; font-size:19px; font-weight:500; line-height:1.15; font-variant-numeric:tabular-nums}
+.readout .v.sig{color:var(--signal)}
+.legend{display:flex; gap:12px; flex-wrap:wrap; font-size:11.5px; color:var(--muted); margin-top:6px}
+.legend span{display:flex; align-items:center; gap:5px}
+.legend i{width:11px; height:11px; border-radius:3px; display:inline-block}
+.legend i.bar{width:20px; height:0; border-top:3px solid var(--gold); border-radius:0}
+.legend i.dash{width:20px; height:0; border-top:2px dashed var(--muted); border-radius:0}
+
+/* counter */
+.ctr{margin-top:10px; display:grid; gap:10px}
+.ctr .row{display:grid; grid-template-columns:minmax(120px,190px) 1fr 74px; gap:10px; align-items:center; font-size:13px}
+.ctr .row .k .zh{display:block; font-size:11.5px; color:var(--muted)}
+.ctr .bar{height:22px; background:var(--sunk); border-radius:6px; position:relative; overflow:hidden}
+.ctr .bar i{position:absolute; left:0; top:0; bottom:0; background:var(--signal); border-radius:6px; width:0}
+.ctr .bar.ok i{background:var(--accent)}
+.ctr .bar b{position:absolute; top:0; bottom:0; left:20%; border-left:2px dashed var(--ink2)}
+.ctr .v{font-family:"IBM Plex Mono",monospace; font-size:15px; text-align:right}
+.ctr .n{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted)}
+@media(max-width:560px){ .ctr .row{grid-template-columns:1fr 64px} .ctr .row .k{grid-column:1 / -1} }
+
+/* stage 1 study cards */
+.grid2{display:grid; grid-template-columns:1fr; gap:14px; margin-top:4px}
+.scard{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:14px}
+.scard .shape{margin-top:10px; font-family:"IBM Plex Mono",monospace; font-size:12px; background:var(--sunk); border:1px dashed var(--line); border-radius:7px; padding:7px 10px; color:var(--ink)}
+.scard .shape code{display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; overflow-wrap:anywhere}
+.scard .shape .en{display:block; font-family:"IBM Plex Sans",sans-serif; font-size:13px; font-weight:600; margin-top:5px}
+.scard .shape .zh{display:block; font-family:"Noto Sans TC",sans-serif; color:var(--ink2); font-size:12px}
+
+/* morph */
+.mq{display:grid; gap:8px; margin-top:6px}
+.mq .q{display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center}
+.mq .q .k{font-size:12.5px; color:var(--ink2); min-width:150px}
+.mq .q .k .zh{display:block; font-size:11.5px; color:var(--muted)}
+.tool{margin-top:12px; border:2px solid var(--accent); border-radius:var(--r); padding:12px 14px; background:var(--accent-soft)}
+.tool .nm{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-size:22px; font-weight:600; color:var(--ink); line-height:1.2}
+.tool .nm .zh{display:block; font-family:"Noto Sans TC",sans-serif; font-size:14px; font-weight:500; color:var(--ink2)}
+.tool.later{border-style:dashed; border-color:var(--muted); background:var(--sunk)}
+.tool .why{font-size:12.5px; color:var(--ink2); margin-top:4px}
+.tool .why .zh{display:block; color:var(--muted)}
+table.dmap{width:100%; border-collapse:collapse; font-size:12.5px; margin-top:12px}
+table.dmap th,table.dmap td{border:1px solid var(--line); padding:7px 8px; vertical-align:top; text-align:left}
+table.dmap thead th{background:var(--sunk); font-weight:500; color:var(--ink2)}
+table.dmap tbody th{font-weight:500; color:var(--ink2); width:30%}
+table.dmap .zh{display:block; color:var(--muted); font-size:11px; font-weight:400}
+table.dmap td.later{color:var(--muted); font-style:italic}
+table.dmap td.hit{background:var(--accent-soft); outline:2px solid var(--accent); outline-offset:-2px; color:var(--ink); font-style:normal}
+.tbl-wrap{overflow-x:auto}
+
+/* how to read, APA */
+.read{display:grid; gap:6px; margin-top:10px}
+.read div{display:grid; grid-template-columns:118px 1fr; gap:10px; align-items:baseline; padding:6px 0; border-top:1px solid var(--line); font-size:13.5px}
+.read div:last-child{border-bottom:1px solid var(--line)}
+.read b{font-family:"IBM Plex Mono",monospace; font-weight:500; color:var(--ink)}
+.read .zh{display:block; font-size:12px; color:var(--muted)}
+@media(max-width:560px){ .read div{grid-template-columns:1fr; gap:2px} }
+.apa{margin-top:12px; border:1px solid var(--gold); border-radius:var(--r); background:var(--card); padding:11px 13px}
+.apa .t{display:block; font-size:11px; letter-spacing:.08em; color:var(--gold); font-weight:600; margin-bottom:5px}
+.apa p{margin:0; font-size:14px; line-height:1.6}
+.apa b.hl{font-weight:600; background:var(--gold-soft); border-radius:4px; padding:0 3px; box-decoration-break:clone; -webkit-box-decoration-break:clone}
+.pairs{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px}
+.pairs button{font:inherit; font-size:12.5px; cursor:pointer; background:var(--sunk); color:var(--ink); border:1px solid var(--line); border-radius:7px; padding:6px 10px}
+.pairs button[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft)}
+svg.ci{display:block; width:100%; max-width:640px; height:auto; margin-top:8px}
+.trust{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:8px; margin-top:10px}
+.trust div{background:var(--sunk); border-radius:8px; padding:9px 11px; font-size:13px}
+.trust b{display:block; color:var(--accent); font-size:12.5px}
+.trust .zh{display:block; color:var(--muted); font-size:12px}
+
+/* audit */
+.pq{margin:6px 0 0; padding:12px 14px; border-radius:var(--r); background:var(--accent-soft); border-left:3px solid var(--accent); font-size:15px; line-height:1.5}
+.sim{display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em; color:var(--muted); margin-bottom:6px}
+.clauses{display:grid; gap:6px; margin-top:10px}
+.clauses div{display:grid; grid-template-columns:26px 1fr; gap:8px; align-items:baseline; font-size:13.5px; padding:7px 10px; border-radius:7px; background:var(--sunk)}
+.clauses .m{font-weight:700; font-size:15px}
+.clauses .ok .m{color:var(--accent)} .clauses .no .m{color:var(--signal)}
+.clauses .zh{display:block; font-size:12px; color:var(--muted)}
+.clauses .ev{display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink2); margin-top:2px}
+
+/* items */
+.qcard{border:1px solid var(--line); border-left:3px solid var(--gold); border-radius:0 var(--r) var(--r) 0; background:var(--card); padding:11px 13px; margin-top:10px}
+.qcard:first-child{margin-top:0}
+.qcard .qt{font-size:14.5px; font-weight:600; color:var(--ink); margin:0}
+.qcard .qt .zh{display:block; font-weight:400; font-size:13px; color:var(--ink2); margin-top:1px}
+.qcard .opts{display:grid; gap:6px; margin:9px 0 8px}
+.qcard .opts.chips{display:flex; flex-wrap:wrap}
+.qcard .opts button{font:inherit; font-size:13.5px; text-align:left; cursor:pointer; background:var(--sunk); color:var(--ink); border:1px solid var(--line); border-radius:7px; padding:7px 10px; line-height:1.35}
+.qcard .opts button .zh{display:block; font-size:12px; color:var(--ink2)}
+.qcard .opts.chips button{padding:5px 10px; font-size:13px}
+.qcard .opts.chips button .zh{display:inline; margin-left:5px; font-size:12px}
+.qcard .opts button[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft)}
+.qcard .opts button:disabled{cursor:default; opacity:.9}
+.qcard .opts button.key{border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent)}
+.qcard .opts button.miss[aria-pressed="true"]{border-color:var(--gold); background:var(--gold-soft)}
+.qcard .row{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.qcard .fb{margin-top:8px; font-size:13px; padding:7px 10px; border-radius:7px; background:var(--sunk); border:1px solid var(--line); color:var(--ink)}
+.qcard .fb.ok{border-color:var(--accent)}
+.qcard .fb.no{border-color:var(--gold)}
+.qcard .fb .zh{display:block; color:var(--ink2); font-size:12px; margin-top:1px}
+.qcard .hint{margin-top:8px; font-size:13px; padding:7px 10px; border-radius:7px; background:var(--gold-soft); color:var(--ink)}
+.qcard .hint .hl{display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em; color:var(--gold); margin-bottom:2px}
+.qcard .hint .zh{display:block; color:var(--ink2); font-size:12px}
+.qcard .st{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted); margin-left:auto}
+.qcard .conf{display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-size:12px; color:var(--muted); margin-bottom:8px}
+.qcard .conf button{font:inherit; font-size:12px; cursor:pointer; background:var(--card); border:1px solid var(--line); border-radius:99px; padding:2px 9px; color:var(--ink2)}
+.qcard .conf button[aria-pressed="true"]{background:var(--accent); color:#fff; border-color:var(--accent)}
+.qcard.locked{border-left-color:var(--accent)}
+.gate{font-size:13px; color:var(--ink); background:var(--gold-soft); border-radius:7px; padding:8px 12px; margin:10px 0}
+.gate .zh{display:block}
+.who{display:flex; gap:8px; align-items:center; flex-wrap:wrap; background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:10px 12px; margin-top:14px}
+.who label{font-size:13px; color:var(--ink2)}
+.who input{font:inherit; font-size:14px; padding:7px 10px; border:1px solid var(--line); border-radius:7px; background:var(--paper); color:var(--ink); flex:1 1 160px; min-width:140px}
+.who .ok{font-size:12.5px; color:var(--accent)}
+
+/* hand-in */
+.fm .note{font-size:12.5px; color:var(--muted); margin-top:8px}
+.fm .note .zh{display:block}
+.fm .note.ok{color:var(--accent)} .fm .note.bad{color:var(--signal)}
+.sumbox{margin-top:10px; font-size:13px; padding:10px 12px; border-radius:8px; background:var(--sunk); border:1px solid var(--line)}
+.sumbox b{color:var(--accent)}
+.sumbox .zh{display:block; color:var(--muted); font-size:12px}
+.sumbox table{width:100%; border-collapse:collapse; margin-top:6px; font-size:12px}
+.sumbox td{padding:2px 4px; border-bottom:1px solid var(--line)}
+.sumbox td:last-child{text-align:right; font-family:"IBM Plex Mono",monospace}
+details.sw{margin-top:14px}
+details.sw summary{cursor:pointer; color:var(--accent); font-weight:500; font-size:13.5px}
+details.sw pre{margin:6px 0 0; padding:8px 10px; background:var(--sunk); border:1px solid var(--line); border-radius:7px; font-family:"IBM Plex Mono",monospace; font-size:12px; white-space:pre; overflow-x:auto; max-width:100%; color:var(--ink)}
+details.sw .lab{display:block; font-size:10.5px; letter-spacing:.08em; color:var(--muted); margin-top:10px}
+details.sw p{margin:4px 0 0; font-size:13.5px}
+.card5 .tn{font-family:"Newsreader","Noto Sans TC",Georgia,serif; font-size:24px; font-weight:600; color:var(--accent)}
+.card5 .tz{color:var(--ink2); font-size:14px; margin-bottom:6px}
+.card5 .lab{display:block; font-size:10.5px; letter-spacing:.08em; color:var(--muted); margin-top:14px; text-transform:uppercase}
+.card5 pre{margin:4px 0 0; padding:9px 11px; background:var(--sunk); border:1px solid var(--line); border-radius:7px; font-family:"IBM Plex Mono",monospace; font-size:12.5px; white-space:pre-wrap; word-break:break-word; color:var(--ink)}
+.card5 .apa{margin:4px 0 0; font-size:14px; line-height:1.6}
+.card5 .ex{font-size:12px; color:var(--muted); margin-top:8px}
+p.ex .zh{display:block; margin-top:2px}
+table.out{width:100%; border-collapse:collapse; font-size:12.5px; margin-top:8px; font-variant-numeric:tabular-nums}
+table.out caption{text-align:left; font-weight:600; font-size:12.5px; color:var(--ink2); padding-bottom:3px}
+table.out th,table.out td{border-bottom:1px solid var(--line); padding:4px 7px; text-align:right}
+table.out th:first-child,table.out td:first-child{text-align:left}
+table.out th{font-weight:500; color:var(--muted); font-size:11.5px}
+table.out tr.hit td{background:var(--accent-soft); font-weight:600}
+
+footer.foot{margin-top:30px; padding-top:14px; border-top:1px solid var(--line); font-size:12px; color:var(--muted); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center}
+.nav{display:flex; gap:8px}
+@media(max-width:700px){
+  body{font-size:14.5px}
+  .top-in{padding:7px 12px; gap:6px 10px}
+  .brand{font-size:15px}
+  .rail{gap:2px} .rail button{padding:4px 9px; font-size:12px}
+  .wrap{padding-inline:12px}
+  .card,.scard{padding:12px}
+  .card > h3{font-size:17.5px}
+  .mq .q .k{min-width:0; flex-basis:100%}
+  .readout .v{font-size:17px}
+}
+table.out.txt th,table.out.txt td{text-align:left; vertical-align:top}
+
+/* ---- Week 8 additions ---- */
+table.cells{border-collapse:separate; border-spacing:6px; width:100%; max-width:560px; font-size:13px; margin-top:6px}
+table.cells th{font-weight:500; color:var(--ink2); text-align:center; padding:4px}
+table.cells th .zh{display:block; font-size:11.5px; color:var(--muted); font-weight:400}
+table.cells th.rh{text-align:left; width:30%}
+table.cells td{background:var(--sunk); border:1px solid var(--line); border-radius:8px; text-align:center; padding:10px 6px; font-family:"IBM Plex Mono",monospace; font-size:16px; color:var(--ink)}
+table.cells td small{display:block; font-family:"IBM Plex Sans","Noto Sans TC",sans-serif; font-size:11px; color:var(--muted)}
+table.cells td.pl{border-color:var(--accent)}
+table.cells td.ct{border-color:var(--gold)}
+.brk{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:var(--ink2); margin-top:4px}
+.brk span{display:flex; align-items:center; gap:6px}
+.brk i{display:inline-block; width:22px; height:0; border-top:2px solid var(--ink2)}
+.brk i.dd{border-top-style:dashed}
+.legend i.ln{width:20px; height:0; border-top:3px solid var(--accent); border-radius:0}
+.legend i.ln.g{border-top-color:var(--gold)}
+.legend i.ln.m{border-top:2px dashed var(--muted)}
+.artpick{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px}
+.artpick button{font:inherit; font-size:12.5px; cursor:pointer; background:var(--sunk); color:var(--ink); border:1px solid var(--line); border-radius:7px; padding:6px 10px; text-align:left; line-height:1.3}
+.artpick button .zh{display:block; font-size:11.5px; color:var(--ink2)}
+.artpick button[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft)}
+.artbox{margin-top:12px}
+.artbox .shape{margin-top:10px; font-family:"IBM Plex Mono",monospace; font-size:12px; background:var(--sunk); border:1px dashed var(--line); border-radius:7px; padding:7px 10px; color:var(--ink)}
+.artbox .shape code{display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; overflow-wrap:anywhere}
+.artbox .shape .en{display:block; font-family:"IBM Plex Sans",sans-serif; font-size:13px; font-weight:600; margin-top:5px}
+.artbox .shape .zh{display:block; font-family:"Noto Sans TC",sans-serif; color:var(--ink2); font-size:12px}
+table.out tr.pick td{cursor:pointer}
+table.out tr.sel td{background:var(--accent-soft); font-weight:600}
+.bld .mq .q .k{min-width:170px}
+.bld textarea{font:inherit; font-size:13.5px; width:100%; min-height:54px; margin-top:8px; padding:7px 10px; border:1px solid var(--line); border-radius:7px; background:var(--paper); color:var(--ink)}
+.bld .tool .eff{font-size:13px; color:var(--ink); margin-top:6px; font-weight:600}
+.bld .tool .eff .zh{display:block; font-weight:400; color:var(--ink2); font-size:12px}
+.ro3{width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; font-variant-numeric:tabular-nums}
+.ro3 th,.ro3 td{border-bottom:1px solid var(--line); padding:5px 8px; text-align:right}
+.ro3 th:first-child,.ro3 td:first-child{text-align:left}
+.ro3 th{font-weight:500; color:var(--muted); font-size:11.5px}
+.ro3 td.sig{color:var(--signal); font-weight:600}
+.ro3 tr.int td:first-child{font-weight:600; color:var(--ink)}
+.dd{margin-top:8px; font-family:"IBM Plex Mono",monospace; font-size:13px; background:var(--sunk); border:1px solid var(--line); border-radius:8px; padding:8px 11px; color:var(--ink)}
+.dd .zh{display:block; font-family:"Noto Sans TC",sans-serif; font-size:12px; color:var(--muted)}
+/* ---- 2026.2: stage 0 steps, stage 1 examples, stage 2 markers ---- */
+.steps{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px}
+.steps button{font:inherit; font-size:12.5px; cursor:pointer; background:var(--sunk); color:var(--ink2); border:1px solid var(--line); border-radius:7px; padding:5px 10px; display:flex; align-items:baseline; gap:6px; line-height:1.3}
+.steps button .n{font-family:"IBM Plex Mono",monospace; font-weight:600; color:var(--muted)}
+.steps button .zh{font-size:11.5px; color:var(--muted)}
+.steps button[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft); color:var(--ink)}
+.steps button[aria-pressed="true"] .n{color:var(--accent)}
+.steps button:disabled{opacity:.45; cursor:default}
+.act[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft); color:var(--ink)}
+#outT div+div{margin-top:4px}
+#outT .zh,#out0 .zh{display:block; font-family:"Noto Sans TC",sans-serif; font-size:12.5px; color:var(--ink2)}
+label.grp{display:flex; align-items:center; gap:8px; font-size:13px}
+label.grp select{font:inherit; font-size:13.5px; padding:5px 8px; border:1px solid var(--line); border-radius:7px; background:var(--paper); color:var(--ink)}
+.glist{display:grid; gap:6px; margin-top:10px}
+.glist button{font:inherit; font-size:14px; text-align:left; cursor:pointer; background:var(--card); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:8px 11px; line-height:1.35}
+.glist button .en{display:block; font-size:12px; color:var(--ink2)}
+.glist button .dn{display:block; font-size:11.5px; color:var(--accent); margin-top:2px}
+.glist button[aria-pressed="true"]{border-color:var(--accent); background:var(--accent-soft)}
+.gbox{margin-top:12px}
+.gth .ttl{font-family:"Noto Sans TC",sans-serif; font-size:16px; font-weight:600; color:var(--ink); line-height:1.4}
+.gth .ttl .en{display:block; font-family:"IBM Plex Sans",sans-serif; font-size:13px; font-weight:400; color:var(--ink2)}
+.gth .meta{font-size:12px; color:var(--muted); margin:4px 0 8px}
+.gth .meta a{color:var(--accent)}
+.gth .gq .fb .zh{display:block; color:var(--ink2); font-size:12.5px}
+.gterms{margin-top:10px; font-size:12.5px; color:var(--ink2)}
+.gterms summary{cursor:pointer; color:var(--ink); font-weight:600}
+.gterms div{margin-top:4px}
+.gau{margin-top:12px; display:grid; gap:8px}
+.gau div{background:var(--sunk); border:1px solid var(--line); border-radius:8px; padding:8px 11px; font-size:13.5px; color:var(--ink)}
+.gau b{display:block; font-size:12px; color:var(--accent); margin-bottom:3px}
+.gau .zh{display:block; font-size:12.5px; color:var(--ink2)}
+.gnote{font-size:13px; color:var(--muted); margin-top:8px}
+.gnote .zh{display:block}
+.gnote.ok{color:var(--accent)} .gnote.bad{color:var(--signal)}
+.mk{margin-top:8px; font-size:12.5px; background:var(--sunk); border:1px dashed var(--line); border-radius:8px; padding:7px 11px; color:var(--ink)}
+.mk div+div{margin-top:4px}
+.mk .zh{display:block; color:var(--ink2); font-size:12px}
+table.sheet td.nw,table.sheet th.nw{animation:flash 1.4s ease-out}
+/* ---- 2026.3: stage 3.1 checkers ---- */
+.hero{display:flex; gap:14px; align-items:flex-start}
+.hero > div{flex:1; min-width:0}
+.hero h3{margin-top:2px}
+svg.pix{flex:none; width:96px; height:auto; image-rendering:pixelated}
+@media (max-width:560px){svg.pix{width:72px}}
+details.ext > summary{cursor:pointer; list-style:none}
+details.ext > summary::-webkit-details-marker{display:none}
+details.ext > summary .hero{display:flex; align-items:center; gap:12px}
+details.ext > summary .hero > span{display:block}
+details.ext > summary .zh{display:block; font-size:12.5px; color:var(--ink2)}
+#out31 .zh,#outL .zh{display:block; font-family:"Noto Sans TC",sans-serif; font-size:12.5px; color:var(--ink2)}
+.hero h3{font-size:19px; line-height:1.25; margin:0 0 8px}
+.hero h3 .zh{display:block; font-family:"Noto Sans TC",sans-serif; font-size:14px; font-weight:500; color:var(--ink2); margin-top:2px}
+table.sheet td .zh{display:block; font-family:"Noto Sans TC",sans-serif; font-size:12px; color:var(--ink2)}
+
+/* answer feedback: icon + text, never colour alone (2026.4) */
+.qcard .opts button .mk{display:inline-block; font-weight:700; margin-right:5px}
+.qcard .opts button.key{border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent)}
+.qcard .opts button.key.hit{background:var(--accent); color:#fff; border-color:var(--accent); opacity:1}
+.qcard .opts button.key.hit .zh{color:#fff; opacity:.9}
+.qcard .opts button.miss[aria-pressed="true"]{border-color:var(--signal); background:transparent; box-shadow:inset 0 0 0 1px var(--signal); opacity:1}
+.qcard .opts button.miss .mk{color:var(--signal)}
+.qcard .opts button.dim{opacity:.55}
+.qcard .fb .vd{display:block; font-size:13.5px; margin-bottom:3px}
+.qcard .fb.ok{border-color:var(--accent); border-width:2px; background:var(--accent-soft)}
+.qcard .fb.ok .vd{color:var(--accent)}
+.qcard .fb.no{border-color:var(--signal); border-width:2px}
+.qcard .fb.no .vd{color:var(--signal)}
+@media (prefers-reduced-motion: no-preference){
+  .qcard .opts button.key.hit{animation:pop .55s cubic-bezier(.2,1.4,.4,1)}
+  .qcard .fb.ok{animation:flash 1.2s ease-out}
+}
+/* pixel mascots (2026.4) */
+.hero img.mascot{width:150px; height:auto; flex:0 0 150px; border-radius:10px; image-rendering:auto}
+@media (max-width:480px){.hero img.mascot{width:110px; flex-basis:110px}}
+/* ---- Week 9 additions ---- */
+.cell4{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px}
+.cell4 th,.cell4 td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;text-align:left}
+.cell4 thead th{background:var(--sunk);font-weight:500;color:var(--ink2)}
+.cell4 tbody th{background:var(--sunk);font-weight:500;color:var(--ink2);width:34%}
+.cell4 td b{color:var(--accent);font-size:14.5px}
+.cell4 .zh{display:block;font-size:12px;color:var(--muted)}
+.cell4 .wk{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);margin-top:2px}
+.sl{display:flex;flex-direction:column;gap:4px;flex:1 1 220px;font-size:13px}
+.sl .v{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:15px}
+.sl input[type=range]{width:100%;accent-color:var(--accent)}
+.readout.ro9 div{display:flex;flex-direction:column;gap:2px}
+.readout.ro9 .s{font-size:11.5px;color:var(--ink2);line-height:1.4}
+.readout.ro9 .s .zh{display:block;color:var(--muted)}
+.readout.ro9 .v{font-size:17px}
+.sheet tr.na td{color:var(--signal);background:var(--signal-soft)}
+.pdots{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.pd{font-family:"IBM Plex Mono",monospace;font-size:11px;padding:3px 7px;border-radius:99px;background:var(--gold-soft);color:var(--ink);border:1px solid transparent}
+.pd.p{background:var(--accent-soft)}
+.pd.out{background:var(--sunk);color:var(--muted);text-decoration:line-through;border-color:var(--line)}
+.pd.half{border-color:var(--signal);border-style:dashed}
+.you{margin-top:14px;padding:12px 14px;border-radius:var(--r);background:var(--accent-soft);border:1.5px solid var(--accent)}
+.you b{display:block;color:var(--accent);font-size:13px;letter-spacing:.04em;margin-bottom:6px}
+.you div{font-size:13.5px;line-height:1.5;color:var(--ink);padding:3px 0}
+.you div .zh{display:block;font-size:12px;color:var(--ink2)}
+.goal{margin-top:8px;padding:9px 12px;border-left:3px solid var(--gold);background:var(--gold-soft);font-size:13.5px;line-height:1.5}
+.goal .zh{display:block;font-size:12.5px;color:var(--ink2)}
+.howto{margin-top:12px;padding:10px 12px;border-radius:var(--r);background:var(--sunk);display:grid;gap:7px}
+.howto .t{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.howto div{font-size:13.5px;line-height:1.5}
+.howto div b{color:var(--accent)}
+.howto div .zh{display:block;font-size:12.5px;color:var(--ink2)}
+.card .apa{margin-top:12px;padding:10px 12px;border-radius:var(--r);border:1px solid var(--line);font-size:14px;line-height:1.65}
+.card .apa .t{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:"IBM Plex Mono",monospace;margin-bottom:4px}
+.card .apa p{margin:0}
+.card .apa .hl{background:var(--gold-soft);font-weight:500;padding:0 2px}
+.card .apa .sm{display:block;margin-top:6px;font-size:12px;color:var(--muted)}
+.card .apa .sm .zh{display:block}
+.out.fam tr.new td{background:var(--accent-soft)}
+.dd{margin-top:8px;font-size:13.5px;line-height:1.5}
+.dd .zh{display:block;font-size:12.5px;color:var(--ink2)}
+.glist .en{display:block;font-size:11.5px;color:var(--muted)}
+.sum{min-width:0}
+.rpart{margin-top:12px;padding:10px 12px;border-radius:var(--r);background:var(--card);border:1px solid var(--line)}
+.rpart .qt{margin:0 0 6px;font-weight:600;font-size:14px}
+.rpart .qt .zh{display:block;font-size:12.5px;color:var(--ink2);font-weight:400}
+.rin{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;align-items:center;margin-top:6px;font-size:12.5px}
+.rin b{color:var(--accent);font-size:14px}
+.rin span{color:var(--muted);font-size:11.5px}
+.rin input{grid-column:1 / -1;font:inherit;font-size:13.5px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--paper);color:var(--ink);width:100%}
+#gKey table td,#gKey table th{text-align:left;vertical-align:top}
+#gKey table td:last-child{text-align:center;width:28px}
+#gKey table td:first-child{white-space:nowrap}
+#gKey .zh{display:block;color:var(--ink2);font-size:12px}
+.rpart textarea{width:100%;font:inherit;font-size:13.5px;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:var(--paper);color:var(--ink);resize:vertical}
+.rlab{font-size:11.5px;color:var(--muted);margin-top:6px}
+.rpart .opts{margin-top:6px}
+.rptab{border-collapse:collapse;margin-top:6px;font-size:13px}.rptab td{padding:3px 8px 3px 0;vertical-align:middle}
+.rptab button{font:inherit;font-size:12.5px;padding:5px 10px;border:1px dashed var(--line);border-radius:7px;background:var(--paper);color:var(--ink);cursor:pointer}
+.rptab button.tri.yes{border-style:solid;border-color:var(--accent);background:var(--accent-soft)}
+.rptab button.tri.no{border-style:solid;border-color:var(--signal);background:var(--signal-soft)}
+.rpart .opts button.tri{border-style:dashed}
+.rpart .opts button.tri.yes{border-style:solid;border-color:var(--accent);background:var(--accent-soft)}
+.rpart .opts button.tri.no{border-style:solid;border-color:var(--signal);background:var(--signal-soft)}
+.rpart .opts button:disabled{opacity:.85;cursor:default}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">Same study, three “what ifs” 同一個研究，三個「如果」<small>Week 9 · ANCOVA · MANOVA · linear mixed models · 共變數分析・多變量變異數分析・線性混合模型</small></div>
+    <nav class="rail" id="rail" aria-label="stages"></nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ============ STAGE 0 · last week ============ -->
+<section class="panel" id="p0">
+  <div class="eyebrow">stage 0 · last week · 上週</div>
+  <h2 class="title">What you can already do</h2>
+  <div class="title-zh zh">你已經會的</div>
+  <div class="chain" data-on="fl,ds,tl"></div>
+  <div class="who"><label for="who"><b>Name 姓名</b></label><input type="text" id="who" autocomplete="off" placeholder="type once 只輸入一次"><span class="ok" id="whoOk"></span><button class="act ghost" type="button" id="whoReset" style="font-size:12px;padding:5px 9px">New student 換人作答</button></div>
+  <div class="sg">
+    <aside class="sum"><details open><summary>Summary 總結</summary>
+      <ol class="pr">
+        <li>The design decides the tool. Two time points, the same people: paired t. Three or more: one-way RM ANOVA. Add a group: mixed ANOVA.<span class="zh">設計決定工具。兩個時間點、同一群人：配對 t。三個以上：單因子重複量數。加上組別：混合設計。</span></li>
+        <li>Did the training work? Group × Time, not Time, and not each group’s own p.<span class="zh">訓練有沒有效？看組別 × 時間，不是時間，也不是兩組各自的 p。</span></li>
+        <li>A new tool is not for every question. If the design did not change, the tool does not change.<span class="zh">新工具不是每題都要用。設計沒變，工具就不變。</span></li>
+      </ol>
+      <h4>Today 今天</h4>
+      <p class="lead">The same 16 players, three “what ifs”: the groups start apart · the coach measured two things · a value is missing.<span class="zh">同樣 16 位球員，三個「如果」：兩組起點不同 · 教練量了兩樣東西 · 有一格缺值。</span></p>
+    </details></aside>
+    <div class="prac">
+      <div class="card" id="c0">
+        <h3>Four cells, four tools<span class="zh">四格、四個工具</span></h3>
+        <div class="study">Last week you could describe a design but not always name its tool. This table is the bridge: find the row, find the column, read the tool.<span class="zh">上週你們會描述設計，但不一定說得出工具。這張表就是那座橋：找到列、找到欄、讀出工具。</span></div>
+        <div class="tbl-wrap"><table class="cell4"><thead><tr><th></th><th>No group factor<span class="zh">沒有組別因子</span></th><th>With a group factor<span class="zh">有組別因子</span></th></tr></thead>
+          <tbody><tr><th>2 time points, the same people<span class="zh">2 個時間點，同一群人</span></th><td><b>Paired t</b><span class="zh">配對 t</span><span class="wk">Week 4</span></td><td><b>Mixed ANOVA</b> (2 × 2)<span class="zh">混合設計變異數分析</span><span class="wk">Week 8</span></td></tr>
+          <tr><th>3 + time points or conditions, the same people<span class="zh">3 個以上時間點或條件，同一群人</span></th><td><b>One-way RM ANOVA</b><span class="zh">單因子重複量數變異數分析</span><span class="wk">Week 8</span></td><td><b>Mixed ANOVA</b> (2 × 3)<span class="zh">混合設計變異數分析</span><span class="wk">Week 8</span></td></tr></tbody></table></div>
+        <p class="ex">Different people in every cell instead: Welch t (2 groups, Week 4), one-way ANOVA (3 + groups, Week 7), two-way ANOVA (2 factors, Week 8).<span class="zh">如果每一格都是不同的人：Welch t（2 組，第四週）、單因子變異數分析（3 組以上，第七週）、二因子變異數分析（2 個因子，第八週）。</span></p>
+        <div class="study" style="margin-top:12px"><b>A common mistake last week 上週常見的錯誤</b> · Week 8, Stage 1: “The same 8 players each did three programmes in turn (plyometric, combined, usual), one jump after each. The tool?”<span class="zh">第八週 Stage 1：「同一批 8 位球員輪流做三種訓練（增強式、複合、平常），每種之後跳一次。工具？」</span>
+          <div style="margin-top:6px">Paired t 配對 t · One-way ANOVA 單因子變異數分析 · <b>One-way RM ANOVA 單因子重複量數變異數分析 ✓</b> · Mixed ANOVA 混合設計變異數分析</div>
+          <div style="margin-top:4px">“In turn” means every player did all three, one after another.<span class="zh">「輪流」的意思是：每一位球員三種都做，一種接一種。</span></div></div>
+        <div class="grid2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:10px">
+          <div><div class="rlab" style="margin:0 0 4px;font-size:12px;color:var(--muted)">What the data sheet looks like 資料表的樣子 · the same 8 players 同樣 8 位</div>
+          <div class="tbl-wrap"><table class="sheet"><thead><tr><th>ID</th><th>Plyometric</th><th>Combined</th><th>Usual</th></tr></thead><tbody><tr><td>P01</td><td class="n">41.2</td><td class="n">40.5</td><td class="n">39.6</td></tr><tr><td>P02</td><td class="n">37.8</td><td class="n">37.9</td><td class="n">36.4</td></tr><tr><td>P03</td><td class="n">43.5</td><td class="n">42.6</td><td class="n">42.1</td></tr><tr><td>…</td><td class="n">…</td><td class="n">…</td><td class="n">…</td></tr></tbody></table></div>
+          <p class="ex" style="margin-top:6px">Jump height (cm). One row = one player, three numbers. 8 people, 24 jumps. → <b>One-way RM ANOVA</b> 單因子重複量數<span class="zh">跳躍高度（cm）。一列 = 一位球員，三個數字。8 個人，24 次跳躍。</span></p></div>
+          <div><div class="rlab" style="margin:0 0 4px;font-size:12px;color:var(--muted)">What one-way ANOVA would need 單因子變異數分析需要的資料 · 24 different players 24 位不同的人</div>
+          <div class="tbl-wrap"><table class="sheet"><thead><tr><th>ID</th><th>Programme</th><th>Jump</th></tr></thead><tbody><tr><td>P01</td><td>Plyometric</td><td class="n">41.2</td></tr><tr><td>P09</td><td>Combined</td><td class="n">40.5</td></tr><tr><td>P17</td><td>Usual</td><td class="n">39.6</td></tr><tr><td>…</td><td>…</td><td class="n">…</td></tr></tbody></table></div>
+          <p class="ex" style="margin-top:6px">One row = one player, one number. Each person in one programme only. 24 people, 24 jumps. → <b>One-way ANOVA</b> 單因子變異數分析<span class="zh">一列 = 一位球員，一個數字。每人只做一種訓練。24 個人，24 次跳躍。</span></p></div>
+        </div>
+        <div class="howto" style="margin-top:10px"><span class="t">How to read it 怎麼看</span>
+          <div><b>1 · Count the factors.</b> One: the programme, with 3 levels. The jump is the DV, measured once after each programme; it is not a second factor.<span class="zh">1 · 數因子。一個：訓練方式，3 個水準。跳躍是依變項（DV），每種訓練之後量一次；它不是第二個因子。</span></div>
+          <div><b>2 · Count the people.</b> 8, not 24. The 24 are jumps.<span class="zh">2 · 數人數。是 8，不是 24。24 是跳躍次數。</span></div>
+          <div><b>3 · Count the numbers per person.</b> Three: the same player is in every column → within-subjects → one-way RM ANOVA.<span class="zh">3 · 數每個人有幾個數字。三個：同一位球員在每一欄都出現 → 受試者內 → 單因子重複量數變異數分析。</span></div>
+        </div>
+        <div class="howto" style="margin-top:10px"><span class="t">Why not the other two? 為什麼不是另外兩個？</span>
+          <div><b>Why not one-way ANOVA:</b> one-way ANOVA needs different players in each level (the right-hand sheet, 24 people). Here every player did all three. One-way ANOVA would treat the 24 jumps as 24 different people and throw away what makes this design strong: each player is her own control.<span class="zh">為什麼不是單因子變異數分析：單因子變異數分析需要每個水準是不同的球員（右邊那張表，24 個人）。這裡每位球員三種都做。用單因子變異數分析，會把 24 次跳躍當成 24 個不同的人，丟掉這個設計最強的地方：每位球員自己當對照。</span></div>
+          <div><b>Why not mixed ANOVA:</b> a mixed design needs two factors, one between (different people in different groups) and one within (the same people measured more than once), like the Week 8 study: Group × Time. Here there is one factor, the programme, and nobody was put into a group. “One jump after each” is not a time factor: there is no before and after, only one jump per programme.<span class="zh">為什麼不是混合設計變異數分析：混合設計需要兩個因子，一個受試者間（不同的人在不同組）、一個受試者內（同一批人量不只一次），像第八週的研究：組別 × 時間。這裡只有一個因子，訓練方式，而且沒有人被分到任何一組。「每種之後跳一次」不是時間因子：沒有前測和後測，每種訓練只跳一次。</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 1 · different starts (ANCOVA) ============ -->
+<section class="panel" id="p1" hidden>
+  <div class="eyebrow">stage 1 · what if the groups did not start together? · 如果兩組的起點不一樣呢？</div>
+  <h2 class="title">ANCOVA | Different starting points</h2>
+  <div class="title-zh zh">共變數分析｜起點不同</div>
+  <div class="chain" data-on="rq,dv,tl,rs"></div>
+  <div class="sg">
+    <aside class="sum"><details open><summary>Summary 總結</summary>
+      <ol class="pr">
+        <li>Version B: the players chose their own group. The plyometric group started 5.00 cm lower (35.00 vs 40.00).<span class="zh">自選版：球員自己選組。增強式組起點低了 5.00 公分（35.00 vs 40.00）。</span></li>
+        <li>Three questions, three answers. Post-test only: −2.00 cm (ignores the start). Changes: 3.00 cm (credits the lower starters for rising on their own). ANCOVA: 1.98 cm (players with the same start).<span class="zh">三個問題、三個答案。只比後測：−2.00 公分（忽略起點）。變化量：3.00 公分（把起點低者的自然回升也算成訓練）。ANCOVA：1.98 公分（起點相同的球員）。</span></li>
+        <li>Regression to the mean: within a group, post rises 0.80 cm per 1 cm of pre. Players who start low gain more by themselves.<span class="zh">趨中迴歸：組內前測每高 1 公分，後測高 0.80 公分。起點低的球員自己就會多進步。</span></li>
+        <li>ANCOVA = ANOVA on the post-test with the pre-test as a covariate. Report <i>F</i>(1, 13), <i>p</i>, ηp² and the adjusted means.<span class="zh">共變數分析 = 用後測做變異數分析，前測當共變數。報告 F(1, 13)、p、ηp² 和校正後平均數。</span></li>
+      </ol>
+      <h4>Key terms 關鍵詞</h4>
+      <div class="terms" data-mode="full" data-set="s1"></div>
+      <h4>溫故知新 · Review → new</h4>
+      <div class="rv" data-rows="num2d,mix,ancova"></div>
+    </details></aside>
+    <div class="prac">
+      <div class="card" id="c1a">
+        <h3>Version B: the players chose<span class="zh">自選版：球員自己選</span></h3>
+        <div class="study">The same 16 players, but this time the coach let them choose. The weaker jumpers chose plyometric training. Countermovement jump (cm) before and after 8 weeks.<span class="zh">同樣 16 位球員，但這次教練讓她們自己選。跳得較差的選了增強式訓練。8 週前後各測一次反向跳（cm）。</span></div>
+        <div class="tbl-wrap"><table class="sheet"><thead><tr><th>ID</th><th>Group</th><th>CMJ_Pre</th><th>CMJ_Post</th><th>Change<span class="rl">Post − Pre</span></th></tr></thead>
+          <tbody><tr><td>C01</td><td>Control</td><td class="n">33.4</td><td class="n">36.0</td><td class="n">+2.6</td></tr><tr><td>C02</td><td>Control</td><td class="n">36.1</td><td class="n">37.9</td><td class="n">+1.8</td></tr><tr><td>C03</td><td>Control</td><td class="n">38.0</td><td class="n">38.4</td><td class="n">+0.4</td></tr><tr><td>…</td><td>…</td><td class="n">…</td><td class="n">…</td><td class="n">…</td></tr>
+          <tr><td>P01</td><td>Plyometric</td><td class="n">28.4</td><td class="n">33.5</td><td class="n">+5.1</td></tr><tr><td>P02</td><td>Plyometric</td><td class="n">31.1</td><td class="n">34.6</td><td class="n">+3.5</td></tr><tr><td>P03</td><td>Plyometric</td><td class="n">33.0</td><td class="n">37.8</td><td class="n">+4.8</td></tr><tr><td>…</td><td>…</td><td class="n">…</td><td class="n">…</td><td class="n">…</td></tr></tbody></table></div>
+        <p class="ex">Look at C01 to C03, the control group, with no plyometric training (usual training only): the lower the start, the bigger the gain, usually. C01 starts lowest (33.4) and gains 2.6 cm; C02 (36.1) gains 1.8; C03 (38.0) gains 0.4. Low starters catch up a little by themselves.<span class="zh">看對照組 C01 到 C03，沒有增強式訓練（只做平常訓練）：起點越低，通常進步越多。C01 起點最低（33.4），進步 2.6 公分；C02（36.1）進步 1.8；C03（38.0）進步 0.4。起點低的球員自己就會追回一點。</span></p>
+        <canvas id="cv1a" height="270" data-hm="250" aria-label="each player's jump before and after training, version B: the plyometric group starts lower"></canvas>
+        <div class="ctrls" id="s1ac" hidden><label for="sGa" class="sl"><b>Pre-test gap 前測差距</b> <span class="v" id="vGa">5.00 cm</span><input type="range" id="sGa" min="0" max="5" step="0.5" value="5"></label></div>
+        <div class="dd" id="dd1a">Control 40.00 → 41.00 cm (+1.00). Plyometric 35.00 → 39.00 cm (+4.00). After training the control group is still 2.00 cm higher.<span class="zh">對照組 40.00 → 41.00 公分（+1.00）。增強式組 35.00 → 39.00 公分（+4.00）。訓練後對照組還是高 2.00 公分。</span></div>
+        <div id="q_s1a" style="margin-top:12px"></div>
+      </div>
+      <div class="card" id="c1b">
+        <h3>Three answers, one slider<span class="zh">三個答案，一個滑桿</span></h3>
+        <div class="study">Move the pre-test gap. The training effect and the within-group slope stay as they are; only the starting points move.<span class="zh">移動前測差距。訓練效果和組內斜率都不變；只有起點在動。</span></div>
+        <canvas id="cv1b" height="300" data-hm="270" aria-label="post-test against pre-test with one parallel line per group; the adjusted difference is the vertical gap between the lines at the mean pre-test"></canvas>
+        <div id="lg1b" hidden style="font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.5;margin-top:4px"></div>
+        <div class="dd" id="st1"></div>
+        <div class="ctrls" id="nx1w"><button class="act ghost" type="button" id="bk1">← Back 上一步</button><button class="act" type="button" id="nx1"></button></div>
+        <div id="s1c" hidden>
+        <div class="ctrls">
+          <label for="sG" class="sl"><b>Pre-test gap 前測差距</b> <span class="v" id="vG">5.00 cm</span><input type="range" id="sG" min="0" max="5" step="0.5" value="5"></label>
+          <div class="seg" id="pre1"><button type="button" data-v="5">Our data 本研究 (5.00)</button><button type="button" data-v="2.5">Halfway 一半 (2.50)</button><button type="button" data-v="0">Randomised 隨機 (0)</button></div>
+        </div>
+        <div class="readout ro9" id="ro1"></div>
+        <div class="dd" id="dd1"></div>
+        <div id="q_s1b" style="margin-top:12px"></div>
+        </div>
+      </div>
+      <div class="card" id="c1c">
+        <h3>Read the result<span class="zh">讀結果</span></h3>
+        <div class="goal">Goal: one line for Group, read at the same pre-test. Three things as always: a statistic (<i>F</i>), its df (1, 13), a reference distribution (<i>F</i>, right tail) → <i>p</i> → decision.<span class="zh">目標：組別一列，在同一個前測值上讀。一樣三件事：統計量（F）、自由度（1, 13）、參考分布（F 分布右尾）→ p → 決定。</span></div>
+        <div class="tbl-wrap"><table class="out"><caption>ANCOVA – CMJ_Post (Jamovi: ANOVA → ANCOVA)</caption><thead><tr><th></th><th>Sum of Squares</th><th>df</th><th>Mean Square</th><th>F</th><th>p</th><th>η²<sub>p</sub></th></tr></thead>
+          <tbody><tr><td>CMJ_Pre</td><td>153.80</td><td>1</td><td>153.80</td><td>148.98</td><td>&lt; .001</td><td>0.920</td></tr><tr class="hit"><td>Group</td><td>11.11</td><td>1</td><td>11.11</td><td>10.76</td><td>0.006</td><td>0.453</td></tr><tr><td>Residuals</td><td>13.42</td><td>13</td><td>1.03</td><td></td><td></td><td></td></tr></tbody></table></div>
+        <div class="tbl-wrap"><table class="out"><caption>Estimated Marginal Means – Group (adjusted to CMJ_Pre = 37.50)</caption><thead><tr><th>Group</th><th>Mean</th><th>SE</th><th>Lower</th><th>Upper</th></tr></thead>
+          <tbody><tr><td>Control</td><td>39.01</td><td>0.395</td><td>38.16</td><td>39.86</td></tr><tr><td>Plyometric</td><td>40.99</td><td>0.395</td><td>40.14</td><td>41.84</td></tr></tbody></table></div>
+        <div class="howto"><span class="t">How to read 怎麼讀</span>
+          <div><b>Group: <i>F</i>(1, 13) = 10.76</b> → the adjusted group difference is 10.76 times the noise. 13 = 16 − 2 groups − 1 covariate.<span class="zh">組別：校正後的組間差距是雜訊的 10.76 倍。13 = 16 − 2 組 − 1 個共變數。</span></div>
+          <div><b><i>p</i> = .006</b> → if the groups were equal at the same pre-test, a gap at least this large has probability .006. Reject H₀.<span class="zh">如果前測相同時兩組相等，至少這麼大的差距出現的機率是 .006。拒絕 H₀。</span></div>
+          <div><b>ηp² = .45</b> → Group explains 45% of what is left after the pre-test.<span class="zh">扣掉前測之後，組別解釋了剩下變異的 45%。</span></div>
+          <div><b>Adjusted means 40.99 vs 39.01</b> → at a pre-test of 37.50, plyometric adds 1.98 cm, 95% CI [0.68, 3.28].<span class="zh">前測 37.50 時，增強式多 1.98 公分，95% CI [0.68, 3.28]。</span></div>
+          <div><b>CMJ_Pre: <i>F</i> = 148.98</b> → the covariate works: the pre-test predicts the post-test strongly (slope 0.80). Not the research question.<span class="zh">共變數有用：前測強烈預測後測（斜率 0.80）。這不是研究問題。</span></div>
+          <div><b>Before you trust it</b> → parallel lines (homogeneity of slopes, <i>F</i>(1, 12) = 0.00, <i>p</i> = .958); residual shape (Shapiro–Wilk <i>W</i> = 0.95, <i>p</i> = .503); and say how the groups were formed.<span class="zh">相信它之前 → 兩條線平行（斜率同質性，F(1, 12) = 0.00，p = .958）；殘差形狀（Shapiro–Wilk W = 0.95，p = .503）；還要寫明兩組是怎麼形成的。</span></div>
+        </div>
+        <div class="apa"><span class="t">APA</span><p>An ANCOVA on post-training jump height, with pre-training jump height as the covariate, showed a significant effect of Group, <b class="hl"><i>F</i>(1, 13) = 10.76, <i>p</i> = .006, ηp² = .45</b>. Adjusted for the pre-test (<i>M</i> = 37.50 cm), the plyometric group jumped higher than the control group (<b class="hl">adjusted <i>M</i> = 40.99 vs 39.01 cm, difference = 1.98 cm, 95% CI [0.68, 3.28]</b>). The regression slopes were homogeneous, <i>F</i>(1, 12) = 0.00, <i>p</i> = .958. Groups were self-selected, not randomised.</p>
+          <span class="sm">Parts: the test and the covariate · the factor’s <i>F</i>, df, <i>p</i>, ηp² · adjusted means and the adjusted difference with its CI · the slope check · how the groups were formed.<span class="zh">各部分：檢定和共變數 · 因子的 F、df、p、ηp² · 校正後平均數和校正後差距及其 CI · 斜率檢查 · 分組方式。</span></span></div>
+      </div>
+      <div class="card">
+        <h3>Audit an AI’s advice<span class="zh">審核 AI 的建議</span></h3>
+        <div class="study">A student pasted the version B data into an AI assistant and asked how to test whether the training worked. The reply:<span class="zh">一位同學把自選版的資料貼給 AI 助理，問要怎麼檢定訓練有沒有效。回覆是：</span></div>
+        <div class="pq">“Since the plyometric group started lower, the fairest comparison is the post-test: run an independent-samples t-test on CMJ_Post. The control group jumped higher after training (41.00 vs 39.00 cm, <i>t</i>(13.97) = 1.16, <i>p</i> = .267), so plyometric training did not work.”</div>
+        <div id="q_s1d" style="margin-top:10px"></div>
+        <div class="clauses" id="clauses" hidden>
+          <div class="ok"><span class="m">✓</span><span>The plyometric group started lower.<span class="zh">增強式組起點較低。</span><span class="ev">35.00 vs 40.00 cm at pre-test</span></span></div>
+          <div class="no"><span class="m">✗</span><span>So the fairest comparison is the post-test.<span class="zh">所以最公平的比較是後測。</span><span class="ev">A post-only test ignores the start it just mentioned. Fairer = the same start, if the pre-test is the only reason the groups differ: ANCOVA, F(1, 13) = 10.76, p = .006, +1.98 cm · 只比後測正好忽略了它剛說的起點；較公平 = 同一個起點（前提：前測是兩組唯一的差別）</span></span></div>
+          <div class="no"><span class="m">✗</span><span>So plyometric training did not work.<span class="zh">所以增強式訓練無效。</span><span class="ev">p = .267 is “no evidence of a post-test difference”, not “no effect”; and the plyometric group gained 4.00 cm vs 1.00 · p = .267 是「後測沒有差異的證據」，不是「沒有效果」</span></span></div>
+        </div>
+        <div class="you" id="you_p1" hidden><b>You can now 你已經會</b><div>✓ tell a post-test difference from an improvement when the groups start apart<span class="zh">分辨「訓練後的差距」和「進步」，即使兩組起點不同</span></div><div>✓ say why the lower-starting group gains more by itself (regression to the mean, slope 0.80)<span class="zh">說出為什麼起點低的一組自己就會多進步（趨中迴歸，斜率 0.80）</span></div><div>✓ read an ANCOVA table: <i>F</i>(1, 13) = 10.76, <i>p</i> = .006, adjusted means 40.99 vs 39.01<span class="zh">讀 ANCOVA 表：F(1, 13) = 10.76，p = .006，校正後平均數 40.99 vs 39.01</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 2 · two outcomes (MANOVA) ============ -->
+<section class="panel" id="p2" hidden>
+  <div class="eyebrow">stage 2 · what if the coach measured two things? · 如果教練量了兩樣東西呢？</div>
+  <h2 class="title">MANOVA | Two outcomes</h2>
+  <div class="title-zh zh">多變量變異數分析｜兩個結果</div>
+  <div class="chain" data-on="rq,dv,tl,rs"></div>
+  <div class="sg">
+    <aside class="sum"><details open><summary>Summary 總結</summary>
+      <ol class="pr">
+        <li>Back to the randomised study (Week 8). The coach also timed a 20-m sprint before and after. Two DVs: jump change and sprint change.<span class="zh">回到隨機分組的研究（第八週）。教練前後也測了 20 公尺衝刺。兩個依變項：跳躍變化和衝刺變化。</span></li>
+        <li>Two separate tests at .05 = two chances of a false positive. Either correct the <i>p</i> values (Holm) or ask one question about the pair: MANOVA.<span class="zh">兩個各 .05 的檢定 = 兩次假陽性的機會。要麼校正 p 值（Holm），要麼用 MANOVA 對這一對問一次。</span></li>
+        <li>MANOVA asks: do the groups differ on the set of DVs? One statistic (Pillai’s trace), one <i>p</i>. Then look at each DV.<span class="zh">MANOVA 問：各組在這一組依變項上有沒有差異？一個統計量（Pillai 跡）、一個 p。然後再看每個依變項。</span></li>
+        <li>Use it when the DVs belong together and are correlated (<i>r</i> = −.85 here; two DVs that are almost the same measure need only one). When each DV is its own question, separate tests with a correction are clearer. In 74 department theses: 1 MANOVA.<span class="zh">依變項屬於同一件事、彼此相關時（這裡 r = −.85；兩個幾乎相同的量測只需要一個）才用。每個依變項各是一個問題時，分開檢定加校正更清楚。本系 74 篇論文：1 篇 MANOVA。</span></li>
+      </ol>
+      <h4>Key terms 關鍵詞</h4>
+      <div class="terms" data-mode="full" data-set="s2"></div>
+      <h4>溫故知新 · Review → new</h4>
+      <div class="rv" data-rows="num2d,mix,manova"></div>
+    </details></aside>
+    <div class="prac">
+      <div class="card" id="c2a">
+        <h3>Two outcomes, one training<span class="zh">兩個結果，一種訓練</span></h3>
+        <div class="study">Week 8 data (randomised, 8 + 8). Jump height (cm) and 20-m sprint time (s), both before and after. A faster sprint is a smaller number.<span class="zh">第八週的資料（隨機分組，8 + 8）。跳躍高度（cm）和 20 公尺衝刺時間（s），前後都有。衝刺變快是數字變小。</span></div>
+        <div class="tbl-wrap"><table class="out"><caption>The two changes, tested one at a time 兩個變化量，分開檢定</caption><thead><tr><th>Change 變化量</th><th>Control</th><th>Plyometric</th><th>Difference</th><th>t(14)</th><th>p</th><th>d</th></tr></thead>
+          <tbody><tr><td>Jump 跳躍 (cm)</td><td>+1.00 (1.97)</td><td>+4.00 (1.96)</td><td>3.00</td><td>3.05</td><td>.009</td><td>1.53</td></tr><tr><td>Sprint 衝刺 (s)</td><td>−0.01 (0.04)</td><td>−0.08 (0.03)</td><td>−0.07</td><td>−4.17</td><td>&lt; .001</td><td>2.08</td></tr></tbody></table></div>
+        <canvas id="cv2" height="280" data-hm="260" aria-label="each player's jump change against sprint change; the two changes are strongly correlated"></canvas>
+        <div class="dd">The players who gained the most jump also cut the most sprint time: <i>r</i> = −.85. The two DVs say one thing, “explosive power”, twice.<span class="zh">跳躍進步最多的球員，衝刺時間也減最多：r = −.85。兩個依變項說的是同一件事「爆發力」，說了兩次。</span></div>
+        <div id="q_s2a" style="margin-top:12px"></div>
+      </div>
+      <div class="card" id="c2b">
+        <h3>Read the result<span class="zh">讀結果</span></h3>
+        <div class="goal">Goal: one <i>p</i> for the pair, then one per DV. Statistic: Pillai’s trace, turned into an <i>F</i> with df (2, 13) → <i>p</i> → decision.<span class="zh">目標：這一對一個 p，然後每個依變項各一個。統計量：Pillai 跡，換算成自由度 (2, 13) 的 F → p → 決定。</span></div>
+        <div class="tbl-wrap"><table class="out"><caption>Multivariate Tests – Group (Jamovi: ANOVA → MANCOVA)</caption><thead><tr><th></th><th>value</th><th>F</th><th>df1</th><th>df2</th><th>p</th></tr></thead>
+          <tbody><tr class="hit"><td>Pillai’s Trace</td><td>0.554</td><td>8.06</td><td>2</td><td>13</td><td>0.005</td></tr><tr><td>Wilks’ Lambda</td><td>0.446</td><td>8.06</td><td>2</td><td>13</td><td>0.005</td></tr></tbody></table></div>
+        <div class="tbl-wrap"><table class="out"><caption>Univariate Tests (one ANOVA per DV) · Holm-corrected p on the right</caption><thead><tr><th>DV</th><th>Sum of Squares</th><th>df</th><th>F</th><th>p</th><th>η²<sub>p</sub></th><th>p (Holm)</th></tr></thead>
+          <tbody><tr><td>dCMJ · Group</td><td>36.00</td><td>1, 14</td><td>9.33</td><td>0.009</td><td>0.400</td><td>.009 × 1 = .009</td></tr><tr><td>dSprint · Group</td><td>0.0196</td><td>1, 14</td><td>17.37</td><td>&lt; .001</td><td>0.554</td><td>.0009 × 2 = .002</td></tr></tbody></table></div>
+        <div class="howto"><span class="t">How to read 怎麼讀</span>
+          <div><b>Pillai’s trace = .55</b> → the groups explain about 55% of the pair of changes taken together. Between 0 and 1 when the factor has two levels.<span class="zh">兩個變化量合起來看，各組解釋了約 55%。因子只有兩個水準時介於 0 到 1。</span></div>
+          <div><b><i>F</i>(2, 13) = 8.06, <i>p</i> = .005</b> → df1 = 2 DVs; df2 = 13 = N − groups − DVs + 1. If the groups were equal on both changes, a result this far out has probability .005. Reject H₀ for the set.<span class="zh">df1 = 2 個依變項；df2 = 13 = N − 組數 − 依變項數 + 1。如果兩組在兩個變化量上都相等，這麼極端的結果機率是 .005。對整組拒絕 H₀。</span></div>
+          <div><b>Then each DV</b> → jump <i>F</i>(1, 14) = 9.33, <i>p</i> = .009; sprint <i>F</i>(1, 14) = 17.37, <i>p</i> &lt; .001 (Holm: .002). Both differ.<span class="zh">再看每個依變項 → 跳躍 F(1, 14) = 9.33，p = .009；衝刺 F(1, 14) = 17.37，p < .001（Holm：.002）。兩個都有差。</span></div>
+          <div><b>Holm</b> → sort the <i>p</i> values; multiply the smallest by 2, the next by 1. The same decisions here, and no MANOVA needed if each DV was its own question.<span class="zh">Holm → p 值排序；最小的乘 2，下一個乘 1。這裡結論一樣；如果每個依變項各是一個問題，就不需要 MANOVA。</span></div>
+          <div><b>Which to report?</b> → one question about “explosive power”: MANOVA, then the DVs. Two questions: two tests with Holm. Say which, before you look.<span class="zh">報告哪一個？→ 一個關於「爆發力」的問題：MANOVA，再看各依變項。兩個問題：兩個檢定加 Holm。看結果之前先決定。</span></div>
+        </div>
+        <div class="apa"><span class="t">APA</span><p>A one-way MANOVA on the changes in jump height and 20-m sprint time showed a significant effect of Group, <b class="hl">Pillai’s trace = .55, <i>F</i>(2, 13) = 8.06, <i>p</i> = .005</b>. Follow-up ANOVAs (Holm-corrected) showed larger improvements in the plyometric group for both jump height, <b class="hl"><i>F</i>(1, 14) = 9.33, <i>p</i> = .009, ηp² = .40</b>, and sprint time, <i>F</i>(1, 14) = 17.37, <i>p</i> = .002, ηp² = .55.</p>
+          <span class="sm">Parts: the test and the DVs · the multivariate statistic with <i>F</i>, df, <i>p</i> · one line per DV, with the correction named.<span class="zh">各部分：檢定和依變項 · 多變量統計量及其 F、df、p · 每個依變項一行，寫明校正方法。</span></span></div>
+        <div class="you" id="you_p2" hidden><b>You can now 你已經會</b><div>✓ say what two tests at .05 cost, and the two fixes: Holm, or one MANOVA<span class="zh">說出兩個各 .05 的檢定要付什麼代價，和兩個解法：Holm，或一個 MANOVA</span></div><div>✓ decide when MANOVA is the question and when separate tests are<span class="zh">判斷什麼時候 MANOVA 才是問題，什麼時候分開檢定就好</span></div><div>✓ read Pillai’s trace = .55, <i>F</i>(2, 13) = 8.06, <i>p</i> = .005, then the DVs<span class="zh">讀 Pillai 跡 = .55，F(2, 13) = 8.06，p = .005，再讀各依變項</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 3 · missing values (LMM) ============ -->
+<section class="panel" id="p3" hidden>
+  <div class="eyebrow">stage 3 · what if a value is missing? · 如果有一格缺值呢？</div>
+  <h2 class="title">Linear mixed model (LMM) | Missing values</h2>
+  <div class="title-zh zh">線性混合模型｜缺值</div>
+  <div class="chain" data-on="rq,ds,tl,rs"></div>
+  <div class="sg">
+    <aside class="sum"><details open><summary>Summary 總結</summary>
+      <ol class="pr">
+        <li>Three players have one missing test. A mixed ANOVA needs every player at every time: it drops all three (13 left).<span class="zh">三位球員各缺一次測驗。混合設計需要每位球員每個時間點都有：三位全被排除（剩 13 位）。</span></li>
+        <li>A linear mixed model works on one row per measurement, with the player as a random effect: 29 of 32 measurements, all 16 players.<span class="zh">線性混合模型用一列一筆測量的資料，球員是隨機效果：32 筆中的 29 筆，16 位球員全留。</span></li>
+        <li>Same question, same line: Group × Time. With nothing missing it gives exactly the Week 8 numbers, <i>F</i>(1, 14) = 9.33, <i>p</i> = .009.<span class="zh">同一個問題、同一列：組別 × 時間。沒有缺值時它給的就是第八週的數字，F(1, 14) = 9.33，p = .009。</span></li>
+        <li>Trials: when each player jumps three times, rows are trials, not players. Tell the model which rows share a player and a test day; otherwise the trials are treated as independent measurements of the training effect. 16 players × 2 tests × 3 jumps = 96 rows; 5 jumps are missing, so 91 trials are recorded.<span class="zh">試作：每位球員跳三次時，列是試作，不是球員。要告訴模型哪些列屬於同一位球員、同一個測驗日；否則這些試作會被當成訓練效果的獨立證據。16 位球員 × 2 次測驗 × 3 跳 = 96 列；缺 5 跳，所以記錄到 91 次試作。</span></li>
+      </ol>
+      <h4>Key terms 關鍵詞</h4>
+      <div class="terms" data-mode="full" data-set="s3"></div>
+      <h4>溫故知新 · Review → new</h4>
+      <div class="rv" data-rows="num2s,mix,lmm"></div>
+    </details></aside>
+    <div class="prac">
+      <div class="card" id="c3a">
+        <h3>Three missing values<span class="zh">三個缺值</span></h3>
+        <div class="study">Week 8 data, but real life happened: C02 joined after the pre-test, C05 sprained an ankle before the post-test, P04 was absent on the post-test day. One row = one measurement.<span class="zh">第八週的資料，但現實發生了：C02 在前測之後才加入，C05 後測前扭傷腳踝，P04 後測那天缺席。一列 = 一筆測量。</span></div>
+        <div class="tbl-wrap"><table class="sheet"><thead><tr><th>ID</th><th>Group</th><th>Time</th><th>CMJ</th></tr></thead>
+          <tbody><tr><td>C01</td><td>Control</td><td>Pre</td><td class="n">31.9</td></tr><tr><td>C01</td><td>Control</td><td>Post</td><td class="n">31.8</td></tr><tr class="na"><td>C02</td><td>Control</td><td>Pre</td><td class="n">NA</td></tr><tr><td>C02</td><td>Control</td><td>Post</td><td class="n">36.4</td></tr><tr><td>…</td><td>…</td><td>…</td><td class="n">…</td></tr><tr><td>C05</td><td>Control</td><td>Pre</td><td class="n">39.6</td></tr><tr class="na"><td>C05</td><td>Control</td><td>Post</td><td class="n">NA</td></tr><tr><td>…</td><td>…</td><td>…</td><td class="n">…</td></tr><tr><td>P04</td><td>Plyometric</td><td>Pre</td><td class="n">37.3</td></tr><tr class="na"><td>P04</td><td>Plyometric</td><td>Post</td><td class="n">NA</td></tr><tr><td>…</td><td>…</td><td>…</td><td class="n">…</td></tr></tbody></table></div>
+        <div class="ctrls"><div class="seg" id="seg3"><button type="button" data-v="anova">Mixed ANOVA 混合設計</button><button type="button" data-v="lmm">Linear mixed model 線性混合模型</button></div></div>
+        <div class="pdots" id="pdots"></div>
+        <div class="readout ro9" id="ro3"></div>
+        <div class="dd" id="dd3"></div>
+        <div id="q_s3a" style="margin-top:12px"></div>
+      </div>
+      <div class="card" id="c3b">
+        <h3>Read the result<span class="zh">讀結果</span></h3>
+        <div class="goal">Goal: the same Group × Time line, now from a model that keeps every measurement. Statistic: <i>F</i> (or <i>t</i>) with estimated df → <i>p</i> → decision; plus the estimate in cm with its CI.<span class="zh">目標：同一列組別 × 時間，但來自一個保留每筆測量的模型。統計量：F（或 t），自由度是估計的 → p → 決定；再加上以公分計的估計值和它的 CI。</span></div>
+        <div class="tbl-wrap"><table class="out"><caption>Linear mixed model – CMJ ~ Group * Time + (1 | ID) · 16 players, 29 measurements (R: lmerTest)</caption><thead><tr><th>Fixed effect</th><th>Estimate</th><th>SE</th><th>df</th><th>t</th><th>p</th></tr></thead>
+          <tbody><tr><td>(Intercept) · control at Pre</td><td>38.63</td><td>1.59</td><td>16.13</td><td>24.23</td><td>&lt; .001</td></tr><tr><td>Group: plyometric − control at Pre</td><td>−0.63</td><td>2.24</td><td>15.76</td><td>−0.28</td><td>.782</td></tr><tr><td>Time: Post − Pre in the control</td><td>1.09</td><td>0.81</td><td>11.59</td><td>1.34</td><td>.205</td></tr><tr class="hit"><td>Group × Time</td><td>3.22</td><td>1.11</td><td>11.49</td><td>2.89</td><td>.014</td></tr></tbody></table></div>
+        <div class="tbl-wrap"><table class="out"><caption>anova(model) – Type III Analysis of Variance Table with Satterthwaite’s method (R: lmerTest)</caption><thead><tr><th>Effect</th><th>Sum Sq</th><th>Mean Sq</th><th>NumDF</th><th>DenDF</th><th>F</th><th>p</th></tr></thead>
+          <tbody><tr><td>Group</td><td>0.41</td><td>0.41</td><td>1</td><td>14.18</td><td>0.20</td><td>.660</td></tr><tr><td>Time</td><td>47.74</td><td>47.74</td><td>1</td><td>11.49</td><td>23.61</td><td>&lt; .001</td></tr><tr class="hit"><td>Group × Time</td><td>16.92</td><td>16.92</td><td>1</td><td>11.49</td><td>8.37</td><td>.014</td></tr></tbody></table></div>
+        <div class="tbl-wrap"><table class="out"><caption>Random effects 隨機效果</caption><thead><tr><th></th><th>SD</th><th>What it says 意思</th></tr></thead><tbody><tr><td>ID (Intercept)</td><td>4.21 cm</td><td>players differ from each other by about 4 cm 球員之間相差約 4 公分</td></tr><tr><td>Residual</td><td>1.42 cm</td><td>a measurement wobbles about 1.4 cm around its player’s line 一筆測量在自己球員的線附近擺動約 1.4 公分</td></tr></tbody></table></div>
+        <div class="howto"><span class="t">How to read 怎麼讀</span>
+          <div><b>Group × Time = 3.22 cm</b> → the plyometric change minus the control change, estimated from all 29 measurements. Week 8 said 3.00 from 32.<span class="zh">增強式的變化減對照的變化，用全部 29 筆測量估計。第八週用 32 筆得到 3.00。</span></div>
+          <div><b><i>t</i>(11.49) = 2.89, <i>p</i> = .014</b> → the df is estimated (Satterthwaite), so it is not a whole number; report it to two decimals, like Welch. Same df, same <i>p</i>, same test.<span class="zh">自由度是估計的（Satterthwaite），所以不是整數；像 Welch 一樣報到小數兩位。自由度一樣、p 一樣，是同一個檢定。</span></div>
+          <div><b><i>F</i>(1, 11.49) = 8.37</b> → from the <code>anova(model)</code> table, Group × Time row: NumDF 1, DenDF 11.49. With 1 numerator df, <i>F</i> = <i>t</i>²: 2.89² ≈ 8.37. The APA sentence reports this <i>F</i>, as for every ANOVA-family test.<span class="zh">來自 anova(model) 表的組別 × 時間那一列：分子自由度 1、分母自由度 11.49。分子自由度是 1 時，F = t²：2.89² ≈ 8.37。APA 句子報這個 F，和整個 ANOVA 家族一樣。</span></div>
+          <div><b>95% CI [0.77, 5.67]</b> → the extra gain is somewhere between 0.8 and 5.7 cm: clearly above 0, not precisely known.<span class="zh">多出來的進步大約在 0.8 到 5.7 公分之間：明顯高於 0，但不精確。</span></div>
+          <div><b>The other lines</b> → Group at Pre (−0.63, <i>p</i> = .782): the groups started together. Time in the control (1.09, <i>p</i> = .205): the control did not clearly change. In the <code>anova(model)</code> table, Group (<i>p</i> = .660) and Time (<i>p</i> &lt; .001) are averaged over the other factor, so they do not match these lines; with an interaction, read the Group × Time row first.<span class="zh">其他列 → 前測的組別（−0.63，p = .782）：兩組起點相同。對照組的時間（1.09，p = .205）：對照組沒有明顯變化。anova(model) 表裡的 Group（p = .660）和 Time（p &lt; .001）是平均另一個因子後的效果，所以和這兩列對不上；有交互作用時，先讀組別 × 時間那一列。</span></div>
+          <div><b>Mixed ANOVA on the 13 complete players</b> → <i>F</i>(1, 11) = 7.76, <i>p</i> = .018: the same decision, from fewer data. Both are honest; the LMM wastes less.<span class="zh">用 13 位完整球員做混合設計 → F(1, 11) = 7.76，p = .018：同樣的決定，資料較少。兩個都誠實；LMM 浪費得少。</span></div>
+        </div>
+        <div class="apa"><span class="t">APA</span><p>A linear mixed model with Group, Time and their interaction as fixed effects and a random intercept per player (16 players, 29 measurements; three players had one missing test) showed a significant Group × Time interaction, <b class="hl"><i>F</i>(1, 11.49) = 8.37, <i>p</i> = .014</b>: the plyometric group improved <b class="hl">3.22 cm more than the control group, 95% CI [0.77, 5.67]</b>.</p>
+          <span class="sm">Parts: the model (fixed effects, random effect) · the sample in players and measurements, with the missing values stated · the interaction’s <i>F</i>, df, <i>p</i> · the estimate in cm with its CI.<span class="zh">各部分：模型（固定效果、隨機效果）· 以球員數和測量數計的樣本，寫明缺值 · 交互作用的 F、df、p · 以公分計的估計值及其 CI。</span></span></div>
+        <div class="you" id="you_p3" hidden><b>You can now 你已經會</b><div>✓ say what a mixed ANOVA does with a missing value (drops the player)<span class="zh">說出混合設計怎麼處理缺值（整位球員排除）</span></div><div>✓ say what a linear mixed model keeps (every measurement, every player) and that it asks the same Group × Time question<span class="zh">說出線性混合模型保留了什麼（每筆測量、每位球員），而且問的還是組別 × 時間</span></div><div>✓ read the LMM line: 3.22 cm, 95% CI [0.77, 5.67], <i>p</i> = .014<span class="zh">讀 LMM 那一列：3.22 公分，95% CI [0.77, 5.67]，p = .014</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 4 · Jamovi ============ -->
+<section class="panel" id="p4" hidden>
+  <div class="eyebrow">stage 4 · Jamovi · Jamovi 操作</div>
+  <h2 class="title">The same numbers in Jamovi</h2>
+  <div class="title-zh zh">在 Jamovi 得到同樣的數字</div>
+  <div class="chain" data-on="tl,rs,ap"></div>
+  <div class="sg">
+    <aside class="sum"><details open><summary>Summary 總結</summary>
+      <ol class="pr">
+        <li>The same steps as always: factors, levels and DV · between or within · the tool · run and read.<span class="zh">和平常一樣的步驟：因子、水準、依變項 · 受試者間或內 · 選工具 · 執行並讀結果。</span></li>
+        <li>ANCOVA: ANOVA → ANCOVA, the pre-test under Covariates; Estimated Marginal Means for the adjusted means.<span class="zh">共變數分析：ANOVA → ANCOVA，前測放 Covariates；校正後平均數看 Estimated Marginal Means。</span></li>
+        <li>MANOVA: ANOVA → MANCOVA, two DVs; read Multivariate Tests, then Univariate Tests.<span class="zh">多變量：ANOVA → MANCOVA，兩個依變項；先讀 Multivariate Tests，再讀 Univariate Tests。</span></li>
+        <li>Linear mixed model: the GAMLj module, Linear Models → Mixed Model, with the player as the cluster variable.<span class="zh">線性混合模型：GAMLj 模組，Linear Models → Mixed Model，球員當 cluster 變項。</span></li>
+      </ol>
+      <h4>Watch for 注意</h4>
+      <ul class="pr">
+        <li>ANCOVA and MANCOVA use the wide files (one row = one player); the mixed model uses the long file (one row = one measurement) with empty cells for the missing values.<span class="zh">共變數分析和 MANCOVA 用寬檔（一列 = 一位球員）；混合模型用長檔（一列 = 一筆測量），缺值留空。</span></li>
+        <li>CMJ_Pre goes under Covariates, never under Fixed Factors.<span class="zh">CMJ_Pre 放 Covariates，不是 Fixed Factors。</span></li>
+        <li>The slope check (Group ✻ CMJ_Pre) is added once, read, and removed again.<span class="zh">斜率檢查（Group ✻ CMJ_Pre）加一次、讀完、再移除。</span></li>
+        <li>Holm is not in the MANCOVA menu: do it by hand.<span class="zh">Holm 不在 MANCOVA 選單裡：手算。</span></li>
+        <li>GAMLj must be installed once (⊕ Modules → jamovi library); its df are estimated, so they have decimals.<span class="zh">GAMLj 要先裝一次（⊕ Modules → jamovi library）；它的自由度是估計的，有小數。</span></li>
+      </ul>
+      <h4>Check your numbers 核對數字</h4>
+      <p class="lead">ANCOVA Group <i>F</i>(1, 13) = 10.76, <i>p</i> = .006, adjusted 40.99 vs 39.01 · MANOVA Pillai = .55, <i>F</i>(2, 13) = 8.06, <i>p</i> = .005 · Mixed model Group ✻ Time <i>F</i>(1, 11.5) = 8.37, <i>p</i> = .014, 3.22 cm<span class="zh">你的數字要和這些一樣。</span></p>
+    </details></aside>
+    <div class="prac">
+      <div class="card card5">
+        <div class="tn">1 · ANCOVA</div><div class="tz zh">共變數分析 · version B 自選版</div>
+        <span class="lab">Jamovi</span>
+        <pre>Data: W9_Plyo_SelfSelect_Wide_2026.csv   (one row = one player; Group = nominal)
+Exploration → Descriptives
+  CMJ_Pre, CMJ_Post → Variables · Group → Split by
+ANOVA → ANCOVA
+  Dependent Variable: CMJ_Post
+  Fixed Factors:      Group                      (between 受試者間)
+  Covariates:         CMJ_Pre                    (the pre-test, held constant 前測，固定住)
+  Effect Size: partial η²
+  Assumption Checks: Homogeneity test · Normality test · Q-Q plot
+  Estimated Marginal Means: Group → right box · tick Marginal means tables · Marginal means plots
+Homogeneity of slopes (once, then remove it):
+  Model → Model Terms: select Group and CMJ_Pre together → add Group ✻ CMJ_Pre → read its p → remove the term</pre>
+        <details class="sw"><summary>What Jamovi shows 你應該看到</summary>
+          <div class="tbl-wrap"><table class="out"><caption>ANCOVA – CMJ_Post</caption><thead><tr><th></th><th>Sum of Squares</th><th>df</th><th>Mean Square</th><th>F</th><th>p</th><th>η²<sub>p</sub></th></tr></thead>
+          <tbody><tr><td>CMJ_Pre</td><td>153.80</td><td>1</td><td>153.80</td><td>148.98</td><td>&lt; .001</td><td>0.920</td></tr><tr class="hit"><td>Group</td><td>11.11</td><td>1</td><td>11.11</td><td>10.76</td><td>0.006</td><td>0.453</td></tr><tr><td>Residuals</td><td>13.42</td><td>13</td><td>1.03</td><td></td><td></td><td></td></tr></tbody></table></div>
+          <div class="tbl-wrap"><table class="out"><caption>Estimated Marginal Means – Group</caption><thead><tr><th>Group</th><th>Mean</th><th>SE</th><th>Lower</th><th>Upper</th></tr></thead>
+          <tbody><tr><td>Control</td><td>39.0</td><td>0.395</td><td>38.2</td><td>39.9</td></tr><tr><td>Plyometric</td><td>41.0</td><td>0.395</td><td>40.1</td><td>41.8</td></tr></tbody></table></div>
+          <p class="ex">With the Group ✻ CMJ_Pre term added: F = 0.00, p = 0.958 → parallel lines; remove the term again. Normality (Shapiro–Wilk) W = 0.951, p = 0.503. Number formatting is predicted, not observed; check in class. 加上 Group ✻ CMJ_Pre 那一列：F = 0.00，p = 0.958 → 兩線平行；再把它移除。常態性 W = 0.951，p = 0.503。數字格式是預測的，課堂上再核對。</p>
+        </details>
+        <span class="lab">APA</span>
+        <p class="apa">An ANCOVA on post-training jump height, with pre-training jump height as the covariate, showed a significant effect of Group, <i>F</i>(1, 13) = 10.76, <i>p</i> = .006, ηp² = .45. Adjusted for the pre-test (<i>M</i> = 37.50 cm), the plyometric group jumped higher than the control group (adjusted <i>M</i> = 40.99 vs 39.01 cm, difference = 1.98 cm, 95% CI [0.68, 3.28]). The regression slopes were homogeneous, <i>F</i>(1, 12) = 0.00, <i>p</i> = .958. Groups were self-selected, not randomised.</p>
+      </div>
+
+      <div class="card card5">
+        <div class="tn">2 · MANOVA</div><div class="tz zh">多變量變異數分析 · Week 8 data 第八週資料</div>
+        <span class="lab">Jamovi</span>
+        <pre>Data: W8_Plyo_Demo_Wide_2026.csv   (one row = one player)
+Data → Compute: new column dCMJ    = CMJ_Post - CMJ_Pre
+Data → Compute: new column dSprint = Sprint_Post - Sprint_Pre
+ANOVA → MANCOVA
+  Dependent Variables: dCMJ, dSprint
+  Factors:             Group
+  Multivariate statistics: Pillai's trace (default) · Wilks' lambda
+Read: Multivariate Tests (one p for the pair), then Univariate Tests (one row per DV)</pre>
+        <details class="sw"><summary>What Jamovi shows 你應該看到</summary>
+          <div class="tbl-wrap"><table class="out"><caption>Multivariate Tests</caption><thead><tr><th></th><th></th><th>value</th><th>F</th><th>df1</th><th>df2</th><th>p</th></tr></thead>
+          <tbody><tr class="hit"><td>Group</td><td>Pillai's Trace</td><td>0.554</td><td>8.06</td><td>2</td><td>13</td><td>0.005</td></tr><tr><td></td><td>Wilks' Lambda</td><td>0.446</td><td>8.06</td><td>2</td><td>13</td><td>0.005</td></tr></tbody></table></div>
+          <div class="tbl-wrap"><table class="out"><caption>Univariate Tests</caption><thead><tr><th></th><th>Dependent Variable</th><th>Sum of Squares</th><th>df</th><th>Mean Square</th><th>F</th><th>p</th></tr></thead>
+          <tbody><tr><td>Group</td><td>dCMJ</td><td>36.00</td><td>1</td><td>36.00</td><td>9.33</td><td>0.009</td></tr><tr><td></td><td>dSprint</td><td>0.0196</td><td>1</td><td>0.0196</td><td>17.37</td><td>&lt; .001</td></tr><tr><td>Residuals</td><td>dCMJ</td><td>54.04</td><td>14</td><td>3.86</td><td></td><td></td></tr><tr><td></td><td>dSprint</td><td>0.0158</td><td>14</td><td>0.00113</td><td></td><td></td></tr></tbody></table></div>
+          <p class="ex">Holm by hand: .0009 × 2 = .002 and .009 × 1 = .009. Holm 手算：.0009 × 2 = .002、.009 × 1 = .009。</p>
+        </details>
+        <span class="lab">APA</span>
+        <p class="apa">A one-way MANOVA on the changes in jump height and 20-m sprint time showed a significant effect of Group, Pillai’s trace = .55, <i>F</i>(2, 13) = 8.06, <i>p</i> = .005. Follow-up ANOVAs (Holm-corrected) showed larger improvements in the plyometric group for both jump height, <i>F</i>(1, 14) = 9.33, <i>p</i> = .009, ηp² = .40, and sprint time, <i>F</i>(1, 14) = 17.37, <i>p</i> = .002, ηp² = .55.</p>
+      </div>
+
+      <div class="card card5">
+        <div class="tn">3 · Linear mixed model</div><div class="tz zh">線性混合模型 · three missing values 三個缺值</div>
+        <span class="lab">Jamovi · GAMLj</span>
+        <pre>Once, on your own laptop (needs internet):
+  ⊕ Modules (top right) → jamovi library → GAMLj → Install
+Data: W9_Plyo_Missing_Long_2026.csv   (one row = one measurement; 32 rows, 3 empty CMJ cells)
+Linear Models → Mixed Model
+  Dependent Variable: CMJ
+  Factors:            Group, Time
+  Cluster variables:  ID                          (which rows share a player 哪些列屬於同一位球員)
+  Random Effects:     Intercept | ID → right box  (each player her own baseline 每位球員自己的基準)
+  Fixed Effects:      Group, Time, Group ✻ Time   (added by default)
+Read: Fixed Effects Omnibus Tests → the Group ✻ Time row; Fixed Effects Parameter Estimates → the estimate and its CI</pre>
+        <details class="sw"><summary>What Jamovi shows 你應該看到</summary>
+          <div class="tbl-wrap"><table class="out"><caption>Fixed Effects Omnibus Tests</caption><thead><tr><th></th><th>F</th><th>Num df</th><th>Den df</th><th>p</th></tr></thead>
+          <tbody><tr><td>Group</td><td>0.20</td><td>1</td><td>14.2</td><td>0.660</td></tr><tr><td>Time</td><td>23.61</td><td>1</td><td>11.5</td><td>&lt; .001</td></tr><tr class="hit"><td>Group ✻ Time</td><td>8.37</td><td>1</td><td>11.5</td><td>0.014</td></tr></tbody></table></div>
+          <div class="tbl-wrap"><table class="out"><caption>Random Components</caption><thead><tr><th>Groups</th><th>Name</th><th>SD</th><th>Variance</th></tr></thead><tbody><tr><td>ID</td><td>(Intercept)</td><td>4.21</td><td>17.76</td></tr><tr><td>Residual</td><td></td><td>1.42</td><td>2.02</td></tr></tbody></table></div>
+          <p class="ex">Number of observations 29, clusters 16: every player kept. The Group ✻ Time estimate is 3.22 cm (its sign and the exact SE depend on GAMLj’s contrast coding: read the row, not the sign). Menu labels are from the GAMLj documentation; confirm in class. 觀察值 29、cluster 16：每位球員都在。Group ✻ Time 的估計值是 3.22 公分（正負號和 SE 依 GAMLj 的對比編碼而定：讀那一列，不要只看正負號）。選單名稱課堂上核對。</p>
+        </details>
+        <span class="lab">APA</span>
+        <p class="apa">A linear mixed model with Group, Time and their interaction as fixed effects and a random intercept per player (16 players, 29 measurements; three players had one missing test) showed a significant Group × Time interaction, <i>F</i>(1, 11.49) = 8.37, <i>p</i> = .014: the plyometric group improved 3.22 cm more than the control group, 95% CI [0.77, 5.67].</p>
+      </div>
+
+      <div class="card card5">
+        <div class="tn">At home · the same in R</div><div class="tz zh">在家 · 用 R 重做（選做）</div>
+        <p class="ex">Optional. W9_R_Together_2026.R runs all three in R (lm + Anova, manova, lmer) and prints the same numbers; W9_R_SOP_2026.docx is the dictionary. Nothing in class depends on it. 選做。W9_R_Together_2026.R 用 R 重做三個工具，印出同樣的數字；W9_R_SOP_2026.docx 是字典。課堂不需要。</p>
+        <p class="ex">Files on Moodle: W9_Plyo_SelfSelect_Wide_2026.csv (ANCOVA) · W8_Plyo_Demo_Wide_2026.csv (MANOVA) · W9_Plyo_Missing_Long_2026.csv (mixed model) · W9_Jamovi_SOP_2026.docx · W9_R_Together_2026.R · W9_R_SOP_2026.docx. 檔案都在 Moodle。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 5 · read a thesis, report in five minutes ============ -->
+<section class="panel" id="p5" hidden>
+  <div class="eyebrow">stage 5 · read a thesis, report in five minutes · 讀一篇論文，五分鐘報告</div>
+  <h2 class="title">How did they report it? One thesis per group, one sheet each</h2>
+  <div class="title-zh zh">他們怎麼報告？每組一篇論文，每人一份報告表</div>
+  <div class="chain" data-on="rq,fl,dv,ds,tl,rs,ap"></div>
+  <div class="sg">
+    <aside class="sum"><details open><summary>Summary 總結</summary>
+      <h4>Your five minutes 你們的五分鐘</h4>
+      <ol class="pr">
+        <li>P · I · C · O: who, what was done, compared with what, measured how (with units).<span class="zh">P · I · C · O：對象、介入或條件、比較什麼、量什麼（含單位）。</span></li>
+        <li>Design → tool: factors, levels, between or within → the test the authors used.<span class="zh">設計 → 工具：因子、水準、受試者間或內 → 作者用的檢定。</span></li>
+        <li>The result sentence: read one sentence from the thesis and point at the statistic, the df, the <i>p</i>, the effect size, the CI, the post hoc.<span class="zh">結果句：唸論文裡的一句，指出統計量、自由度、p、效果量、CI、事後比較。</span></li>
+      </ol>
+      <h4>Which tool? 用哪個工具？</h4>
+      <div class="rv" data-rows="num2d,num2s,num3d,num3s,twob,mix,twow,ancova,manova,lmm,catd,none"></div>
+      <h4>References 參考文獻</h4>
+      <ul class="refs" style="font-size:12px;line-height:1.5;color:var(--ink2);padding-left:1.1em;margin:4px 0 0">
+        <li>American Psychological Association. (2020). <i>Publication manual of the American Psychological Association</i> (7th ed.). https://doi.org/10.1037/0000165-000</li>
+        <li>Appelbaum, M., Cooper, H., Kline, R. B., Mayo-Wilson, E., Nezu, A. M., &amp; Rao, S. M. (2018). Journal article reporting standards for quantitative research in psychology: The APA Publications and Communications Board task force report. <i>American Psychologist, 73</i>(1), 3–25. https://doi.org/10.1037/amp0000191</li>
+        <li>Meteyard, L., &amp; Davies, R. A. I. (2020). Best practice guidance for linear mixed-effects models in psychological science. <i>Journal of Memory and Language, 112</i>, 104092. https://doi.org/10.1016/j.jml.2020.104092</li>
+        <li>Vickers, A. J., &amp; Altman, D. G. (2001). Analysing controlled trials with baseline and follow up measurements. <i>BMJ, 323</i>(7321), 1123–1124. https://doi.org/10.1136/bmj.323.7321.1123</li>
+      </ul>
+    </details></aside>
+    <div class="prac">
+      <div class="card" id="c5fam">
+        <h3>Which tool, when<span class="zh">什麼情況，用什麼工具</span></h3>
+        <div class="study">Every tool since Week 4 answers the same chain: factors → levels → DV → between or within → tool. Today you read one of them. The last column counts, among the 73 quantitative master’s theses of this department (AY 110–115), those that use the tool: read in the method chapter for 64 theses, in the abstract for the other 9.<span class="zh">從第四週起的每個工具都回答同一條鏈：因子 → 水準 → 依變項 → 受試者間／內 → 工具。今天你們讀其中一篇。最後一欄是本系 73 篇量化碩士論文（110–115 學年）中用到該工具的篇數：64 篇讀方法章，其餘 9 篇只看摘要。</span></div>
+        <div class="tbl-wrap"><table class="out fam"><thead><tr><th>Situation 情況</th><th>Tool 工具</th><th>Week</th><th>Theses 論文</th></tr></thead>
+          <tbody><tr><td>2 groups, different people 2 組不同的人</td><td>Welch t · independent t 獨立 t</td><td>4</td><td>9</td></tr>
+          <tr><td>2 time points, the same people 2 個時間點同一群人</td><td>Paired t 配對 t</td><td>4</td><td>9</td></tr>
+          <tr><td>a category outcome, different people 結果是類別、不同的人</td><td>χ² test 卡方檢定</td><td>4</td><td>8</td></tr>
+          <tr><td>3 + groups 3 組以上</td><td>One-way ANOVA 單因子</td><td>7</td><td>5</td></tr>
+          <tr><td>two between factors 兩個受試者間因子</td><td>Two-way ANOVA 二因子</td><td>8</td><td>1</td></tr>
+          <tr><td>3 + time points or conditions, the same people 3 個以上條件同一群人</td><td>One-way RM ANOVA 重複量數</td><td>8</td><td rowspan="3">41 (36 named + 5 by design; includes the two rows below)</td></tr>
+          <tr><td>group × time 組別 × 時間</td><td>Mixed ANOVA 混合設計</td><td>8</td></tr>
+          <tr><td>two within factors 兩個受試者內因子</td><td>Two-way RM ANOVA</td><td>8</td></tr>
+          <tr class="new"><td>groups start apart; a covariate 起點不同；有共變數</td><td>ANCOVA · RM ANCOVA 共變數分析</td><td>9</td><td>1 of the 41</td></tr>
+          <tr class="new"><td>2 + DVs that belong together 2 個以上同屬一件事的依變項</td><td>MANOVA 多變量</td><td>9</td><td>2 of the 41</td></tr>
+          <tr class="new"><td>missing values · many trials per person 缺值・每人多次試作</td><td>Linear mixed model 線性混合模型</td><td>9</td><td>3</td></tr>
+          <tr><td>two measured numbers, no factor 兩個數值、沒有因子</td><td>Pearson r · regression 相關・迴歸</td><td>6</td><td>27 · 14</td></tr></tbody></table></div>
+        <p class="ex">Counts from the department ranking (a thesis using two tools is counted twice; one-sample t, non-parametric tests and Spearman are not shown). More than half of the quantitative theses (41 of 73) use a within-subjects ANOVA: the design you learned in Week 8.<span class="zh">篇數來自本系排名（用兩種工具的論文算兩次；單一樣本 t、無母數檢定和 Spearman 沒有列出）。超過一半的量化論文（73 篇中 41 篇）用受試者內變異數分析：就是第八週學的設計。</span></p>
+      </div>
+      <div class="card" id="c5rep">
+        <h3>Read, fill in, send, then present<span class="zh">讀、填、送出、然後報告</span></h3>
+        <div class="study">Choose your group, a field and one thesis (two groups may choose the same thesis). Read the method and results chapters together. Then each of you fills in the three parts on your own page and presses Send: every student sends one sheet. Your group presents in five minutes.<span class="zh">選你的組、一個專長、一篇論文（兩組可以選同一篇）。一起讀方法和結果兩章。然後每人在自己的頁面填三部分，按「送出」：每位學生都要送出一份。全組用五分鐘報告。</span></div>
+        <div class="ctrls"><label class="grp" style="flex:1 1 200px"><b>Group 組別</b> <select id="gGrp" style="font:inherit;font-size:13px;padding:6px 9px;border:1px solid var(--line);border-radius:7px;background:var(--paper);color:var(--ink);width:100%;max-width:240px"></select></label></div>
+        <div class="artpick" id="gFld"></div>
+        <div class="glist" id="gList"></div>
+        <div class="gbox" id="gBox"></div>
+        <div class="ctrls"><button class="act" type="button" id="gSend" hidden>Send my report sheet 送出我的報告表</button></div>
+        <div class="gnote" id="gNote"></div>
+      </div>
+      <div class="card" id="c5ref">
+        <h3>Learning reflection: send by Sunday 8 November<span class="zh">學習心得：11 月 8 日（星期日）前送出</span></h3>
+        <div class="study">Homework, one for each student. After your group has presented, answer the questions below about the thesis you read and press “Send my reflection”. It is sent on its own, separately from the report sheet and the Hand in button. Deadline: Sunday 8 November 2026, 23:59. You can write it at home: open this page again on the same device and your text is still here.<span class="zh">每人一份的功課。全組報告之後，針對你讀的那篇論文回答下面的問題，按「送出學習心得」。它會單獨送出，和報告表、「交回」按鈕分開。期限：2026 年 11 月 8 日（星期日）23:59。可以回家寫：用同一台裝置再打開這一頁，你寫的內容還在。</span></div>
+        <div class="ctrls"><label class="grp" style="flex:1 1 260px"><b>Thesis 論文</b> <select id="rTh" style="font:inherit;font-size:13px;padding:6px 9px;border:1px solid var(--line);border-radius:7px;background:var(--paper);color:var(--ink);width:100%;max-width:420px"></select></label></div>
+        <div class="rpart qcard" id="rBox"></div>
+        <div class="ctrls"><button class="act" type="button" id="rSend">Send my reflection 送出學習心得</button></div>
+        <div class="gnote" id="rNote"></div>
+      </div>
+      <div class="card fm">
+        <h3>Hand in<span class="zh">交回</span></h3>
+        <div class="ctrls"><button class="act" type="button" id="exSend">Send 送出</button><button class="act ghost" type="button" id="exSave">Save file 儲存檔案</button><button class="act ghost" type="button" id="exCopy">Copy 複製</button></div>
+        <div class="note" id="exNote">Press Send before you leave. If it does not say “received”, press Save file and email the file to the TA.<span class="zh">離開前按「送出」。如果沒有顯示「已收到」，按「儲存檔案」，再把檔案 email 給助教。</span></div>
+        <div class="sumbox" id="sumbox" hidden></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div>Fall 2026 Biostatistics and Experimental Design 生物統計與實驗設計 · Week 9 · NTNU</div>
+  <div class="nav"><button class="act ghost" id="prev">← Back 上一步</button><button class="act" id="next">Next 下一步 →</button></div>
+</footer>
+</div>
+
+<script>
+"use strict";
+/* ---------- maths helpers ---------- */
+function mean(a){for(var i=0,s=0;i<a.length;i++)s+=a[i];return s/a.length}
+function vari(a){var m=mean(a),s=0;for(var i=0;i<a.length;i++)s+=(a[i]-m)*(a[i]-m);return s/(a.length-1)}
+function ss(a){var m=mean(a),s=0;for(var i=0;i<a.length;i++)s+=(a[i]-m)*(a[i]-m);return s}
+function lgam(x){var c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,.001208650973866179,-.000005395239384953];
+  var y=x,t=x+5.5;t-=(x+.5)*Math.log(t);var s=1.000000000190015;for(var j=0;j<6;j++)s+=c[j]/++y;return -t+Math.log(2.5066282746310005*s/x)}
+function bcf(a,b,x){var F=1e-300,qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<F)d=F;d=1/d;var h=d;
+  for(var m=1;m<=300;m++){var m2=2*m,aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<F)d=F;c=1+aa/c;if(Math.abs(c)<F)c=F;d=1/d;h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<F)d=F;c=1+aa/c;if(Math.abs(c)<F)c=F;d=1/d;var del=d*c;h*=del;if(Math.abs(del-1)<3e-13)break}return h}
+function ibeta(x,a,b){if(x<=0)return 0;if(x>=1)return 1;
+  var bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2)?bt*bcf(a,b,x)/a:1-bt*bcf(b,a,1-x)/b}
+function pF(f,d1,d2){if(!isFinite(f))return 0;if(f<=0)return 1;return ibeta(d2/(d2+d1*f),d2/2,d1/2)}
+function pTxt(p){return p<.001?'< .001':'= '+p.toFixed(3).replace(/^0/,'')}
+function f2(x){return x.toFixed(2).replace('-','−')}
+function sg2(x){return (x>0?'+':x<0?'−':'')+Math.abs(x).toFixed(2)}
+function noz(x){return x.toFixed(2).replace(/^0/,'')}
+function el(id){return document.getElementById(id)}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+var T={};function theme(){T={ink:css('--ink'),ink2:css('--ink2'),muted:css('--muted'),line:css('--line'),acc:css('--accent'),accs:css('--accent-soft'),sig:css('--signal'),sigs:css('--signal-soft'),gold:css('--gold'),golds:css('--gold-soft'),card:css('--card'),sunk:css('--sunk')}}theme();
+
+/* ---------- canvas ---------- */
+var CW=600,NARROW=false;
+function fit(cv){if(!cv.dataset.h)cv.dataset.h=cv.getAttribute('height');var d=window.devicePixelRatio||1,w=cv.clientWidth||600;NARROW=w<560;CW=w;
+  var h=parseInt((NARROW&&cv.dataset.hm)?cv.dataset.hm:cv.dataset.h,10);cv.width=Math.round(w*d);cv.height=Math.round(h*d);var g=cv.getContext('2d');g.setTransform(d,0,0,d,0,0);g.clearRect(0,0,w,h);return{g:g,w:w,h:h}}
+function lbl(g,t,x,y,c,sz,al){g.fillStyle=c;g.font=(sz||11)+'px "IBM Plex Mono", monospace';al=al||'center';g.textAlign=al;var m=g.measureText(t).width,L=(al==='left')?x:(al==='right')?x-m:x-m/2;
+  if(L+m>CW-2)x-=(L+m-(CW-2));if(L<2)x+=(2-L);g.fillText(t,x,y)}
+function line(g,x1,y1,x2,y2,c,w,dash){g.strokeStyle=c;g.lineWidth=w||1;g.setLineDash(dash||[]);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.setLineDash([])}
+function dot(g,x,y,r,fill,stroke){g.beginPath();g.arc(x,y,r,0,2*Math.PI);g.fillStyle=fill;g.fill();if(stroke){g.strokeStyle=stroke;g.lineWidth=1.5;g.stroke()}}
+function diamond(g,x,y,r,fill,stroke){g.beginPath();g.moveTo(x,y-r);g.lineTo(x+r,y);g.lineTo(x,y+r);g.lineTo(x-r,y);g.closePath();g.fillStyle=fill;g.fill();if(stroke){g.strokeStyle=stroke;g.lineWidth=1.5;g.stroke()}}
+function yaxis(g,P,w,h,Y,ticks,lab){ticks.forEach(function(v){line(g,P.l,Y(v),w-P.r,Y(v),T.line,1);lbl(g,String(v),P.l-5,Y(v)+4,T.muted,10.5,'right')});
+  g.save();g.translate(11,(P.t+h-P.b)/2);g.rotate(-Math.PI/2);g.fillStyle=T.ink2;g.font='10.5px "IBM Plex Mono", monospace';g.textAlign='center';g.fillText(lab,0,0);g.restore()}
+
+
+/* ---------- data ---------- */
+/* Version A (Week 8, randomised): W8_Plyo_Demo_Wide_2026.csv */
+var A={Control:{id:['C01','C02','C03','C04','C05','C06','C07','C08'],pre:[31.9,34.6,36.5,37.6,39.6,40.9,42.5,44.4],post:[31.8,36.4,34.5,41.6,38.8,41.7,45.5,45.7],spre:[3.42,3.35,3.34,3.30,3.27,3.25,3.24,3.15],spost:[3.43,3.31,3.36,3.23,3.26,3.29,3.21,3.15]},
+  Plyometric:{id:['P01','P02','P03','P04','P05','P06','P07','P08'],pre:[32.4,34.1,35.6,37.3,38.8,40.3,41.8,43.7],post:[36.6,35.2,41.5,39.2,45.7,43.5,46.9,47.4],spre:[3.41,3.36,3.33,3.31,3.28,3.26,3.23,3.22],spost:[3.32,3.31,3.20,3.23,3.17,3.23,3.15,3.15]}};
+/* Version B (today, the players chose): W9_Plyo_SelfSelect_Wide_2026.csv */
+var B={Control:{id:['C01','C02','C03','C04','C05','C06','C07','C08'],pre:[33.4,36.1,38.0,39.1,41.1,42.4,44.0,45.9],post:[36.0,37.9,38.4,41.0,42.2,43.2,43.0,46.3]},
+  Plyometric:{id:['P01','P02','P03','P04','P05','P06','P07','P08'],pre:[28.4,31.1,33.0,34.1,36.1,37.4,39.0,40.9],post:[33.5,34.6,37.8,40.3,39.2,40.7,43.5,42.4]}};
+var SLOPE=0.8;   /* the within-group slope used when the slider moves the gap: post moves 0.80 cm per 1 cm of pre */
+var GN=['Control','Plyometric'],GZ={Control:'對照組',Plyometric:'增強式組'};
+function gcol(n){return n==='Plyometric'?T.acc:T.gold}
+var JIT=[-.22,.1,-.08,.2,-.15,.14,-.02,.06];
+/* version B with the pre-test gap set to g cm (5 = the data file) */
+function verB(g){var s=5-g,o={Control:{pre:B.Control.pre.slice(),post:B.Control.post.slice()},Plyometric:{pre:B.Plyometric.pre.map(function(v){return v+s}),post:B.Plyometric.post.map(function(v){return v+SLOPE*s})}};return o}
+/* Welch t on two arrays (b - a) */
+function welch(a,b){var va=vari(a),vb=vari(b),se=Math.sqrt(va/a.length+vb/b.length),t=(mean(b)-mean(a))/se,df=Math.pow(va/a.length+vb/b.length,2)/(Math.pow(va/a.length,2)/(a.length-1)+Math.pow(vb/b.length,2)/(b.length-1));return{t:t,df:df,p:pF(t*t,1,df),d:mean(b)-mean(a)}}
+/* change-score comparison = the Group x Time interaction of the mixed ANOVA (Week 8) */
+function inter(D){var dP=D.Plyometric.post.map(function(v,i){return v-D.Plyometric.pre[i]}),dC=D.Control.post.map(function(v,i){return v-D.Control.pre[i]});var s2=(ss(dP)+ss(dC))/14,a=mean(dP),b=mean(dC),F=(a-b)*(a-b)/(s2/4);return{F:F,p:pF(F,1,14),dP:a,dC:b,d:a-b,e:F/(F+14)}}
+/* ANCOVA: post ~ pre + group, pooled within-group slope */
+function ancova(D){var sxx=0,sxy=0,syy=0,M={};GN.forEach(function(n){var x=D[n].pre,y=D[n].post,mx=mean(x),my=mean(y);M[n]={x:mx,y:my};for(var i=0;i<8;i++){sxx+=(x[i]-mx)*(x[i]-mx);sxy+=(x[i]-mx)*(y[i]-my);syy+=(y[i]-my)*(y[i]-my)}});
+  var b=sxy/sxx,sse=syy-sxy*sxy/sxx,mse=sse/13,dx=M.Plyometric.x-M.Control.x,adj=(M.Plyometric.y-M.Control.y)-b*dx,se=Math.sqrt(mse*(1/8+1/8+dx*dx/sxx)),F=adj*adj/(se*se),ssg=F*mse;
+  var gx=(M.Plyometric.x+M.Control.x)/2,ac=M.Control.y+b*(gx-M.Control.x),ap=M.Plyometric.y+b*(gx-M.Plyometric.x);
+  return{b:b,adj:adj,se:se,F:F,p:pF(F,1,13),e:ssg/(ssg+sse),gx:gx,ac:ac,ap:ap,lo:adj-2.160*se,hi:adj+2.160*se,M:M,mse:mse}}
+
+/* stage 1 · pre and post, one line per player (version B) */
+function prePostB(cv,D){var o=fit(cv),g=o.g,w=o.w,h=o.h,P={l:NARROW?36:44,r:12,t:14,b:38},yr=[26,50];
+  var pw=(w-P.l-P.r)/2,Y=function(v){return h-P.b-(v-yr[0])/(yr[1]-yr[0])*(h-P.t-P.b)};
+  g.fillStyle=T.card;g.fillRect(0,0,w,h);yaxis(g,P,w,h,Y,[30,35,40,45,50],'jump 跳躍 (cm)');
+  GN.forEach(function(n,i){var x0=P.l+i*pw,xa=x0+pw*.26,xb=x0+pw*.74,c=gcol(n);
+    if(i)line(g,x0,P.t,x0,h-P.b,T.line,1,[3,3]);
+    lbl(g,'Pre',xa,h-P.b+15,T.muted,10.5);lbl(g,'Post',xb,h-P.b+15,T.muted,10.5);lbl(g,n+(NARROW?'':' '+GZ[n]),(xa+xb)/2,h-P.b+31,T.ink2,11);
+    D[n].pre.forEach(function(v,j){line(g,xa,Y(v),xb,Y(D[n].post[j]),c,1.2);dot(g,xa,Y(v),3.8,c,T.card);dot(g,xb,Y(D[n].post[j]),3.8,c,T.card)});
+    var mp=mean(D[n].pre),mq=mean(D[n].post);line(g,xa,Y(mp),xb,Y(mq),T.ink2,3.2);lbl(g,f2(mp),xa-6,Y(mp)+4,T.ink2,10.5,'right');lbl(g,f2(mq),xb+6,Y(mq)+4,T.ink2,10.5,'left');
+    lbl(g,sg2(mq-mp),(xa+xb)/2,P.t+8,c,11.5)})}
+/* stage 1 · post against pre, two parallel lines, the adjusted gap at the grand pre mean */
+function ancPlot(cv,D,R,step){step=step||3;var o=fit(cv),g=o.g,w=o.w,h=o.h,P={l:NARROW?40:48,r:NARROW?14:22,t:18,b:40},xr=[26,48],yr=[30,50];
+  var X=function(v){return P.l+(v-xr[0])/(xr[1]-xr[0])*(w-P.l-P.r)},Y=function(v){return h-P.b-(v-yr[0])/(yr[1]-yr[0])*(h-P.t-P.b)};
+  g.fillStyle=T.card;g.fillRect(0,0,w,h);yaxis(g,P,w,h,Y,[30,35,40,45,50],'post 後測 (cm)');
+  [30,35,40,45].forEach(function(v){line(g,X(v),P.t,X(v),h-P.b,T.line,1);lbl(g,String(v),X(v),h-P.b+15,T.muted,10.5)});lbl(g,'pre 前測 (cm)',(P.l+w-P.r)/2,h-6,T.ink2,11);
+  GN.forEach(function(n){var c=gcol(n),x=D[n].pre,y=D[n].post,mx=R.M[n].x,my=R.M[n].y,x1=Math.min.apply(null,x)-1,x2=Math.max.apply(null,x)+1;
+    line(g,X(x1),Y(my+R.b*(x1-mx)),X(x2),Y(my+R.b*(x2-mx)),c,2.2);
+    x.forEach(function(v,i){dot(g,X(v),Y(y[i]),4.2,c,T.card)});
+    diamond(g,X(mx),Y(my),9,c,T.card)});
+  var LG=[];GN.slice().reverse().forEach(function(n){LG.push(['◆ '+(NARROW?(n==='Plyometric'?'Plyo':'Ctrl'):n)+' mean 平均 '+f2(R.M[n].x)+' → '+f2(R.M[n].y),gcol(n)])});
+  var lgd=el('lg1b');if(lgd){lgd.hidden=!NARROW;lgd.innerHTML=LG.map(function(r){return '<span style="color:'+r[1]+';display:block">'+r[0]+'</span>'}).join('')}
+  if(!NARROW){g.font='10.5px "IBM Plex Mono", monospace';var lw=0;LG.forEach(function(r){lw=Math.max(lw,g.measureText(r[0]).width)});var lx=w-P.r-lw-12,ly=h-P.b-LG.length*15-8;
+  g.globalAlpha=.92;g.fillStyle=T.card;g.fillRect(lx,ly,lw+10,LG.length*15+6);g.globalAlpha=1;g.strokeStyle=T.line;g.lineWidth=1;g.strokeRect(lx,ly,lw+10,LG.length*15+6);
+  LG.forEach(function(r,i){lbl(g,r[0],lx+5,ly+14+i*15,r[1],10.5,'left')})}
+  
+  if(step<2)return;
+  var gx=R.gx;line(g,X(gx),P.t,X(gx),h-P.b,T.ink2,1,[4,4]);lbl(g,'mean pre 平均前測 '+f2(gx),X(gx),P.t+10,T.ink2,10.5);
+  var ya=Y(R.ac),yp=Y(R.ap);line(g,X(gx),ya,X(gx),yp,T.ink,2.6);line(g,X(gx)-5,ya,X(gx)+5,ya,T.ink,2.6);line(g,X(gx)-5,yp,X(gx)+5,yp,T.ink,2.6);
+  var t1='Same start: '+f2(R.adj)+' cm apart',t2='起點一樣，相差 '+f2(R.adj)+' 公分';g.font='bold 12px "IBM Plex Mono", monospace';var tw=Math.max(g.measureText(t1).width,g.measureText(t2).width*1.1),bx=X(gx)+14,by=P.t+20;if(bx+tw+12>w-P.r)bx=X(gx)-tw-26;line(g,bx<X(gx)?X(gx)-5:X(gx)+5,(ya+yp)/2,bx<X(gx)?bx+tw+12:bx,by+18,T.ink,1);
+  g.fillStyle=T.card;g.strokeStyle=T.ink;g.lineWidth=1;g.fillRect(bx,by,tw+12,36);g.strokeRect(bx,by,tw+12,36);lbl(g,t1,bx+6,by+14,T.ink,12,'left');lbl(g,t2,bx+6,by+30,T.ink,12,'left')}
+/* stage 2 · the two changes, one point per player */
+function corrPlot(cv){var o=fit(cv),g=o.g,w=o.w,h=o.h,P={l:NARROW?44:52,r:16,t:18,b:40},xr=[-4,9],yr=[-.15,.08];
+  var X=function(v){return P.l+(v-xr[0])/(xr[1]-xr[0])*(w-P.l-P.r)},Y=function(v){return h-P.b-(v-yr[0])/(yr[1]-yr[0])*(h-P.t-P.b)};
+  g.fillStyle=T.card;g.fillRect(0,0,w,h);yaxis(g,P,w,h,Y,[-.15,-.1,-.05,0,.05],'sprint change 衝刺變化 (s)');
+  [-4,-2,0,2,4,6,8].forEach(function(v){line(g,X(v),P.t,X(v),h-P.b,T.line,1);lbl(g,String(v).replace('-','−'),X(v),h-P.b+15,T.muted,10.5)});lbl(g,'jump change 跳躍變化 (cm)',(P.l+w-P.r)/2,h-6,T.ink2,11);
+  line(g,X(0),P.t,X(0),h-P.b,T.ink2,1,[3,3]);line(g,P.l,Y(0),w-P.r,Y(0),T.ink2,1,[3,3]);
+  (function(){var u=[],v=[];GN.forEach(function(n){A[n].post.forEach(function(q,i){u.push(q-A[n].pre[i]);v.push(A[n].spost[i]-A[n].spre[i])})});var mu=mean(u),mv=mean(v),a=0,c=0;for(var i=0;i<u.length;i++){a+=(u[i]-mu)*(v[i]-mv);c+=(u[i]-mu)*(u[i]-mu)}
+    var b=a/c,x1=Math.min.apply(null,u),x2=Math.max.apply(null,u);line(g,X(x1),Y(mv+b*(x1-mu)),X(x2),Y(mv+b*(x2-mu)),T.ink2,1.8);lbl(g,'trend line 趨勢線',X(x1)+2,Y(mv+b*(x1-mu))-10,T.ink2,10.5,'left')})();
+  var xs=[],ys=[];GN.forEach(function(n){var c=gcol(n);A[n].post.forEach(function(v,i){var dx=v-A[n].pre[i],dy=A[n].spost[i]-A[n].spre[i];xs.push(dx);ys.push(dy);dot(g,X(dx),Y(dy),4.4,c,T.card)});
+    var mx=mean(A[n].post.map(function(v,i){return v-A[n].pre[i]})),my=mean(A[n].spost.map(function(v,i){return v-A[n].spre[i]}));diamond(g,X(mx),Y(my),7,T.card,c);lbl(g,n+' '+sg2(mx)+' cm, '+(my>=0?'+':'−')+Math.abs(my).toFixed(2)+' s',X(mx),Y(my)-13,c,10.5)});
+  var mx=mean(xs),my=mean(ys),sxy=0,sxx=0,syy=0;for(var i=0;i<16;i++){sxy+=(xs[i]-mx)*(ys[i]-my);sxx+=(xs[i]-mx)*(xs[i]-mx);syy+=(ys[i]-my)*(ys[i]-my)}
+  lbl(g,'r = '+noz(sxy/Math.sqrt(sxx*syy)),w-P.r-4,P.t+10,T.ink,12,'right')}
+
+/* ---------- event log (append-only; same 27 columns as Week 7) ---------- */
+var LESSON='W9_ANCOVA_MANOVA_LMM',CONTENT='2026.3',SCHEMA='1',STORE='W9_ANOVA_'+CONTENT;
+/* Class Google Sheet: the Apps Script web-app URL (ends in /exec). Empty = Save file only. */
+var SHEET_URL='https://script.google.com/macros/s/AKfycbyxQXJoqw1t_kgMOYkvW8G-UVatmi3Km5gMFSBqjzDCccotR6ypNo0wShJwiuJSo3-q/exec';   /* Week 9 Apps Script web app (deployed 2026-10-29). Empty = Save file only. */
+var SENT=0;
+var EV=[],SEQ=0,T0=performance.now(),SID=null,VIS={page:'p0',since:performance.now(),acc:{}},USED={};
+function sid(){return 'S'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function now(){return new Date().toISOString()}
+function tz(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){return ''}}
+function who(){return el('who').value.trim()}
+function log(o){SEQ++;var e={schema_version:SCHEMA,lesson_id:LESSON,content_version:CONTENT,learner_name:who(),session_id:SID,event_id:SID+'-'+SEQ,sequence_no:SEQ,
+  event_time:now(),timezone:tz(),elapsed_ms:Math.round(performance.now()-T0),page_id:o.page_id||VIS.page,item_id:o.item_id||'',item_version:o.item_version||'',event_type:o.event_type,
+  attempt_no:o.attempt_no||'',selected_option:o.selected_option||'',correctness:o.correctness||'',reason_option:o.reason_option||'',confidence:o.confidence||'',
+  support_type:o.support_type||'',hint_level:o.hint_level||'',answer_revealed:o.answer_revealed||'',prior_event_id:o.prior_event_id||'',visible_duration_ms:o.visible_duration_ms||'',
+  data_origin:o.data_origin||'observed_in_page',completion_status:o.completion_status||'',other_text:o.other_text||''};
+  if(o.option_text)e.option_text=o.option_text;
+  if(o.group)e.group=o.group;
+  if(o.refl)e.refl=o.refl;
+  EV.push(e);save();return e.event_id}
+function used(w,page,opt){if(USED[w])return;USED[w]=1;log({page_id:page,item_id:w,event_type:'widget_use',selected_option:opt||'',data_origin:'observed_in_page'})}
+function save(){try{localStorage.setItem(STORE,JSON.stringify({sid:SID,seq:SEQ,ev:EV,st:ST,name:who(),ui:UI,used:USED,sent:SENT}))}catch(e){}}
+function visTick(){var n=performance.now();if(document.visibilityState==='visible'){VIS.acc[VIS.page]=(VIS.acc[VIS.page]||0)+(n-VIS.since)}VIS.since=n}
+document.addEventListener('visibilitychange',function(){visTick();log({event_type:'visibility_change',selected_option:document.visibilityState})});
+window.addEventListener('pagehide',function(){visTick();save()});
+
+/* ---------- items ---------- */
+var UNS=['unsure','Not sure','不確定'];
+var TOOLS={welch:['welch','Welch t','Welch t 檢定'],paired:['paired','Paired t','配對 t'],anova:['anova','One-way ANOVA','單因子變異數分析'],
+  rm1:['rm1','One-way RM ANOVA','單因子重複量數變異數分析'],twob:['twob','Two-way ANOVA','二因子變異數分析'],mix:['mix','Mixed ANOVA','混合設計變異數分析'],
+  twow:['twow','Two-way RM ANOVA','二因子重複量數變異數分析'],ancova:['ancova','ANCOVA','共變數分析'],rmancova:['rmancova','RM ANCOVA','重複量數共變數分析'],
+  manova:['manova','MANOVA','多變量變異數分析'],lmm:['lmm','Linear mixed model','線性混合模型'],r:['r','Pearson r','皮爾森相關'],chi:['chi','χ² test','卡方檢定']};
+function tools(list){return list.map(function(k){return TOOLS[k]}).concat([UNS])}
+var ITEMS=[
+ /* ---- stage 1 · ANCOVA ---- */
+ {id:'s1_post',page:'p1',m:'q_s1a',q:['After training: control 41.00 cm, plyometric 39.00 cm. Did plyometric training fail?','訓練後：對照組 41.00 公分，增強式組 39.00 公分。增強式訓練失敗了嗎？'],key:'start',
+  opts:[['yes','Yes: the control group jumps higher after training','失敗：訓練後對照組跳得比較高'],['start','Cannot tell from the post-test: the plyometric group started 5.00 cm lower','光看後測不能說：增強式組起點低了 5.00 公分'],['small','No: 2.00 cm is too small to matter','沒有：2.00 公分太小，沒有意義'],UNS],
+  hints:[['Baseline 前測: each player’s jump before training.','前測：每位球員訓練前的跳躍。'],['Week 8: a difference after training is not an improvement. Here the groups were apart before training too.','第八週：訓練後的差距不等於進步。這裡兩組訓練前就有差距。'],['Control 40.00 → 41.00; plyometric 35.00 → 39.00. Who improved more?','對照組 40.00 → 41.00；增強式組 35.00 → 39.00。誰進步比較多？'],['Cannot tell from the post-test alone: the plyometric group started 5.00 cm lower and gained 4.00 cm; the control gained 1.00.','光看後測不能說：增強式組起點低 5.00 公分，進步了 4.00；對照組進步 1.00。']],
+  ofb:{yes:['Higher after training, but where did each group start?','訓練後比較高，但兩組各自從哪裡開始？'],small:['The size is not the issue: the groups did not start from the same place.','不是大小的問題：兩組的起點不一樣。']},
+  fb:['Cannot tell from the post-test alone. The groups started 5.00 cm apart.','光看後測不能說。兩組起點差 5.00 公分。']},
+ {id:'s1_same',page:'p1',m:'q_s1b',q:['Move the gap from 5.00 cm to 0. Which answer stays (almost) the same?','把前測差距從 5.00 公分拉到 0。哪一個答案（幾乎）不變？'],key:'anc',
+  opts:[['post','The post-test comparison','後測比較'],['chg','The change comparison (Group × Time)','變化量比較（組別 × 時間）'],['anc','ANCOVA’s adjusted difference','ANCOVA 的校正後差距'],UNS],
+  hints:[['Adjusted 校正後: compared at the same pre-test.','校正後：在同一個前測值上比較。'],['The post-test answer moves with the gap; the change answer credits the lower starters for rising on their own.','後測答案跟著差距走；變化量答案把起點低的人自然回升也算成訓練。'],['At gap 0 all three say 2.00 cm. At gap 5.00 only one still says about 2.00.','差距 0 時三個都說 2.00 公分。差距 5.00 時只剩一個還說大約 2.00。'],['ANCOVA: 1.98–2.00 cm at every gap. It compares players with the same pre-test.','ANCOVA：任何差距都是 1.98–2.00 公分。它比較的是前測相同的球員。']],
+  ofb:{post:['Watch the post-test number: it went from −2.00 to +2.00.','看後測那個數字：從 −2.00 變成 +2.00。'],chg:['Watch the change number: 3.00 at gap 5.00, 2.00 at gap 0.','看變化量那個數字：差距 5.00 時是 3.00，差距 0 時是 2.00。']},
+  fb:['ANCOVA. Its answer does not depend on where the groups started.','ANCOVA。它的答案不受兩組起點影響。']},
+ {id:'s1_q',page:'p1',m:'q_s1b',q:['ANCOVA says 1.98 cm, p = .006. Which question does that number answer?','ANCOVA 說 1.98 公分，p = .006。這個數字回答的是哪一個問題？'],key:'same',
+  opts:[['high','Which group jumps higher after training?','訓練後哪一組跳得比較高？'],['chg','Did the plyometric group improve from pre to post?','增強式組從前測到後測有沒有進步？'],['same','For players with the same pre-test, how much more did plyometric training add?','前測相同的球員，增強式訓練多加了多少？'],UNS],
+  hints:[['Covariate 共變數: a measured number the analysis holds constant (here the pre-test).','共變數：分析時固定住的一個數值（這裡是前測）。'],['ANCOVA moves every player to the same pre-test (37.50 cm) and compares the post-tests there.','ANCOVA 把每位球員移到同一個前測值（37.50 公分），在那裡比較後測。'],['Adjusted means: control 39.01, plyometric 40.99: for a player starting at 37.50, plyometric training adds about 2 cm.','校正後平均數：對照組 39.01，增強式組 40.99：起點 37.50 的球員，增強式訓練多加約 2 公分。'],['For players with the same pre-test, plyometric training adds 1.98 cm more than usual training.','前測相同的球員，增強式訓練比平常訓練多加 1.98 公分。']],
+  ofb:{high:['That is the post-test question: 39.00 vs 41.00, the control is higher.','那是後測的問題：39.00 vs 41.00，對照組比較高。'],chg:['That is one group’s change (+4.00). ANCOVA compares two groups.','那是一組的變化（+4.00）。ANCOVA 比較的是兩組。']},
+  fb:['For players with the same pre-test: plyometric training adds 1.98 cm more.','前測相同的球員：增強式訓練多加 1.98 公分。']},
+ /* ---- stage 2 · MANOVA ---- */
+ {id:'s2_three',page:'p2',m:'q_s2a',q:['A thesis measures jump, 20-m sprint and agility after training and runs three separate tests, each at α = .05. What is the problem?','一篇論文在訓練後量了跳躍、20 公尺衝刺和敏捷性，分開做三個檢定，每個 α = .05。問題在哪裡？'],key:'fam',
+  opts:[['none','No problem: three outcomes need three tests','沒問題：三個結果就要三個檢定'],['fam','Three chances of a false positive: correct the p values (Holm) or ask one question with MANOVA','三次假陽性的機會：校正 p 值（Holm）或用 MANOVA 問一次'],['big','The tests must be ANOVAs, not t-tests','要用變異數分析，不能用 t 檢定'],UNS],
+  hints:[['Familywise error 族系錯誤率: the chance that at least one of several tests is a false positive.','族系錯誤率：幾個檢定裡至少一個是假陽性的機會。'],['One test at .05: 5% risk. Three tests: about 14%.','一個檢定 .05：5% 風險。三個檢定：約 14%。'],['Week 7 post hoc: many pairs → Tukey. Many DVs → the same idea.','第七週的事後比較：很多對 → Tukey。很多依變項 → 同一個道理。'],['Three tests = three chances of a false positive. Either correct the p values (Holm) or ask one question about the set (MANOVA).','三個檢定 = 三次假陽性的機會。要麼校正 p 值（Holm），要麼用 MANOVA 問一次。']],
+  ofb:{none:['Three tests at .05 each: what is the chance that at least one is a false positive?','三個各 .05 的檢定：至少一個假陽性的機會有多大？'],big:['t-test or ANOVA gives the same p with two groups. The issue is the number of tests.','兩組時 t 檢定和變異數分析的 p 一樣。問題在檢定的個數。']},
+  fb:['Three tests = three chances of a false positive. Correct the p values, or ask once with MANOVA.','三個檢定 = 三次假陽性的機會。校正 p 值，或用 MANOVA 問一次。']},
+ {id:'s2_when',page:'p2',m:'q_s2a',q:['When does MANOVA add something that separate tests do not?','什麼時候 MANOVA 比分開檢定多給了什麼？'],key:'set',
+  opts:[['always','Always: more DVs, more power','永遠：依變項越多，檢定力越強'],['set','When the DVs belong together and are correlated, and the question is about the set','當依變項屬於同一件事、彼此相關，而問題是關於整組的'],['never','Never: thesis committees prefer separate ANOVAs','從不：口試委員比較喜歡分開做'],UNS],
+  hints:[['Multivariate 多變量: several DVs analysed together.','多變量：幾個依變項一起分析。'],['Jump change and sprint change here: r = −.85. They move together, one “explosive power”.','這裡跳躍變化和衝刺變化：r = −.85。它們一起動，是同一個「爆發力」。'],['In 74 department theses, 1 used MANOVA; most ran separate ANOVAs, because each DV was its own question.','本系 74 篇論文裡 1 篇用 MANOVA；多數分開跑，因為每個依變項各是一個問題。'],['When the DVs belong together and are correlated, and the question is about the set. Each DV its own question → separate tests with a correction.','當依變項屬於同一件事、彼此相關，而問題是關於整組的。每個依變項各是一個問題 → 分開檢定加校正。']],
+  ofb:{always:['Unrelated DVs make MANOVA weaker, not stronger, and harder to interpret.','依變項不相關時 MANOVA 反而更弱、更難解釋。'],never:['Some questions are about the set: the rhythmic-gymnastics thesis (110) used one.','有些問題就是關於整組的：韻律體操那篇論文（110）就用了。']},
+  fb:['When the DVs belong together and the question is about the set.','當依變項屬於同一件事，而問題是關於整組的。']},
+ /* ---- stage 3 · LMM ---- */
+ {id:'s3_drop',page:'p3',m:'q_s3a',q:['C05 sprained an ankle and has no post-test. In a mixed ANOVA, what happens to her pre-test?','C05 扭傷腳踝，沒有後測。在混合設計變異數分析裡，她的前測怎麼了？'],key:'drop',
+  opts:[['keep','It is kept: the Pre mean uses 16 players','保留：前測平均用 16 位'],['drop','It is deleted with her: the whole player is dropped (13 players left)','跟著她一起刪掉：整位球員被排除（剩 13 位）'],['fill','It is copied into Post','被複製到後測'],UNS],
+  hints:[['Listwise deletion 整列刪除: a player with any missing cell is removed from the whole analysis.','整列刪除：任何一格缺值的球員，整個分析都不算她。'],['A within factor needs each player at every level: Pre and Post.','受試者內因子要求每位球員每個水準都有：前測和後測。'],['R (afex) prints a warning: “Missing values for 3 ID(s)… removed”; in Jamovi the N in the table drops to 13.','R（afex）會印警告：「3 位 ID 有缺值……已移除」；Jamovi 的表裡 N 會變成 13。'],['Deleted with her: the whole player is dropped. Three players out, 13 left, F(1, 11) = 7.76.','跟著她一起刪掉：整位球員被排除。三位出局，剩 13 位，F(1, 11) = 7.76。']],
+  ofb:{keep:['A within factor needs both values from the same player. With one missing, what does the software do with the other?','受試者內因子需要同一位球員的兩個值。少一個時，軟體怎麼處理另一個？'],fill:['No software fills a value in by itself.','沒有軟體會自己補一個值進去。']},
+  fb:['Deleted with her: the whole player is dropped. Three players out, 13 left.','跟著她一起刪掉：整位球員被排除。三位出局，剩 13 位。']},
+ {id:'s3_rows',page:'p3',m:'q_s3a',q:['Each player jumps three times at each test: 96 rows. What are the rows?','每位球員每次測驗跳三次：96 列。這些列是什麼？'],key:'meas',
+  opts:[['players','96 players','96 位球員'],['meas','96 measurements of 16 players: the model must be told which rows share a player and a test day','16 位球員的 96 次測量：要告訴模型哪些列屬於同一位球員、同一個測驗日'],['avg','Nothing: average the three first, always','沒什麼：永遠先把三次平均'],UNS],
+  hints:[['Random effect 隨機效果: the model’s way of saying “these rows belong to the same player”.','隨機效果：模型用來說「這些列屬於同一位球員」的方式。'],['Three jumps by one player are more alike than three jumps by three players.','同一位球員的三跳，比三位球員的三跳更相像。'],['96 rows, 5 jumps missing: 91 recorded trials. Treat them as 91 independent measurements of the training effect and F jumps from 7.43 to 35.97: too confident.','96 列，缺 5 跳：記錄到 91 次試跳。把它們當成訓練效果的 91 個獨立證據，F 從 7.43 跳到 35.97：過度自信。'],['Measurements, not players. Tell the model: (1 | ID) + (1 | ID:Time). Averaging first is also fine when nothing is missing.','是測量，不是球員。告訴模型：(1 | ID) + (1 | ID:Time)。沒有缺值時先平均也可以。']],
+  ofb:{players:['There are still 16 players. Who jumped the three times in row 1–3?','還是 16 位球員。第 1–3 列的三跳是誰跳的？'],avg:['Averaging works when nothing is missing; with a lost trial the mean of two is not the same thing.','沒有缺值時平均可以；少了一跳，兩跳的平均就不是同一回事。']},
+  fb:['Measurements of 16 players. The model must know which rows share a player and a test day.','16 位球員的測量。模型要知道哪些列屬於同一位球員、同一個測驗日。']},
+ /* ---- stage 5 · audit, then apply ---- */
+ {id:'s5_audit',page:'p1',m:'q_s1d',q:['Accept, modify or reject this advice?','接受、修改，還是拒絕這段建議？'],key:'reject',
+  opts:[['accept','Accept: the groups are compared after training, that is the question','接受：訓練後比較兩組，就是這個問題'],['modify','Modify: keep the t-test, but also report the pre-test means','修改：保留 t 檢定，但也報告前測平均數'],['reject','Reject: a post-only test ignores the 5.00 cm starting gap; compare players with the same start (ANCOVA) or compare the changes','拒絕：只看後測忽略了 5.00 公分的起點差距；要比較起點相同的球員（ANCOVA）或比較變化量'],UNS],
+  hints:[['Post-only comparison 只比後測: a difference after training, not an improvement.','只比後測：訓練後的差距，不是進步。'],['The advice starts from the right fact (“started lower”) and then throws it away.','這段建議從正確的事實開始（「起點較低」），然後把它丟掉。'],['Card 2: post-test −2.00 cm, p = .267; ANCOVA 1.98 cm, p = .006.','卡片 2：後測 −2.00 公分，p = .267；ANCOVA 1.98 公分，p = .006。'],['Reject. The starting gap is the reason to adjust for the pre-test, not a reason to ignore it.','拒絕。起點差距正是要校正前測的理由，不是忽略它的理由。']],
+  ofb:{accept:['The advice itself says the plyometric group started lower. Does a post-only test use that?','這段建議自己說增強式組起點較低。只比後測有用到這件事嗎？'],modify:['Reporting the pre-test means does not change the test: it still compares 39.00 with 41.00.','報告前測平均數不會改變檢定：它還是在比 39.00 和 41.00。']},
+  fb:['Reject: a post-only test ignores the starting gap. ANCOVA (or the changes) answers the coach.','拒絕：只比後測忽略了起點差距。ANCOVA（或變化量）才回答教練的問題。'],reveal:'clauses'}
+];
+ITEMS.sort(function(a,b){return a.page<b.page?-1:a.page>b.page?1:0});
+
+var ST={};
+function st(id){if(!ST[id])ST[id]={att:[],hints:[],rev:false,conf:'',lock:false,lastEv:''};return ST[id]}
+function item(id){for(var i=0;i<ITEMS.length;i++)if(ITEMS[i].id===id)return ITEMS[i]}
+function isKey(it,v){return Array.isArray(it.key)?it.key.indexOf(v)>=0:it.key===v}
+function render(it){var s=st(it.id),box=el('i_'+it.id);if(!box)return;var sel=box.dataset.sel||'',n=s.att.length,done=s.lock,hn=(it.hints||[]).length;
+  var h='<p class="qt">'+it.q[0]+'<span class="zh">'+it.q[1]+'</span></p><div class="opts'+(it.chips?' chips':'')+'">';
+  var last=n?s.att[n-1]:null,gotIt=done&&last&&last.c==='correct';
+  it.opts.forEach(function(o){var k=isKey(it,o[0]),pressed=done?(last&&last.v===o[0]):(sel===o[0]);
+    var cls=done?(k?(' class="key'+(gotIt?' hit':'')+'"'):(pressed?' class="miss"':' class="dim"')):'';
+    var mk=done?(k?'<span class="mk" aria-hidden="true">✓</span>':(pressed&&last.c==='incorrect'?'<span class="mk" aria-hidden="true">✗</span>':'')):'';
+    h+='<button type="button" data-v="'+o[0]+'"'+cls+' aria-pressed="'+(pressed?'true':'false')+'"'+(done?' disabled':'')+'>'+mk+o[1]+'<span class="zh">'+o[2]+'</span></button>'});
+  h+='</div>';
+  if(it.conf&&!done)h+='<div class="conf">How sure? 有多確定？'+[['low','low 低'],['mid','medium 中'],['high','high 高']].map(function(c){return '<button type="button" data-c="'+c[0]+'" aria-pressed="'+(s.conf===c[0]?'true':'false')+'">'+c[1]+'</button>'}).join('')+'<span style="font-size:11px">optional 可不填</span></div>';
+  h+='<div class="row">'+(done?'':'<button class="act" type="button" data-act="submit">'+(n?'Submit revision 送出修訂':'Submit 送出')+'</button>')+
+     ((done||!hn)?'':'<button class="act ghost" type="button" data-act="hint">Hint 提示'+(s.hints.length?' ('+s.hints.length+'/'+hn+')':'')+'</button>')+'</div>';
+  s.hints.forEach(function(l){var t=it.hints[l-1];h+='<div class="hint"><span class="hl">hint 提示 '+l+' · '+['term 詞語','concept 概念','example 例子','full 完整說明'][l-1]+'</span>'+t[0]+'<span class="zh">'+t[1]+'</span></div>'});
+  if(n){var a=s.att[n-1];
+    if(a.c==='correct')h+='<div class="fb ok"><b class="vd">✓ Correct 答對了</b>'+it.fb[0]+'<span class="zh">'+it.fb[1]+'</span></div>';
+    else if(a.c==='unscored')h+='<div class="fb">'+(done?it.fb[0]:(hn?'Open a hint, then answer again.':'Answer again when you are ready.'))+'<span class="zh">'+(done?it.fb[1]:(hn?'開一個提示，再答一次。':'想好再答一次。'))+'</span></div>';
+    else{var of=(!done&&it.ofb&&it.ofb[a.v])?it.ofb[a.v]:null;
+      h+='<div class="fb no"><b class="vd">'+(done?'✗ Not this one 不是這個':'✗ Not yet 再想想')+'</b>'+(done?'The answer: '+it.fb[0]:(of?of[0]+' ':'')+(hn?'Open a hint or change your answer.':'Change your answer.'))+'<span class="zh">'+(done?'答案：'+it.fb[1]:(of?of[1]:'')+(hn?'開一個提示或修改答案。':'修改答案。'))+'</span></div>'}}
+  box.innerHTML=h;box.className='qcard'+(done?' locked':'')}
+function finish(it){if(it.reveal){el(it.reveal).hidden=false}if(it.after)it.after();youCheck()}
+function mount(it){var parent=el(it.m),d=document.createElement('div');d.id='i_'+it.id;d.className='qcard';d.dataset.sel='';parent.appendChild(d);render(it);
+  d.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var s=st(it.id);
+    if(b.dataset.v!==undefined&&!s.lock){d.dataset.sel=b.dataset.v;render(it);return}
+    if(b.dataset.c!==undefined){s.conf=(s.conf===b.dataset.c?'':b.dataset.c);render(it);return}
+    if(b.dataset.act==='hint'){if(s.hints.length>=(it.hints||[]).length)return;var lv=s.hints.length+1;s.hints.push(lv);
+      s.lastEv=log({page_id:it.page,item_id:it.id,item_version:CONTENT,event_type:'hint_open',hint_level:lv,support_type:'prewritten_hint',attempt_no:s.att.length+1,prior_event_id:s.lastEv});render(it);return}
+    if(b.dataset.act==='submit'){if(!who()){gate('Please type your name at the top of Stage 0 first.','請先在 Stage 0 最上面輸入姓名。');return}
+      var v=d.dataset.sel;if(!v){gate('Choose one option first.','請先選一個選項。');return}
+      var c=v==='unsure'?'unscored':(isKey(it,v)?'correct':'incorrect'),no=s.att.length+1;
+      s.att.push({v:v,c:c,t:now()});var fin=(c==='correct')||no>=2;s.lock=fin;s.rev=fin;
+      s.lastEv=log({page_id:it.page,item_id:it.id,item_version:CONTENT,event_type:no===1?'answer_submit':'revision_submit',attempt_no:no,selected_option:v,option_text:(it.opts.filter(function(o){return o[0]===v})[0]||['',''])[1],correctness:c,confidence:s.conf,
+        hint_level:s.hints.length?s.hints[s.hints.length-1]:'',answer_revealed:fin?'yes':'no',prior_event_id:s.lastEv,data_origin:'observed_in_page'});
+      if(fin)log({page_id:it.page,item_id:it.id,item_version:CONTENT,event_type:'answer_reveal',attempt_no:no,prior_event_id:s.lastEv,data_origin:'computed',correctness:c});
+      d.dataset.sel='';render(it);if(fin)finish(it);save();queueSend()}})}
+function gate(en,zh){document.querySelectorAll('.gate').forEach(function(x){x.remove()});var g=document.createElement('div');g.className='gate';g.innerHTML=en+'<span class="zh">'+zh+'</span>';
+  var p=el(PANELS[cur]),h=p.querySelector('.chain');h.parentNode.insertBefore(g,h.nextSibling);setTimeout(function(){g.remove()},4000);if(!who()){go(0);el('who').focus()}}
+
+ITEMS.forEach(mount);
+
+
+/* ---------- UI state ---------- */
+var UI={s1:1,gap:5,lm:'anova',g:{grp:'',fld:'',th:'',ans:{},sub:{}}};
+
+/* ---------- "you can now" cards: shown when every item of the stage is finished ---------- */
+function youCheck(){['p1','p2','p3'].forEach(function(p){var its=ITEMS.filter(function(it){return it.page===p}),done=its.length&&its.every(function(it){return st(it.id).lock});var y=el('you_'+p);if(y)y.hidden=!done})}
+
+/* ---------- stage 1 · the pre-test gap ---------- */
+/* step-by-step reveal in card 1b: 1 points + lines · 2 the vertical gap at the same start · 3 slider + three answers */
+var S1TXT={1:['Each dot is a player. Solid line: post rises 0.80 cm per 1 cm of pre.','每一點是一位球員。實線：前測每高 1 公分，後測高 0.80 公分。','Next: compare at the same start 下一步：在同一個起點比較'],
+ 2:['Read both lines at the same pre-test (the mean, 37.50 cm). The vertical gap between them is the ANCOVA answer.','在同一個前測值（平均 37.50 公分）讀兩條線。兩線之間的垂直距離就是 ANCOVA 的答案。','Next: move the pre-test gap 下一步：移動前測差距'],
+ 3:['Now move the gap. Watch which answer moves and which stays.','現在移動差距。看哪個答案會動、哪個不動。','']};
+function s1step(R){var k=UI.s1||1,t=S1TXT[k];el('st1').innerHTML=t[0].replace('37.50',f2(R.gx))+'<span class="zh">'+t[1].replace('37.50',f2(R.gx))+'</span>';el('nx1').textContent=t[2];el('nx1').hidden=k>=3;el('bk1').hidden=k<=1;el('s1ac').hidden=k<3;el('s1c').hidden=k<3}
+function s1draw(){var D=verB(UI.gap),R=ancova(D),I=inter(D),W=welch(D.Control.post,D.Plyometric.post);if(Math.abs(W.d)<5e-3){W.d=0;W.t=0}
+  prePostB(el('cv1a'),D);ancPlot(el('cv1b'),D,R,UI.s1);s1step(R);el('sG').value=UI.gap;el('vG').textContent=f2(UI.gap)+' cm';el('sGa').value=UI.gap;el('vGa').textContent=f2(UI.gap)+' cm';
+  (function(){var c=R.M.Control,q=R.M.Plyometric,d=c.y-q.y,en,zh;
+   if(Math.abs(d)<5e-3){en='After training the two groups are level.';zh='訓練後兩組一樣高。'}
+   else if(d>0){en='After training the control group is still '+f2(d)+' cm higher.';zh='訓練後對照組還是高 '+f2(d)+' 公分。'}
+   else{en='After training the plyometric group is '+f2(-d)+' cm higher.';zh='訓練後增強式組高 '+f2(-d)+' 公分。'}
+   el('dd1a').innerHTML='Control '+f2(c.x)+' → '+f2(c.y)+' cm ('+sg2(c.y-c.x)+'). Plyometric '+f2(q.x)+' → '+f2(q.y)+' cm ('+sg2(q.y-q.x)+'). '+en+'<span class="zh">對照組 '+f2(c.x)+' → '+f2(c.y)+' 公分（'+sg2(c.y-c.x)+'）。增強式組 '+f2(q.x)+' → '+f2(q.y)+' 公分（'+sg2(q.y-q.x)+'）。'+zh+'</span>'})();
+  var pre=f2(R.M.Plyometric.x)+' vs '+f2(R.M.Control.x);
+  el('ro1').innerHTML='<div><span class="k">Pre-test 前測 (plyo vs control)</span><span class="v">'+pre+'</span></div>'+
+   '<div><span class="k">1 · Post-test only 只比後測</span><span class="v'+(W.p<.05?' sig':'')+'">'+sg2(W.d)+' cm</span><span class="s">Welch <i>t</i>('+W.df.toFixed(2)+') = '+f2(W.t)+', <i>p</i> '+pTxt(W.p)+'</span></div>'+
+   '<div><span class="k">2 · Changes 變化量 (Group × Time, Week 8)</span><span class="v'+(I.p<.05?' sig':'')+'">'+sg2(I.d)+' cm</span><span class="s">'+sg2(I.dP)+' vs '+sg2(I.dC)+' · <i>F</i>(1, 14) = '+f2(I.F)+', <i>p</i> '+pTxt(I.p)+'</span></div>'+
+   '<div><span class="k">3 · ANCOVA · adjusted 校正後</span><span class="v'+(R.p<.05?' sig':'')+'">'+sg2(R.adj)+' cm</span><span class="s">'+f2(R.ap)+' vs '+f2(R.ac)+' at pre '+f2(R.gx)+' · <i>F</i>(1, 13) = '+f2(R.F)+', <i>p</i> '+pTxt(R.p)+'</span></div>';
+  var g=UI.gap,msg;
+  if(g>=4.5)msg=['Gap 5.00 cm (our data). Three questions, three answers: the post-test says the control is ahead; the changes say 3.00; ANCOVA says 1.98 for players with the same start.','差距 5.00 公分（本研究）。三個問題、三個答案：後測說對照組領先；變化量說 3.00；ANCOVA 說起點相同的球員差 1.98。'];
+  else if(g<=0.5)msg=['Gap 0: the groups start together, as in a randomised study. All three answers agree, about 2.00 cm.','差距 0：兩組起點相同，像隨機分組的研究。三個答案一致，約 2.00 公分。'];
+  else msg=['Gap '+f2(g)+' cm. The post-test answer and the change answer move with the gap; the adjusted answer does not.','差距 '+f2(g)+' 公分。後測答案和變化量答案跟著差距走；校正後答案不動。'];
+  el('dd1').innerHTML=msg[0]+'<span class="zh">'+msg[1]+'</span>'}
+el('bk1').onclick=function(){UI.s1=Math.max(1,(UI.s1||1)-1);if(UI.s1<3)UI.gap=5;s1draw();log({page_id:'p1',item_id:'w_s1step',event_type:'widget_use',selected_option:'back_to_'+UI.s1});save()};
+el('nx1').onclick=function(){UI.s1=Math.min(3,(UI.s1||1)+1);s1draw();log({page_id:'p1',item_id:'w_s1step',event_type:'widget_use',selected_option:'next_to_'+UI.s1});save()};
+['sG','sGa'].forEach(function(id){el(id).addEventListener('input',function(){UI.gap=+this.value;s1draw();used('w_gap','p1');save()})});
+document.querySelectorAll('#pre1 button').forEach(function(b){b.onclick=function(){UI.gap=+b.dataset.v;s1draw();used('w_gap','p1',String(UI.gap));save()}});
+
+/* ---------- stage 3 · mixed ANOVA vs linear mixed model on the same 29 measurements ---------- */
+var LM={anova:{n:'Mixed ANOVA 混合設計變異數分析',pl:'13 players kept · 3 dropped (C02, C05, P04)',plz:'留下 13 位 · 排除 3 位（C02、C05、P04）',m:'26 measurements used of 29',mz:'用了 29 筆中的 26 筆',F:'<i>F</i>(1, 11) = 7.76, <i>p</i> = .018, ηp² = .41',est:'Plyometric +4.30 cm, control +1.17 cm → 3.13 cm',estz:'增強式 +4.30 公分，對照 +1.17 公分 → 3.13 公分',
+   line:['One missing cell removes the whole player: her other value is thrown away too.','一格缺值就刪掉整位球員：她另一個值也一起丟掉。']},
+ lmm:{n:'Linear mixed model 線性混合模型',pl:'16 players kept',plz:'留下 16 位',m:'29 measurements used of 29',mz:'用了 29 筆中的 29 筆',F:'<i>F</i>(1, 11.49) = 8.37, <i>p</i> = .014',est:'Group × Time = 3.22 cm, 95% CI [0.77, 5.67], <i>t</i>(11.49) = 2.89, <i>p</i> = .014',estz:'組別 × 時間 = 3.22 公分，95% CI [0.77, 5.67]，t(11.49) = 2.89，p = .014',
+   line:['One row per measurement, the player as a random effect: C02, C05 and P04 keep the value they have. Same question, same line: Group × Time.','一列一筆測量，球員是隨機效果：C02、C05、P04 留下她們有的那個值。同一個問題、同一列：組別 × 時間。']}};
+function s3draw(){var k=UI.lm,L=LM[k];[].forEach.call(el('seg3').children,function(b){b.setAttribute('aria-pressed',b.dataset.v===k?'true':'false')});
+  var dots='';['C01','C02','C03','C04','C05','C06','C07','C08','P01','P02','P03','P04','P05','P06','P07','P08'].forEach(function(id){var miss=(id==='C02'||id==='C05'||id==='P04'),out=miss&&k==='anova';dots+='<span class="pd'+(id[0]==='P'?' p':'')+(out?' out':'')+(miss&&!out?' half':'')+'">'+id+'</span>'});
+  el('pdots').innerHTML=dots;
+  el('ro3').innerHTML='<div><span class="k">Players 球員</span><span class="v">'+L.pl.split(' ')[0]+'</span><span class="s">'+L.pl+'<span class="zh">'+L.plz+'</span></span></div><div><span class="k">Measurements 測量</span><span class="v">'+L.m.split(' ')[0]+'</span><span class="s">'+L.m+'<span class="zh">'+L.mz+'</span></span></div><div><span class="k">Group × Time 組別 × 時間</span><span class="v">'+L.F+'</span><span class="s">'+L.est+'<span class="zh">'+L.estz+'</span></span></div>';
+  el('dd3').innerHTML=L.line[0]+'<span class="zh">'+L.line[1]+'</span>'}
+el('seg3').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;UI.lm=b.dataset.v;s3draw();used('w_lmm','p3',UI.lm);save()});
+
+/* ---------- stage 5 · read a thesis, report in five minutes ---------- */
+var GROUPS=['G1','G2','G3','G4','G5','G6','G7','G8'];
+var GKEY='W9rep-2';
+var FIELDS=[{k:'bio',e:'Biomechanics',z:'運動生物力學'},{k:'phy',e:'Exercise physiology and training',z:'運動生理與訓練'},{k:'mot',e:'Motor control and learning',z:'動作控制與學習'}];
+var TH=[
+ {id:'bio1',f:'bio',ay:'114',t:'探討不同足弓支撐鞋墊對平衡與步態表現之影響',te:'Arch-support insoles, balance and gait'},
+ {id:'bio2',f:'bio',ay:'114',t:'馬拉松Y字拖與跑鞋之運動生物力學差異',te:'Marathon Y-sandals vs running shoes: biomechanics'},
+ {id:'bio3',f:'bio',ay:'112',t:'握持球棒位置對打擊運動學之影響',te:'Bat-grip position and batting kinematics'},
+ {id:'phy1',f:'phy',ay:'113',t:'攝取甜菜根汁對於蹲舉表現之急性影響',te:'Beetroot juice and squat performance'},
+ {id:'phy2',f:'phy',ay:'111',t:'短暫戒菸時進行單次運動對吸菸渴望、戒斷症狀與皮質醇濃度之影響',te:'A single bout of exercise during brief smoking abstinence'},
+ {id:'phy3',f:'phy',ay:'111',t:'跆拳道品勢訓練對於少年下肢反應能力與平衡表現的影響',te:'Taekwondo poomsae training: reaction and balance in boys'},
+ {id:'phy4',f:'phy',ay:'112',t:'運動性肌肉損傷後增補牛奶對下肢運動表現之影響',te:'Milk after exercise-induced muscle damage'},
+ {id:'mot1',f:'mot',ay:'114',t:'排球攔網視覺焦點對動作時間的影響',te:'Visual focus and movement time in volleyball blocking'},
+ {id:'mot2',f:'mot',ay:'110',t:'比較國內外韻律體操整套之動作-時間結構',te:'Action-time structure of rhythmic gymnastics routines: Taiwan vs international'}];
+var PICO=[['P','Participants 對象','who, how many 誰、幾位'],['I','Intervention / condition 介入或條件','what was done 做了什麼'],['C','Comparison 比較','compared with what 和什麼比'],['O','Outcome 結果變項','what was measured, units 量什麼、單位']];
+var PEOPLE=[['b1','one factor, between 一個因子，受試者間'],['w1','one factor, within 一個因子，受試者內'],['bw','one between + one within 一個受試者間 + 一個受試者內'],['ww','two within 兩個受試者內'],['bb','two between 兩個受試者間'],['more','3 + factors 三個以上因子']];
+var RTOOLS=['welch','paired','anova','rm1','twob','mix','twow','ancova','rmancova','manova','lmm','r','chi'];
+var REPORTED=[['stat','Statistic 統計量 (F, t, Λ…)'],['df','df 自由度'],['p','Exact p 精確 p'],['es','Effect size 效果量'],['ci','95% CI'],['ph','Post hoc named 事後比較方法']];
+var ASSUM=[['norm','Normality 常態性'],['sph','Sphericity 球形性'],['hov','Homogeneity of variance 變異數同質性'],['slope','Homogeneity of slopes 斜率同質性'],['none','None reported 沒有報告']];
+function thx(id){for(var i=0;i<TH.length;i++)if(TH[i].id===id)return TH[i]}
+function rep(th){if(!UI.g.rep)UI.g.rep={};if(!UI.g.rep[th])UI.g.rep[th]={P:'',I:'',C:'',O:'',fac:'',ppl:'',tool:'',toolx:'',sent:'',rp:{},as:{},atest:''};return UI.g.rep[th]}
+
+/* ---------- stage 5 · answer key, shown after the sheet is sent ---------- */
+var KEY={
+ bio1:{P:['15 healthy men, 20–30 y','15 名健康成年男性，20–30 歲'],I:['Transverse, longitudinal and combined arch-support insoles','橫弓、縱弓、複合支撐鞋墊'],C:['Normal insole; every man wore all four','一般鞋墊；每人四種都穿'],O:['Plantar pressure (kPa), CoP sway area (mm²) and path (mm), loading rate, ankle range of motion (°)','足底壓力（kPa）、壓力中心晃動面積（mm²）與軌跡（mm）、負荷率、踝關節活動範圍（°）'],
+  fac:['Insole (4 levels); covariate: navicular height (NNHT)','鞋墊（4 個水準）；共變數：舟狀骨高度（NNHT）'],ppl:'w1',tool:'rmancova',
+  sent:'在前足最大壓力峰值方面，鞋墊條件主效應達顯著差異 ( p = .021，ηp² = .148 )。Bonferroni 事後比較結果顯示，COMP 條件之前足最大壓力峰值顯著高於 LONG 條件。',rp:{stat:'n',df:'n',p:'y',es:'y',ci:'n',ph:'y'},
+  note:['No F and no df anywhere in the thesis, only p and ηp². The covariate is one value per person: ask what it can adjust in a within-subjects design.','全篇沒有 F 和自由度，只有 p 和 ηp²。共變數每人只有一個值：想想它在受試者內設計中能校正什麼。']},
+ bio2:{P:['15 healthy male rearfoot-strike runners, 20–45 y','15 名後足著地的健康成年男性跑者，20–45 歲'],I:['Marathon Y-sandals with and without a heel strap, ordinary flip-flops; walking and running','有後跟、無後跟馬拉松 Y 字拖、一般拖鞋；步行與跑步'],C:['Running shoes; everyone did all 4 shoes × 2 modes','跑鞋；每人四款鞋 × 兩種模式都做'],O:['Step length (m), cadence (steps/min), knee and ankle angles (°), shoe–foot separation, tibial acceleration (g), EMG (%MVC)','步長（m）、步頻（steps/min）、膝踝角度（°）、鞋腳分離、脛骨加速度（g）、肌電（%MVC）'],
+  fac:['Shoe (4 levels) × mode (2 levels)','鞋款（4 個水準）× 運動模式（2 個水準）'],ppl:'ww',tool:'twow',
+  sent:'統計結果顯示，鞋款主效果達顯著差異（F(3, 39) = 8.65, p < .001），速度主效果亦達顯著差異（F(1, 13) = 1101.40, p < .001），且鞋款與速度之間存在顯著交互作用（F(3, 39) = 5.36, p = .003）。',rp:{stat:'y',df:'y',p:'y',es:'n',ci:'n',ph:'y'},
+  note:['15 runners were recruited, but F(1, 13) means 14 were analysed; the thesis does not say who was left out. The df tell you the sample size.','招募 15 人，但 F(1, 13) 表示分析了 14 人，論文沒有說少了誰。自由度會告訴你樣本數。']},
+ bio3:{P:['18 right-handed college baseball players (Division 1)','18 名大專公開一級右打棒球員'],I:['Choked-up grip (CU), long grip (OF)','握短棒（CU）、握長棒（OF）'],C:['Standard grip (AO); each player hit 10 tosses with each grip','標準握棒（AO）；每人每種握法各打 10 球'],O:['Joint angles (°), angular velocity (°/s), bat speed, batted-ball speed and angle (°), phase timing','關節角度（°）、角速度（°/s）、棒頭速度、擊球速度與角度（°）、分期時間點'],
+  fac:['Grip (3 levels)','握棒方式（3 個水準）'],ppl:'w1',tool:'rm1',
+  sent:'Right elbow extension：AO 1366 (91)、CU 1424 (56)、OF 1323 (88) °/s，F = 7.812，p = 0.002，CU > AO, OF（表 12）',rp:{stat:'y',df:'n',p:'y',es:'n',ci:'n',ph:'y'},
+  note:['Tables give F and p but no df. Two rows share F = 0.379 with p = .687 and .106: with the same df that cannot be. Ten swings per player were averaged: compare Stage 3 (many trials per person).','表格有 F 和 p，沒有自由度。兩列都是 F = 0.379，p 卻是 .687 和 .106：自由度相同時不可能。每人 10 次打擊先取平均：對照 Stage 3（每人多次試作）。']},
+ phy1:{P:['12 healthy men, squat 1RM ≥ 1.5 × body mass','12 名健康男性，蹲舉 1RM ≥ 1.5 倍體重'],I:['Beetroot juice (400 mg nitrate) 2.5 h before testing','測驗前 2.5 小時喝甜菜根汁（400 mg 硝酸鹽）'],C:['Placebo and control; everyone did all three (control always first)','安慰劑與控制；每人三種都做（控制固定先做）'],O:['Repetitions to failure in 5 sets at 75% 1RM, force, velocity, power, blood lactate, RPE, muscle oxygenation','5 組 75% 1RM 至衰竭的反覆次數、力量、速度、功率、血乳酸、RPE、肌肉氧飽和'],
+  fac:['Treatment (3 levels) × set (5 levels)','處理（3 個水準）× 組數（5 個水準）'],ppl:'ww',tool:'twow',
+  sent:'處理因子與時間因子之交互作用未達顯著差異 (F = 1.480, p > .05)，處理因子達顯著差異 (F = 9.237, p < .05)……BJ 顯著高於 CON (p < .05, d = 1.116)。',rp:{stat:'y',df:'n',p:'n',es:'y',ci:'n',ph:'y'},
+  note:['The interaction is not significant, yet the sets are then compared one by one, with LSD (no correction). Control was always first, so order and treatment cannot be separated.','交互作用不顯著，之後卻逐組比較，用 LSD（不校正）。控制組固定先做，順序和處理效果分不開。']},
+ phy2:{P:['12 male smokers (≥ 3 years, no regular exercise), after 24 h abstinence','12 名吸菸男性（菸齡 ≥ 3 年、無規律運動），戒菸 24 小時'],I:['30 min cycling at RPE 11–13 (n = 6)','30 分鐘腳踏車運動，RPE 11–13（n = 6）'],C:['30 min rest (n = 6); groups matched on nicotine dependence','30 分鐘休息（n = 6）；依成癮分數配對分組'],O:['Withdrawal symptoms (MPSS), craving (scale score), blood cortisol; before abstinence, before and 5 min after the session','戒斷症狀（MPSS）、吸菸渴望（量表分數）、血中皮質醇；戒菸前、介入前、介入後 5 分鐘'],
+  fac:['Group (2 levels) × time (3 levels)','組別（2 個水準）× 時間（3 個水準）'],ppl:'bw',tool:'mix',
+  sent:'結果顯示不同介入與評估時間交互作用上未達顯著差異（F=0.734，p=.492），但本研究仍將兩個因子進行單純主要效果事後比較。',rp:{stat:'y',df:'n',p:'y',es:'n',ci:'n',ph:'n'},
+  note:['Simple main effects after a non-significant interaction, and the thesis says so. Six per group: can “not significant” be read as “no difference”?','交互作用不顯著仍做單純主要效果，論文自己寫明了。每組 6 人：「未達顯著」能讀成「沒有差異」嗎？']},
+ phy3:{P:['16 boys, 12–14 y, no sport training; randomised','16 名國中男生，12–14 歲，無運動訓練；隨機分組'],I:['PE lessons + 8 weeks of taekwondo poomsae (n = 8)','體育課 + 8 週跆拳道品勢訓練（n = 8）'],C:['PE lessons only (n = 8)','只上體育課（n = 8）'],O:['Squat-jump height (cm), reaction time (s), dynamic balance reach (cm); before and after','下蹲跳高度（cm）、反應時間（s）、動態平衡延伸距離（cm）；訓練前後'],
+  fac:['Group (2 levels) × time (2 levels)','組別（2 個水準）× 時間（2 個水準）'],ppl:'bw',tool:'mix',
+  sent:'組別因子與時間因子在交互作用無顯著差異 (p=.372)，而在主要因子上，組別因子達顯著差異 (p=.009)，時間因子未達顯著差異 (p=.051)。',rp:{stat:'n',df:'n',p:'y',es:'n',ci:'n',ph:'n'},
+  note:['Today’s ANCOVA case. The training effect is the interaction (p = .372), but the conclusion rests on the group effect. The groups already differed at pre-test (24.59 vs 21.57 cm).','就是今天的 ANCOVA。訓練效果要看交互作用（p = .372），結論卻依據組別主效果。兩組前測就不同（24.59 vs 21.57 公分）。']},
+ phy4:{P:['24 female team-sport athletes (7 football, 17 basketball); matched groups','24 名女性團體項目選手（足球 7、籃球 17）；配對分組'],I:['606 ml milk after eccentric leg press that induced muscle damage','離心性腿部推蹬誘發肌肉損傷後喝 606 ml 牛奶'],C:['Water','喝水'],O:['Myoglobin (ng/mL), CK, perceived recovery, pain (VAS), thigh girth, CMJ, IMTP, T-test, 20-m sprint; 6 time points','肌紅蛋白（ng/mL）、CK、自覺恢復、疼痛 VAS、大腿圍、CMJ、IMTP、T 型敏捷、20 m 衝刺；6 個時間點'],
+  fac:['Group (2 levels) × time (6 levels)','組別（2 個水準）× 時間（6 個水準）'],ppl:'bw',tool:'mix',
+  sent:'組別因子與時間因子之交互作用達顯著差異 (F = 2.962, p = .015)……兩組組別因子單純主要效果在恢復期四小時牛奶組顯著低於控制組 (t = 2.246, p = .043, d = 0.92)。',rp:{stat:'y',df:'n',p:'y',es:'y',ci:'n',ph:'n'},
+  note:['The method says “mixed design”; the results say “two-way repeated measures”. Group is between subjects, so which is right? Six time points, yet no sphericity check is reported.','方法章寫「混合設計」，結果章寫「重複量數二因子」。組別是受試者間，哪個對？有 6 個時間點，卻沒有報告球形性檢查。']},
+ mot1:{P:['8 female A-level volleyball blockers; 2 setters, 24 trials each','8 位女性 A 級排球攔網選手；面對 2 位舉球員，每人 24 次試作'],I:['Visual focus on the ball or the setter’s hands','注意力焦點：球、手部'],C:['Focus on the setter’s upper body; across 4 attack types','焦點在上半身；跨四種戰術'],O:['Block start time and total movement time (s, setter contact = 0), block accuracy','攔網啟動時間與完整動作時間（s，舉球員觸球 = 0）、攔網正確性'],
+  fac:['Focus (3 levels) × tactic (4 levels)','焦點（3 個水準）× 戰術（4 個水準）'],ppl:'ww',tool:'lmm',
+  sent:'注意力焦點之主效應達顯著差異，F(2,169) = 7.41, p < .001；經 Bonferroni 事後比較，上半身焦點之啟動時間顯著短於球體與手部焦點 (ps < .05)。',rp:{stat:'y',df:'y',p:'y',es:'n',ci:'n',ph:'y'},
+  note:['df 169 comes from trials (8 players × 24), not from 8 players: that is how a mixed model uses every trial. The two setters are not in the model.','自由度 169 來自試作（8 人 × 24 次），不是 8 人：這就是混合模型使用每一次試作的方式。兩位舉球員沒有放進模型。']},
+ mot2:{P:['64 competition routines: top 8 of the 2019 World Championships and the 2019 National Games, four apparatus (the unit is a routine, not a person)','64 套比賽動作：2019 世錦賽與 2019 全運會前 8 名，四項手具（分析單位是一套動作，不是人）'],I:['No intervention: international routines; four intensity categories within each routine','沒有介入：國際賽；每套動作內四種強度類別'],C:['National routines','國內賽'],O:['Number, total time and mean time (s) of movements at each intensity, coded from video (Simi Scout)','每種強度動作的次數、總時間與平均時間（秒），以影片標記（Simi Scout）'],
+  fac:['Event (2 levels) × intensity (4 levels); 3 DVs, each apparatus analysed separately','賽事（2 個水準）× 強度（4 個水準）；3 個依變項，四項手具各分析一次'],ppl:'bw',tool:'manova',
+  sent:'結果顯示在國內外與強度類別的交互作用達顯著差異，Wiiks’ Lambda =.096 F ( 9, 6 ) = 6.29 p < .05；國內外達顯著差異，Wiiks’ Lambda =.335 F ( 3, 12 ) = 7.95 p < .05。',rp:{stat:'y',df:'y',p:'n',es:'n',ci:'n',ph:'n'},
+  note:['The only MANOVA of the nine. Mean time = total time ÷ count: do the three DVs “belong together”, or is one redundant (Stage 2)? F(3, 42) = 3.35 is reported as p < .001; the actual p is about .03.','九篇中唯一的 MANOVA。平均時間 = 總時間 ÷ 次數：三個依變項「同屬一件事」嗎？還是其中一個多餘（Stage 2）？F(3, 42) = 3.35 寫成 p < .001，實際約 .03。']}};
+var PPLN={};PEOPLE.forEach(function(o){PPLN[o[0]]=o[1]});
+function toolN(k,x){if(k==='other')return 'Other 其他: '+(x||'');var o=TOOLS[k];return o?o[1]+' '+o[2]:'—'}
+function keyHtml(th,R){var K=KEY[th];if(!K)return '';var mk=function(ok){return ok?'<b style="color:var(--accent)">✓</b>':'<b style="color:var(--signal)">✗</b>'};
+  var row=function(lab,yours,ans,ok){return '<tr><td>'+lab+'</td><td>'+esc(yours||'—')+'</td><td>'+ans+'</td><td>'+(ok===null?'':mk(ok))+'</td></tr>'};
+  var h='<div class="rpart qcard" id="gKey" style="border-left-color:var(--accent)"><p class="qt">Compare with the answer<span class="zh">對照答案</span></p>';
+  h+='<div class="tbl-wrap"><table class="out"><thead><tr><th>Part 部分</th><th>Yours 你的</th><th>Answer 答案</th><th></th></tr></thead><tbody>';
+  ['P','I','C','O'].forEach(function(k){h+=row('1 · '+k,R[k],K[k][0]+'<span class="zh">'+K[k][1]+'</span>',null)});
+  h+=row('2 · Factors 因子',R.fac,K.fac[0]+'<span class="zh">'+K.fac[1]+'</span>',null);
+  h+=row('2 · Design 設計',PPLN[R.ppl],PPLN[K.ppl],R.ppl===K.ppl);
+  h+=row('2 · Tool 工具',toolN(R.tool,R.toolx),toolN(K.tool),R.tool===K.tool);
+  h+='</tbody></table></div>';
+  h+='<p class="rlab" style="margin-top:10px">3 · Our result sentence 我們選的結果句</p><p style="margin:4px 0;font-size:13px">'+esc(K.sent)+'</p>';
+  h+='<div class="tbl-wrap"><table class="out"><thead><tr><th>In that sentence 這句有沒有</th><th>Yours 你的</th><th>Answer 答案</th><th></th></tr></thead><tbody>';
+  REPORTED.forEach(function(o){var y=R.rp[o[0]],a=K.rp[o[0]],t=function(v){return v==='y'?'✓ reported 有':v==='n'?'✗ missing 缺':'—'};h+='<tr><td>'+o[1]+'</td><td>'+t(y)+'</td><td>'+t(a)+'</td><td>'+mk(y===a)+'</td></tr>'});
+  h+='</tbody></table></div><p class="rlab">If you copied a different sentence, your yes/no answers can differ: check them against your own sentence.<span class="zh">如果你抄的是另一句，有／沒有的答案可能不同：請對照你自己抄的那一句。</span></p>';
+  h+='<div class="fb" style="margin-top:8px"><b class="vd">Look again 再看一次</b>'+K.note[0]+'<span class="zh">'+K.note[1]+'</span></div></div>';
+  return h}
+var GNOTE=['',''];
+function gNote(en,zh,cls){GNOTE=[en,zh,cls||''];var n=el('gNote');n.className='gnote '+(cls||'');n.innerHTML=en?en+'<span class="zh">'+zh+'</span>':''}
+function esc(x){return String(x||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
+function gRender(){var G=UI.g,any=Object.keys(G.sub).length>0,sel=el('gGrp');
+  if(!sel.options.length){sel.innerHTML='<option value="">— group 組 —</option>'+GROUPS.map(function(g){return '<option value="'+g+'">'+g+'</option>'}).join('')}
+  sel.value=G.grp;sel.disabled=any;
+  el('gFld').innerHTML=FIELDS.map(function(f){return '<button type="button" data-f="'+f.k+'" aria-pressed="'+(G.fld===f.k?'true':'false')+'">'+f.e+'<span class="zh">'+f.z+'</span></button>'}).join('');
+  el('gList').innerHTML=G.fld?TH.filter(function(T){return T.f===G.fld}).map(function(T){var S=G.sub[T.id];return '<button type="button" data-t="'+T.id+'" aria-pressed="'+(G.th===T.id?'true':'false')+'">'+T.t+'<span class="en">'+T.te+' · '+T.ay+'</span>'+(S&&S.rec?'<span class="dn">✓ sent 已送出</span>':'')+'</button>'}).join(''):'';
+  var T=G.th?thx(G.th):null,box=el('gBox');if(!T){box.innerHTML='';el('gSend').hidden=true;return}
+  var R=rep(T.id),S=G.sub[T.id],lock=!!S,dis=lock?' disabled':'';
+  var h='<div class="gth"><div class="ttl">'+T.t+'<span class="en">'+T.te+' · '+T.ay+'</span></div>';
+  h+='<div class="rpart qcard"><p class="qt">1 · P · I · C · O</p>'+PICO.map(function(q){return '<label class="rin"><b>'+q[0]+'</b><span>'+q[1]+'</span><input type="text" maxlength="160" data-k="'+q[0]+'" value="'+esc(R[q[0]])+'" placeholder="'+q[2]+'"'+dis+'></label>'}).join('')+'</div>';
+  h+='<div class="rpart qcard"><p class="qt">2 · Design → tool<span class="zh">設計 → 工具</span></p><label class="rin"><b>Factors</b><span>factors and levels 因子和水準</span><input type="text" maxlength="160" data-k="fac" value="'+esc(R.fac)+'" placeholder="e.g. insole (4 levels) 例：鞋墊（4 個水準）"'+dis+'></label>'+
+    '<div class="opts">'+PEOPLE.map(function(o){return '<button type="button" data-ppl="'+o[0]+'" aria-pressed="'+(R.ppl===o[0]?'true':'false')+'"'+dis+'>'+o[1]+'</button>'}).join('')+'</div>'+
+    '<div class="opts chips">'+RTOOLS.map(function(k){var o=TOOLS[k];return '<button type="button" data-tool="'+o[0]+'" aria-pressed="'+(R.tool===o[0]?'true':'false')+'"'+dis+'>'+o[1]+'<span class="zh">'+o[2]+'</span></button>'}).join('')+'<button type="button" data-tool="other" aria-pressed="'+(R.tool==='other'?'true':'false')+'"'+dis+'>Other<span class="zh">其他</span></button></div>'+
+    (R.tool==='other'?'<label class="rin"><b>Other</b><span>name the test the authors used 寫出作者用的檢定</span><input type="text" maxlength="120" data-k="toolx" value="'+esc(R.toolx)+'" placeholder="e.g. Friedman test 例：Friedman 檢定"'+dis+'></label>':'')+'</div>';
+  h+='<div class="rpart qcard"><p class="qt">3 · The result sentence<span class="zh">結果句</span></p><textarea data-k="sent" maxlength="500" rows="3" placeholder="Copy one result sentence from the thesis, with its numbers 抄一句結果，連數字"'+dis+'>'+esc(R.sent)+'</textarea>'+
+    '<div class="rlab">Reported in that sentence? Choose one for each line. 這句報告了嗎？每一列選一個。</div><table class="rptab">'+REPORTED.map(function(o){var v=R.rp[o[0]];return '<tr><td>'+o[1]+'</td><td><button type="button" data-rp="'+o[0]+'" data-v="y" class="tri'+(v==='y'?' yes':'')+'" aria-pressed="'+(v==='y')+'"'+dis+'>✓ reported 有</button></td><td><button type="button" data-rp="'+o[0]+'" data-v="n" class="tri'+(v==='n'?' no':'')+'" aria-pressed="'+(v==='n')+'"'+dis+'>✗ missing 缺</button></td></tr>'}).join('')+'</table></div>';
+  if(lock){h+=keyHtml(T.id,R);if(!S.keyLog){S.keyLog=1;log({page_id:'p5',item_id:'g_'+T.id,item_version:GKEY,event_type:'answer_revealed',selected_option:'tool='+R.tool+';ppl='+R.ppl,correctness:(R.tool===(KEY[T.id]||{}).tool&&R.ppl===(KEY[T.id]||{}).ppl)?'correct':'incorrect',data_origin:'computed'})}}
+  if(lock)h+='<div class="fb ok"><b class="vd">✓ Received 已收到</b>Your group presents in five minutes: P-I-C-O → design → tool → the numbers. Then write your learning reflection below.<span class="zh">全組五分鐘報告：P-I-C-O → 設計 → 工具 → 數字。之後在下面寫學習心得。</span></div>';
+  box.innerHTML=h+'</div>';
+  var sb=el('gSend');sb.hidden=lock;sb.disabled=!!(S&&S.polling)}
+function rpSummary(R){return {P:R.P,I:R.I,C:R.C,O:R.O,fac:R.fac,ppl:R.ppl,tool:R.tool==='other'?'other: '+(R.toolx||''):R.tool,sent:R.sent,rp:REPORTED.map(function(o){return o[0]+'='+(R.rp[o[0]]||'')}).join(';'),as:ASSUM.filter(function(o){return R.as[o[0]]}).map(function(o){return o[0]}).join('+'),atest:R.atest}}
+el('gGrp').addEventListener('change',function(){UI.g.grp=this.value;log({page_id:'p5',item_id:'g_group',event_type:'widget_use',selected_option:this.value,data_origin:'self_report'});save()});
+el('gFld').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;UI.g.fld=b.dataset.f;gRender();save()});
+el('gList').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;UI.g.th=b.dataset.t;if(!rf().th){rf().th=b.dataset.t;rRender()}gNote('','');gRender();
+  log({page_id:'p5',item_id:'g_'+b.dataset.t,item_version:GKEY,event_type:'example_choice',selected_option:b.dataset.t,data_origin:'observed_in_page'});save()});
+el('gBox').addEventListener('input',function(e){var t=e.target,th=UI.g.th;if(!th||UI.g.sub[th]||!t.dataset.k)return;rep(th)[t.dataset.k]=t.value;save()});
+el('gBox').addEventListener('click',function(e){var b=e.target.closest('button');if(!b||b.disabled)return;var th=UI.g.th;if(!th||UI.g.sub[th])return;var R=rep(th);
+  if(b.dataset.ppl!==undefined)R.ppl=(R.ppl===b.dataset.ppl?'':b.dataset.ppl);
+  else if(b.dataset.tool!==undefined)R.tool=(R.tool===b.dataset.tool?'':b.dataset.tool);
+  else if(b.dataset.rp!==undefined){var v=b.dataset.v;R.rp[b.dataset.rp]=(R.rp[b.dataset.rp]===v?'':v)}
+  else if(b.dataset.as!==undefined){if(b.dataset.as==='none'){R.as={none:!R.as.none}}else{delete R.as.none;R.as[b.dataset.as]=!R.as[b.dataset.as]}}
+  else return;
+  var fo=document.activeElement;gRender();save()});
+el('gSend').onclick=function(){var th=UI.g.th,T=thx(th);if(!T)return;
+  if(!who()){gate('Please type your name at the top of Stage 0 first.','請先在 Stage 0 最上面輸入姓名。');return}
+  if(!UI.g.grp){gNote('Choose your group first.','請先選你的組。','bad');return}
+  var R=rep(th),me=[],mz=[],tr=function(v){return String(v||'').trim()},add=function(e,z){me.push(e);mz.push(z)};
+  [['P','P'],['I','I'],['C','C'],['O','O']].forEach(function(k){if(!tr(R[k[0]]))add('Part 1: the '+k[0]+' box','第 1 部分：'+k[1]+' 格')});
+  if(!tr(R.fac))add('Part 2: the Factors box','第 2 部分：因子格');
+  if(!R.ppl)add('Part 2: a design button (between / within)','第 2 部分：設計按鈕（受試者間／內）');
+  if(!R.tool)add('Part 2: the tool the authors used (every thesis names one; see the statistical-analysis section)','第 2 部分：作者用的工具（每篇都有寫，見統計分析一節）');
+  if(R.tool==='other'&&!tr(R.toolx))add('Part 2: the name of the “Other” test','第 2 部分：「其他」檢定的名稱');
+  if(!tr(R.sent))add('Part 3: the result sentence','第 3 部分：結果句');
+  var nr=REPORTED.filter(function(o){return !R.rp[o[0]]});
+  if(nr.length)add('Part 3: reported or missing for '+nr.map(function(o){return o[1].split(' ')[0]==='Exact'?'Exact p':o[1].split(' (')[0].replace(/ [\u4e00-\u9fff].*$/,'')}).join(', '),'第 3 部分：'+nr.map(function(o){var m=o[1].match(/[\u4e00-\u9fff]+/g);return m?m.join(''):o[1]}).join('、')+'還沒選「有」或「缺」');
+  if(me.length){gNote('Not finished yet: '+me.join(' · ')+'.','還沒完成：'+mz.join('；')+'。','bad');return}
+  if(!UI.g.sub[th]){var eid=log({page_id:'p5',item_id:'g_'+th,item_version:GKEY,event_type:'group_submit',attempt_no:1,selected_option:'tool='+R.tool+';ppl='+R.ppl,
+      other_text:'group='+UI.g.grp+';thesis='+th+';field='+T.f+';key='+GKEY,data_origin:'self_report',group:{id:UI.g.grp,thesis:th,field:T.f,key:GKEY,rep:rpSummary(R)}});
+    UI.g.sub[th]={eid:eid,rec:false,t:now()};save();gRender()}
+  gSend(th)};
+function receipt(eid,cb){var nm='w9r'+Date.now()+Math.floor(Math.random()*1e4),sc=document.createElement('script'),done=false;
+  function end(r){if(done)return;done=true;try{delete window[nm]}catch(e){window[nm]=undefined}sc.remove();cb(r)}
+  window[nm]=function(r){end(!!(r&&r.found))};sc.onerror=function(){end(null)};setTimeout(function(){end(null)},8000);
+  sc.src=SHEET_URL+'?receipt='+encodeURIComponent(eid)+'&cb='+nm;document.body.appendChild(sc)}
+function gFail(th){var S=UI.g.sub[th];if(S){S.polling=false;if(S.rec)return}if(UI.g.th===th){el('gSend').hidden=false;el('gSend').disabled=false;el('gSend').innerHTML='Send again 再送一次'}
+  gNote('Not received yet. Your sheet is kept: press “Send again”. If it still fails, press Save file at the end.','還沒收到。你的表還在：請按「再送一次」。如果還是不行，最後按「儲存檔案」。','bad')}
+function gDone(th){var S=UI.g.sub[th];if(S.rec)return;S.rec=true;S.polling=false;S.recT=now();log({page_id:'p5',item_id:'g_'+th,item_version:GKEY,event_type:'group_receipt',prior_event_id:S.eid,data_origin:'computed'});save();queueSend();gRender();
+  gNote('Received ✓','已收到 ✓','ok')}
+function gPoll(th,k){var S=UI.g.sub[th];receipt(S.eid,function(r){if(r===true)gDone(th);else if(k<4)setTimeout(function(){gPoll(th,k+1)},2000);else gFail(th)})}
+function gSend(th){var S=UI.g.sub[th],ev=EV.filter(function(e){return e.event_id===S.eid})[0];if(S.polling||S.rec)return;
+  if(!SHEET_URL){gDone(th);gNote('Saved on this device ✓ Press Save file at the end and email it to the TA.','已存在這台裝置 ✓ 最後按「儲存檔案」，再 email 給助教。','ok');return}
+  fillName(ev);S.polling=true;el('gSend').disabled=true;gNote('Sending… 送出中…','','');
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:payload([ev])}).then(function(){setTimeout(function(){gPoll(th,0)},1200)},function(){gFail(th)})}
+
+/* ---------- stage 5 · learning reflection (homework, own Send) ---------- */
+var RKEY='W9ref-1';
+var RQ=[['r1','What did reading this thesis teach you about reporting statistics? Give one example from the thesis.','讀這篇論文，讓你對統計報告學到什麼？舉論文裡的一個例子。',true],
+ ['r2','Would any of today’s tools (ANCOVA, MANOVA, linear mixed model) change how this thesis was analysed or reported? Why, or why not?','今天的工具（共變數分析、MANOVA、線性混合模型）會不會改變這篇論文的分析或報告方式？為什麼會，或為什麼不會？',true],
+ ['r3','One thing you will do in the results chapter of your own thesis.','你在自己論文的結果章會做的一件事。',true],
+ ['r4','Did you use AI or a translation tool? For what, and what did you check yourself? (optional)','你有沒有用 AI 或翻譯工具？用在哪裡？哪些是你自己核對的？（選答）',false]];
+function rf(){if(!UI.rf)UI.rf={th:'',r1:'',r2:'',r3:'',r4:'',sub:[]};return UI.rf}
+function rNote(en,zh,cls){var n=el('rNote');n.className='gnote '+(cls||'');n.innerHTML=en?en+'<span class="zh">'+zh+'</span>':''}
+function rRender(){var F=rf(),sel=el('rTh');if(!F.th&&UI.g.th)F.th=UI.g.th;
+  sel.innerHTML='<option value="">— choose 選擇 —</option>'+TH.map(function(T){return '<option value="'+T.id+'">'+T.id+' · '+T.t+'</option>'}).join('');sel.value=F.th;
+  el('rBox').innerHTML=RQ.map(function(q,i){return '<p class="qt">'+(i+1)+' · '+q[1]+'<span class="zh">'+q[2]+'</span></p><textarea data-r="'+q[0]+'" maxlength="1500" rows="4">'+esc(F[q[0]])+'</textarea>'}).join('');
+  var last=F.sub.length?F.sub[F.sub.length-1]:null;
+  el('rSend').innerHTML=!last?'Send my reflection 送出學習心得':last.rec?'Send an updated reflection 送出修改後的心得':'Send again 再送一次';
+  if(last&&last.local)rNote('Saved on this device ✓ (version '+F.sub.length+'). Press Save file in Hand in and email it to the TA.','已存在這台裝置 ✓（第 '+F.sub.length+' 版）。在「交回」按「儲存檔案」，再 email 給助教。','ok');
+  else if(last&&last.rec)rNote('Received ✓ (version '+F.sub.length+'). You may still edit and send again before the deadline; the TA reads the latest version.','已收到 ✓（第 '+F.sub.length+' 版）。期限前仍可修改再送；助教讀最新的一版。','ok')}
+el('rTh').addEventListener('change',function(){rf().th=this.value;save()});
+el('rBox').addEventListener('input',function(e){var t=e.target;if(!t.dataset.r)return;rf()[t.dataset.r]=t.value;save()});
+function rFail(){el('rSend').disabled=false;rNote('Not received yet. Your text is kept: press Send again. If it still fails, press Save file in Hand in and email the file to the TA.','還沒收到。你寫的內容還在：請再按一次送出。如果還是不行，在「交回」按「儲存檔案」，再 email 給助教。','bad')}
+function rPoll(eid,k){receipt(eid,function(r){if(r===true){var F=rf(),S=F.sub[F.sub.length-1];S.rec=true;log({page_id:'p5',item_id:'reflection',item_version:RKEY,event_type:'reflection_receipt',prior_event_id:eid,data_origin:'computed'});save();queueSend();el('rSend').disabled=false;rRender()}
+  else if(k<4)setTimeout(function(){rPoll(eid,k+1)},2000);else rFail()})}
+el('rSend').onclick=function(){var F=rf();
+  if(!who()){gate('Please type your name at the top of Stage 0 first.','請先在 Stage 0 最上面輸入姓名。');return}
+  if(!F.th){rNote('Choose the thesis you read first.','請先選你讀的論文。','bad');return}
+  var miss=RQ.filter(function(q){return q[3]&&String(F[q[0]]||'').trim().length<20}).map(function(q,i){return q[0].slice(1)});
+  if(miss.length){rNote((miss.length>1?'Questions ':'Question ')+miss.join(', ')+(miss.length>1?' need answers':' needs an answer')+' (at least a full sentence).','第 '+miss.join('、')+' 題還要回答（至少一個完整的句子）。','bad');return}
+  var T=thx(F.th),eid=log({page_id:'p5',item_id:'reflection',item_version:RKEY,event_type:'reflection_submit',attempt_no:F.sub.length+1,selected_option:F.th,
+    other_text:'thesis='+F.th+';key='+RKEY+';r1='+F.r1+';r2='+F.r2+';r3='+F.r3+';r4='+F.r4,data_origin:'self_report',refl:{thesis:F.th,field:T?T.f:'',key:RKEY,r1:F.r1,r2:F.r2,r3:F.r3,r4:F.r4}});
+  F.sub.push({eid:eid,rec:false,t:now()});save();rRender();
+  if(!SHEET_URL){F.sub[F.sub.length-1].rec=true;F.sub[F.sub.length-1].local=true;save();rNote('Saved on this device ✓ Press Save file in Hand in and email it to the TA.','已存在這台裝置 ✓ 在「交回」按「儲存檔案」，再 email 給助教。','ok');return}
+  var ev=EV.filter(function(e){return e.event_id===eid})[0];fillName(ev);el('rSend').disabled=true;rNote('Sending… 送出中…','','');
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:payload([ev])}).then(function(){setTimeout(function(){rPoll(eid,0)},1200)},function(){rFail()})};
+
+/* ---------- restore after reload ---------- */
+(function(){var raw=null;try{raw=localStorage.getItem(STORE)}catch(e){}
+  if(raw){try{var o=JSON.parse(raw);if(o&&o.ev&&o.ev.length){SID=o.sid;SEQ=o.seq;EV=o.ev;ST=o.st||{};USED=o.used||{};SENT=o.sent||0;el('who').value=o.name||'';if(o.ui)for(var k in o.ui)UI[k]=o.ui[k];
+    ITEMS.forEach(function(it){render(it);if(st(it.id).lock)finish(it)});youCheck();
+    log({event_type:'session_resume',data_origin:'computed'});whoOk()}}catch(e){}}
+  if(!SID){SID=sid();log({event_type:'session_start',data_origin:'computed'})}})();
+function whoOk(){el('whoOk').textContent=who()?'✓ '+who():''}
+el('whoReset').onclick=function(){if(!confirm('Start a new session? Answers you already saved in a file stay there; unsaved answers are lost.\n開始新的作答？已儲存的檔案不受影響；未儲存的答案會消失。'))return;try{localStorage.removeItem(STORE)}catch(e){}location.reload()};
+el('who').addEventListener('change',function(){if(who()){log({page_id:'p0',item_id:'name',event_type:'name_entered',data_origin:'self_report'});whoOk();save()}});
+
+/* ---------- export ---------- */
+var COLS=['schema_version','lesson_id','content_version','learner_name','session_id','event_id','sequence_no','event_time','timezone','elapsed_ms','page_id','item_id','item_version','event_type','attempt_no','selected_option','correctness','reason_option','confidence','support_type','hint_level','answer_revealed','prior_event_id','visible_duration_ms','data_origin','completion_status','other_text'];
+function csvq(v){var s=String(v===undefined||v===null?'':v);if(/^[=+\-@\t\r]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}
+function csv(){var rows=[COLS.join(',')];EV.forEach(function(e){e.learner_name=e.learner_name||who();rows.push(COLS.map(function(c){return csvq(e[c])}).join(','))});return rows.join('\r\n')+'\r\n'}
+function summary(){var tot=ITEMS.length,ans=0;ITEMS.forEach(function(it){if(st(it.id).att.length)ans++});return{tot:tot,ans:ans,unf:tot-ans}}
+function exportLog(){visTick();Object.keys(VIS.acc).forEach(function(p){log({page_id:p,event_type:'visible_duration',visible_duration_ms:Math.round(VIS.acc[p]),data_origin:'computed'})});
+  var S=summary();log({event_type:'export',data_origin:'computed',completion_status:S.unf?'partial:'+S.unf+'_unanswered':'complete'});return S}
+function showSum(S){var b=el('sumbox');b.hidden=false;b.innerHTML='Answered 已作答 <b>'+S.ans+'</b> / '+S.tot+(S.unf?'<span class="zh">'+S.unf+' not answered yet 還有 '+S.unf+' 題沒答</span>':'')}
+function note(msg,cls){var n=el('exNote');n.className='note '+(cls||'');n.innerHTML=msg}
+function needName(){if(!who()){gate('Please type your name at the top of Stage 0 first.','請先在 Stage 0 最上面輸入姓名。');return true}return false}
+/* ---------- send to the class Google Sheet ---------- */
+function fillName(e){if(!e.learner_name)e.learner_name=who()}
+function unsent(){return EV.filter(function(e){return e.sequence_no>SENT})}
+function payload(b){return JSON.stringify({lesson:LESSON,content:CONTENT,cols:COLS,events:b})}
+var flushT=null;
+function queueSend(){if(!SHEET_URL)return;clearTimeout(flushT);flushT=setTimeout(function(){sendNow()},1500)}
+function sendNow(cb){if(!SHEET_URL){if(cb)cb(false);return}var b=unsent();if(!b.length){if(cb)cb(true);return}
+  var top=b[b.length-1].sequence_no;b.forEach(fillName);
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:payload(b)})
+   .then(function(){SENT=Math.max(SENT,top);save();if(cb)cb(true)},function(){if(cb)cb(false)})}
+function confirmSheet(cb){var nm='w9cb'+Date.now(),sc=document.createElement('script'),done=false;
+  function end(n){if(done)return;done=true;try{delete window[nm]}catch(e){window[nm]=undefined}sc.remove();cb(n)}
+  window[nm]=function(r){end(r&&r.n?r.n:0)};sc.onerror=function(){end(-1)};setTimeout(function(){end(-1)},8000);
+  sc.src=SHEET_URL+'?session='+encodeURIComponent(SID)+'&cb='+nm;document.body.appendChild(sc)}
+window.addEventListener('pagehide',function(){if(!SHEET_URL||!navigator.sendBeacon)return;var b=unsent();if(!b.length)return;b.forEach(fillName);
+  try{if(navigator.sendBeacon(SHEET_URL,new Blob([payload(b)],{type:'text/plain;charset=utf-8'}))){SENT=b[b.length-1].sequence_no;save()}}catch(e){}});
+el('exSend').onclick=function(){if(needName())return;var S=exportLog();showSum(S);
+  if(!SHEET_URL){note('Sending is not set up on this copy of the page. Press Save file and email it to the TA.<span class="zh">這個頁面還沒有設定送出。請按「儲存檔案」，再 email 給助教。</span>','bad');return}
+  note('Sending… 送出中…');sendAndCheck(true)};
+function sendAndCheck(retry){sendNow(function(ok){if(!ok){note('Not sent: no connection. Press Save file and email it to the TA.<span class="zh">沒有送出：沒有網路。請按「儲存檔案」，再 email 給助教。</span>','bad');return}
+  setTimeout(function(){confirmSheet(function(n){
+    if(n>=EV.length)note('Received ✓ ('+n+' rows). You can close the page.<span class="zh">已收到 ✓（'+n+' 列）。可以關閉頁面。</span>','ok');
+    else if(n>=0&&retry){SENT=0;save();note('Sending again… 再送一次…');sendAndCheck(false)}
+    else note('Sent, but not confirmed. To be safe, press Save file and email it to the TA.<span class="zh">已送出，但未能確認。保險起見，請按「儲存檔案」，再 email 給助教。</span>','bad')})},1500)})}
+el('exSave').onclick=function(){if(needName())return;var S=exportLog(),blob=new Blob(['﻿'+csv()],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='W9_'+who().replace(/[\\/:*?"<>|,;\s]+/g,'_')+'.csv';document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);showSum(S);
+  note('Saved as '+a.download+'. Email it to the TA.<span class="zh">已儲存為 '+a.download+'，請 email 給助教。</span>','ok')};
+el('exCopy').onclick=function(){if(needName())return;var S=exportLog();showSum(S);var t='W9 ANCOVA · MANOVA · LMM · '+who()+' · '+now()+' · session '+SID+' · answered '+S.ans+'/'+S.tot+'\n\n'+csv();
+  var done=function(){note('Copied. Paste it into an email to the TA.<span class="zh">已複製，請貼進給助教的 email。</span>','ok')};
+  var fail=function(){var ta=document.createElement('textarea');ta.value=t;ta.style.cssText='width:100%;min-height:140px;margin-top:8px;font:12px monospace';el('sumbox').hidden=false;el('sumbox').appendChild(ta);ta.focus();ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}if(ok){done();ta.remove()}else note('Copy failed: the text is in the box below; select it and copy it yourself.<span class="zh">複製失敗：文字在下面的方框裡，請自行選取並複製。</span>','bad')};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,fail);else fail()};
+
+/* ---------- summary templates: review table, key terms ---------- */
+var RV={num2d:['number','數值','1 · 2 levels','1 個 · 2 個水準','different','不同的人','Welch t','Welch t 檢定','Week 4',''],
+ num2s:['number','數值','1 · 2 levels','1 個 · 2 個水準','same','同一群人','Paired t','配對 t','Week 4',''],
+ num3d:['number','數值','1 · 3 + levels','1 個 · 3 個以上水準','different','不同的人','One-way ANOVA','單因子變異數分析','Week 7',''],
+ num3s:['number','數值','1 · 3 + levels','1 個 · 3 個以上水準','same','同一群人','One-way RM ANOVA','單因子重複量數變異數分析','Week 8',''],
+ twob:['number','數值','2 factors','2 個因子','both different','兩個都是不同的人','Two-way ANOVA','二因子變異數分析','Week 8',''],
+ mix:['number','數值','2 factors','2 個因子','one different · one same','一個不同的人 · 一個同一群人','Mixed ANOVA','混合設計變異數分析','Week 8',''],
+ twow:['number','數值','2 factors','2 個因子','both same','兩個都是同一群人','Two-way RM ANOVA','二因子重複量數變異數分析','Week 8',''],
+ ancova:['number + a covariate','數值 + 一個共變數','1 + factors','1 個以上因子','different (groups start apart)','不同的人（起點不同）','ANCOVA','共變數分析','Week 9 · today 今天','new'],
+ manova:['2 + numbers, together','2 個以上數值，一起看','1 + factors','1 個以上因子','any','皆可','MANOVA','多變量變異數分析','Week 9 · today 今天','new'],
+ lmm:['number, missing values or trials','數值，有缺值或多次試作','1 + factors','1 個以上因子','same · one row per measurement','同一群人 · 一列一筆測量','Linear mixed model','線性混合模型','Week 9 · today 今天','new'],
+ catd:['category','類別','1 · 2 + levels','1 個 · 2 個以上水準','different','不同的人','χ² test','卡方檢定','Week 4',''],
+ none:['two numbers','兩個數值','no factor','沒有因子','—','—','Pearson r · regression','相關 · 迴歸','Week 6','']};
+document.querySelectorAll('.rv').forEach(function(box){var rows=box.dataset.rows.split(',');
+  box.innerHTML='<div class="tbl-wrap"><table class="rvt"><thead><tr><th>DV<span class="zh">依變項</span></th><th>Factors · levels<span class="zh">因子 · 水準</span></th><th>People<span class="zh">受試者</span></th><th>Tool<span class="zh">工具</span></th></tr></thead><tbody>'+
+  rows.map(function(c){var r=RV[c];return '<tr data-c="'+c+'"'+(r[9]?' class="'+r[9]+'"':'')+'><td>'+r[0]+'<span class="zh">'+r[1]+'</span></td><td>'+r[2]+'<span class="zh">'+r[3]+'</span></td><td>'+r[4]+'<span class="zh">'+r[5]+'</span></td><td class="tl"><b>'+r[6]+'</b><span class="zh">'+r[7]+'</span><span class="wk">'+r[8]+'</span></td></tr>'}).join('')+'</tbody></table></div>'});
+var TERMS={s1:[['Covariate 共變數','A measured number the analysis holds constant, so the groups are compared at the same value of it.','分析時固定住的一個量測值，讓各組在同一個值上比較。','e.g. the pre-test 例：前測'],
+ ['Adjusted mean 校正後平均數','A group’s post-test mean moved to the common pre-test (37.50 cm).','把一組的後測平均數移到共同的前測值（37.50 公分）。','control 39.01 · plyometric 40.99'],
+ ['Regression to the mean 趨中迴歸','Players far below the mean at pre-test are closer to it at post-test, training or not. Within a group here: post rises 0.80 cm per 1 cm of pre.','前測遠低於平均的球員，後測會比較接近平均，有沒有訓練都一樣。這裡組內：前測每高 1 公分，後測高 0.80 公分。','slope 斜率 0.80'],
+ ['Homogeneity of slopes 迴歸斜率同質性','The two groups’ lines are parallel: the training adds the same amount at every pre-test.','兩組的線平行：訓練在每個前測值上多加的量一樣。','F(1, 12) = 0.00, p = .958']],
+ s2:[['Multivariate 多變量','Several DVs analysed together.','幾個依變項一起分析。','e.g. jump change + sprint change 例：跳躍變化 + 衝刺變化'],
+ ['Familywise error 族系錯誤率','The chance that at least one of several tests is a false positive.','幾個檢定裡至少一個是假陽性的機會。','3 tests at .05 → about 14% 3 個檢定各 .05 → 約 14%'],
+ ['Holm correction Holm 校正','Order the p values; multiply the smallest by the number of tests, the next by one fewer, and so on (never below the previous adjusted p).','把 p 值排序；最小的乘以檢定數，下一個乘以少一的數，依此類推（不能低於前一個校正後的 p）。','.0009 × 2 = .002 · .009 × 1 = .009'],
+ ['Pillai’s trace Pillai 跡','MANOVA’s statistic: how much of the DVs together the groups explain. Reported with its F and p.','MANOVA 的統計量：各組合起來解釋了依變項多少。連同它的 F 和 p 一起報告。','V = .55, F(2, 13) = 8.06, p = .005']],
+ s3:[['Missing value 缺值','A cell with no number. Three here: C02 Pre, C05 Post, P04 Post.','沒有數字的一格。這裡有三個：C02 前測、C05 後測、P04 後測。','NA'],
+ ['Listwise deletion 整列刪除','A participant with any missing cell is removed from the whole analysis.','任何一格缺值的受試者，整個分析都不算她。','16 → 13 players 16 → 13 位'],
+ ['Fixed effect 固定效果','The factors you ask about: Group, Time, Group × Time.','你要問的因子：組別、時間、組別 × 時間。','the same three lines 同樣三列'],
+ ['Random effect 隨機效果','The model’s note that some rows belong to the same player: each player gets her own baseline.','模型的註記：有些列屬於同一位球員，每位球員有自己的基準。','(1 | ID) · SD 4.21 cm'],
+ ['Linear mixed model 線性混合模型','Fixed effects plus random effects, fitted to one row per measurement.','固定效果加隨機效果，用一列一筆測量的資料擬合。','lmer(CMJ ~ Group * Time + (1 | ID))']]};
+document.querySelectorAll('.terms').forEach(function(box){var full=box.dataset.mode==='full',set=TERMS[box.dataset.set||'s1'];
+  box.innerHTML=set.map(function(t){return '<div><b>'+t[0]+'</b> '+t[1]+'<span class="zh">'+t[2]+'</span>'+(full?'<span class="eg">'+t[3]+'</span>':'')+'</div>'}).join('')});
+
+/* ---------- chain strip ---------- */
+var CHAIN=[['rq','research question 研究問題'],['fl','factors · levels 因子・水準'],['dv','DV 依變項'],['ds','between / within 受試者間／內'],['tl','tool 工具'],['rs','F · p · effect size'],['ap','APA 報告']];
+document.querySelectorAll('.chain').forEach(function(c){var on=(c.dataset.on||'').split(',');c.innerHTML=CHAIN.map(function(n,i){return (i?'<span class="ar">→</span>':'')+'<span class="nd'+(on.indexOf(n[0])>=0?' on':'')+'">'+n[1]+'</span>'}).join('')});
+
+/* ---------- rail ---------- */
+var STAGES=[{n:'0',e:'Last week',z:'上週'},{n:'1',e:'ANCOVA | Different starting points',z:'起點不同'},{n:'2',e:'MANOVA | Two outcomes',z:'兩個結果'},{n:'3',e:'LMM | Missing values',z:'缺值'},{n:'4',e:'Jamovi',z:'Jamovi 操作'},{n:'5',e:'Report',z:'論文報告'}];var NS=STAGES.length;
+var PANELS=['p0','p1','p2','p3','p4','p5'],cur=0,rail=el('rail');
+STAGES.forEach(function(s,k){var b=document.createElement('button');b.type='button';b.innerHTML='<span class="n">'+s.n+'</span><span class="lbl"><b>'+s.e+'</b><i class="zh">'+s.z+'</i></span>';
+  b.setAttribute('aria-current',k===0?'true':'false');b.onclick=function(){go(k)};rail.appendChild(b)});
+function go(k){var nk=Math.max(0,Math.min(NS-1,k));if(nk!==cur){visTick();log({page_id:PANELS[cur],event_type:'page_leave',visible_duration_ms:Math.round(VIS.acc[PANELS[cur]]||0),data_origin:'computed'});VIS.page=PANELS[nk];log({page_id:PANELS[nk],event_type:'page_enter'})}
+  cur=nk;for(var j=0;j<NS;j++){el(PANELS[j]).hidden=(j!==cur);rail.children[j].setAttribute('aria-current',j===cur?'true':'false')}
+  el('prev').disabled=(cur===0);el('next').disabled=(cur===NS-1);redraw();window.scrollTo({top:0,behavior:'instant'})}
+el('prev').onclick=function(){go(cur-1)};el('next').onclick=function(){go(cur+1)};
+
+/* ---------- boot ---------- */
+function redraw(){if(cur===1)s1draw();if(cur===2)corrPlot(el('cv2'));if(cur===3)s3draw()}
+s3draw();gRender();rRender();if(GNOTE[0])gNote(GNOTE[0],GNOTE[1],GNOTE[2]);
+(function(){var F=rf(),S=F.sub.length?F.sub[F.sub.length-1]:null;if(S&&!S.rec&&SHEET_URL)receipt(S.eid,function(r){if(r===true){S.rec=true;save();rRender()}})})();
+Object.keys(UI.g.sub).forEach(function(th){var S=UI.g.sub[th];S.polling=false;if(!S.rec&&SHEET_URL)receipt(S.eid,function(r){if(r===true&&!S.rec){S.rec=true;S.recT=now();save();gRender()}})});
+log({page_id:'p0',event_type:'page_enter'});
+go(0);
+var rz;window.addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(redraw,120)});
+if(window.matchMedia){var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',function(){theme();redraw()})}
+new MutationObserver(function(){theme();redraw()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
+
+</script>
+</body>
+</html>
