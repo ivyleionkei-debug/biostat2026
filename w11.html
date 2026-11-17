@@ -656,7 +656,7 @@ var DEC=[
 
 /* ---------- number checks: the empty cells in each Jamovi window ---------- */
 var NUMS=[
- {id:'n2_w',page:'p3',f:[['W',1,'1.00'],['p',.015625,'.016'],['rb',-.944444,'−0.944'],['m1',401,'401'],['m2',446,'446']],
+ {id:'n2_w',page:'p3',f:[['W',1,'1.00'],['p',.015625,'.016',[.021]] /* 4th entry: other values marked right. Jamovi shows .021 (normal approximation); the exact p is .016 */,['rb',-.944444,'−0.944'],['m1',401,'401'],['m2',446,'446']],
   traps:[['W',35,.5,'That is Post − Pre. Put TTE_Pre first, as on the page.','那是 Post − Pre。照頁面，TTE_Pre 放前面。'],['W',-1.66,.05,'That is the Student’s t row. Read the Wilcoxon W row.','那是 Student’s t 那一列。讀 Wilcoxon W 那一列。'],['p',.141,.002,'That is the Student’s t row. Read the Wilcoxon W row.','那是 Student’s t 那一列。讀 Wilcoxon W 那一列。'],['rb',.944,.006,'Keep the sign Jamovi shows (Pre − Post).','照 Jamovi 顯示的正負號（Pre − Post）。'],['rb',-.586,.006,'That is Cohen’s d, on the Student’s t row.','那是 Cohen’s d，在 Student’s t 那一列。'],['m1',409,.6,'That is the Mean. Read the Median column.','那是 Mean。讀 Median 那一欄。'],['m2',450,.6,'That is the Mean. Read the Median column.','那是 Mean。讀 Median 那一欄。']]},
  {id:'n3_r',page:'p3',f:[['r',.985196,'0.985'],['rho',.986014,'0.986']],traps:[['r',10,.5,'That is the df row.','那是 df 那一列。']]},
  {id:'n3_ba',page:'p3',f:[['bias',3.066667,'3.07'],['lo',.919052,'0.919'],['hi',5.214281,'5.21']],
@@ -737,7 +737,7 @@ function numNorm(s){return String(s==null?'':s).replace(/[\uFF01-\uFF5E]/g,funct
 function numParse(s){s=numNorm(s).trim().replace(/[−–]/g,'-').replace(/\s/g,'');if(!s)return null;var lt=/^</.test(s);s=s.replace(/^[<=]+/,'');if(/^-?\./.test(s))s=s.replace(/^(-?)\./,'$10.');var v=parseFloat(s);return isNaN(v)?null:{v:v,lt:lt}}
 function numDec(s){s=numNorm(s).replace(/[^0-9.]/g,'');var k=s.indexOf('.');return k<0?0:s.length-k-1}
 function numSig(s){s=numNorm(s).replace(/[^0-9]/g,'').replace(/^0+/,'');return s.length}
-function numOk(f,x,raw){if(!x)return false;var k=f[0],ex=f[1];if(x.lt)return ex<.001&&x.v<=.001;var d=numDec(raw);
+function numOk(f,x,raw){if(!x)return false;if(f[3]&&!x.lt&&numDec(raw)>=3&&f[3].some(function(a){return Math.abs(x.v-a)<.00051}))return true;var k=f[0],ex=f[1];if(x.lt)return ex<.001&&x.v<=.001;var d=numDec(raw);
   if(k==='p'||k==='ps'){if(d<3)return false}else if(k!=='df'&&k!=='W'){if(numSig(raw)<2)return false}
   return Math.abs(x.v-ex)<=0.5*Math.pow(10,-d)+1e-9}
 function nstate(id){if(!UI.num[id])UI.num[id]={vals:{},att:0,ok:false,trap:null};return UI.num[id]}
