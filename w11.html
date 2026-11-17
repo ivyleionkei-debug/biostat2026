@@ -410,6 +410,11 @@ table.t.cmp td:first-child{font-family:var(--body);width:26%}
 @media(max-width:1500px){.stops button:not([aria-current="true"]) .t .zh{display:none}}
 @media(max-width:1020px){.stops button[aria-current="true"] .t{display:inline}.stops button[aria-current="true"] .t .zh{display:none}}
 @media(max-width:560px){.stops button[aria-current="true"] .t{display:none}}
+
+/* knowledge table in 01: today's row in the accent colour, reference rows in grey */
+table.t.kn tr.today td{background:var(--track-soft);color:var(--ink);font-weight:600}
+table.t.kn tr.today td:first-child{box-shadow:inset 4px 0 0 var(--track)}
+table.t.kn tr.ref td,table.t.kn tr.ref td .z{color:#8A8F98}
 </style>
 </head>
 <body>
@@ -472,6 +477,11 @@ table.t.cmp td:first-child{font-family:var(--body);width:26%}
     <div class="row" style="margin-top:6px"><button class="btn ghost" type="button" data-rk="32">+32</button><button class="btn ghost" type="button" data-rk="212">+212</button><button class="btn ghost" type="button" data-rk="400">+400</button></div>
     <div class="board two" id="rkOut"></div>
   </div>
+  <div class="blk"><span class="tag">Parametric and non-parametric 有母數與無母數</span>
+    <div class="tw"><table class="t src kn"><thead><tr><th>Design 設計</th><th>Parametric 有母數</th><th>Non-parametric 無母數</th></tr></thead><tbody><tr class="today"><td>Same people, 2 conditions<span class="z">同一批人，2 個條件</span></td><td>Paired t-test</td><td>Wilcoxon signed-rank</td></tr><tr class="ref"><td>Same people, 3+ conditions<span class="z">同一批人，3 個以上條件</span></td><td>Repeated measures ANOVA</td><td>Friedman</td></tr><tr class="ref"><td>Two numbers, no IV<span class="z">兩個數值，沒有自變項（IV）</span></td><td>Pearson r</td><td>Spearman ρ</td></tr></tbody></table></div>
+    <p class="def">Non-parametric methods are of several kinds; a rank test is one of them.<span class="z">無母數方法有好幾種，等級檢定是其中一種。</span></p>
+    <p class="sm">Coloured row: today. Grey rows: for reference. 有顏色的列：今天的內容。灰色列：參考用。</p>
+  </div>
   <div class="blk"><span class="tag">Decide 決定</span><div id="d_2a"></div></div>
 </div></div></section>
 
@@ -489,8 +499,9 @@ table.t.cmp td:first-child{font-family:var(--body);width:26%}
       <div class="fig"><svg id="agS" viewBox="0 0 360 330" role="img" aria-label="App against force plate with the line of equal readings"></svg><p class="cap"><b>Scatter plot 散佈圖</b> · Dashed line: the two methods give the same number.<span class="z">虛線：兩種方法讀數相同。</span></p></div>
       <div class="fig"><svg id="agB" viewBox="0 0 360 330" role="img" aria-label="Difference between the methods against their mean"></svg><p class="cap"><b>Bland–Altman plot Bland–Altman 圖</b> · Solid line: bias. Dashed lines: limits of agreement.<span class="z">實線：偏差。虛線：一致性界限。</span></p></div>
     </div>
-    <label class="sl"><span>Add to every app reading (cm)<span class="z">每個 App 讀數加上（公分）</span></span><input type="range" id="agA" min="-6" max="3" step="0.5" value="0"><output id="agAo">0</output></label>
-    <label class="sl"><span>Multiply every app reading<span class="z">每個 App 讀數乘以</span></span><input type="range" id="agK" min="0.9" max="1.2" step="0.05" value="1"><output id="agKo">× 1.00</output></label>
+    <p class="def">Fixed bias: all dots move up or down together. Proportional bias: the dots tilt and the limits widen.<span class="z">固定偏差：所有點一起上下移動。比例偏差：點傾斜，界限變寬。</span></p>
+    <label class="sl"><span><b>Fixed bias 固定偏差</b> · Add to every app reading (cm)<span class="z">每個 App 讀數加上（公分）</span></span><input type="range" id="agA" min="-6" max="3" step="0.5" value="0"><output id="agAo">0</output></label>
+    <label class="sl"><span><b>Proportional bias 比例偏差</b> · Multiply every app reading<span class="z">每個 App 讀數乘以</span></span><input type="range" id="agK" min="0.9" max="1.2" step="0.05" value="1"><output id="agKo">× 1.00</output></label>
     <div class="row" style="margin-top:6px"><button class="btn ghost" type="button" data-ag="-3,1">− 3 cm</button><button class="btn ghost" type="button" data-ag="3,1">+ 3 cm</button><button class="btn ghost" type="button" data-ag="0,1.2">× 1.2</button><button class="btn ghost" type="button" data-ag="0,1">Reset 還原</button></div>
     <div class="board three" id="agOut"></div>
     <div class="tw" style="margin-top:18px"><table class="t src"><thead><tr><th>Tool 工具</th><th>Question 問題</th><th>Result 結果</th></tr></thead><tbody><tr><td>Pearson r · Week 6</td><td>Do the two readings rise together?<span class="z">兩個讀數是否一起變大？</span></td><td>r, no unit<span class="z">r，沒有單位</span></td></tr><tr><td>Bland–Altman · Week 11</td><td>How far apart are the two readings for the same jump?<span class="z">同一跳的兩個讀數差多少？</span></td><td>Bias and limits of agreement, in cm<span class="z">偏差和一致性界限，單位是公分</span></td></tr></tbody></table></div>
@@ -505,7 +516,7 @@ table.t.cmp td:first-child{font-family:var(--body);width:26%}
   <p class="wait" data-wait="d2_test,d3_tool">Jamovi opens after you press “Decide” in 01 and in 02.<span class="z">在 01 和 02 各按一次「決定」之後，這裡才會打開。</span></p>
   <div data-after="d2_test,d3_tool" hidden>
     <div class="tabs" role="tablist" data-tabs="t3" style="margin-top:8px">
-      <button role="tab" data-t="t3w">Wilcoxon</button><button role="tab" data-t="t3a">Correlation 相關</button><button role="tab" data-t="t3b">Bland–Altman</button><button role="tab" data-t="t3c">ICC</button></div>
+      <button role="tab" data-t="t3w">Wilcoxon</button><button role="tab" data-t="t3a">Correlation 相關</button><button role="tab" data-t="t3b">Bland–Altman</button></div>
     <div id="t3w" class="tp">
     <div class="blk rqb"><p class="rq"><b><span class="qn">Q3.1</span>Research question 研究問題</b>Is time to exhaustion longer after 4 weeks of high-intensity interval training?<span class="z">4 週高強度間歇訓練後，力竭時間是否變長？</span></p><p class="sm" style="margin-top:0">TTE_Pre and TTE_Post: the same cyclist’s time before and after, so they go in as one pair. TTE_Pre 和 TTE_Post：同一位選手訓練前後的時間，所以成對放進去。</p></div>
     <div class="file">W11_TTE_Wide_2026.csv <em>練習資料</em></div>
@@ -557,17 +568,7 @@ table.t.cmp td:first-child{font-family:var(--body);width:26%}
         </div>
       </div>
     </div>
-    <div id="t3c" class="tp" hidden>
-      <div class="blk rqb"><p class="rq"><b>Research question 研究問題</b>Do the two methods give the same number, summarised in one coefficient?<span class="z">兩種方法的數字是否相同，用一個係數表示？</span></p><p class="sm" style="margin-top:0">An ICC has types; each type answers a different question. ICC 有不同類型；每一型回答不同的問題。</p></div>
 
-      <div class="jw">
-        <div class="jw-bar"><span class="dots"><i></i><i></i><i></i></span><span class="path"><span>Analyses › seolmatrix ›</span> Rater Reliability · Intraclass correlation</span></div>
-        <div class="jw-res"><h5>Intraclass Correlation Coefficient</h5><div class="tw"><table class="t src"><thead><tr><th>Type</th><th>ICC</th><th>Question 問題</th></tr></thead>
-          <tbody><tr><td>ICC3 · consistency</td><td>0.985</td><td>Do the two methods rank the athletes the same way?<span class="z">兩種方法排出的名次一樣嗎？</span></td></tr><tr><td>ICC2 · absolute agreement</td><td>0.883</td><td>Do the two methods give the same number?<span class="z">兩種方法的數字一樣嗎？</span></td></tr></tbody></table></div>
-          <p class="jw-note">Pearson r = .985, the same as the consistency ICC. Only the absolute-agreement ICC drops when one method reads higher. Pearson r = .985，和 consistency 型 ICC 一樣。只有 absolute agreement 型會因為一種方法讀數偏高而下降。</p></div>
-      </div>
-    </div>
-  
   </div>
   <div class="can" id="can3" hidden>✓ Your Jamovi shows the same numbers.<span class="z">你的 Jamovi 跑出同樣的數字。</span></div>
 </div></div></section>
@@ -599,8 +600,7 @@ table.t.cmp td:first-child{font-family:var(--body);width:26%}
 </div></div></section>
 
 <div class="wrap"><div class="refs"><b>References 參考文獻</b>
-  <p>Bland, J. M., &amp; Altman, D. G. (1986). Statistical methods for assessing agreement between two methods of clinical measurement. <i>The Lancet, 327</i>(8476), 307–310. https://doi.org/10.1016/S0140-6736(86)90837-8</p>
-  <p>Koo, T. K., &amp; Li, M. Y. (2016). A guideline of selecting and reporting intraclass correlation coefficients for reliability research. <i>Journal of Chiropractic Medicine, 15</i>(2), 155–163. https://doi.org/10.1016/j.jcm.2016.02.012</p></div></div>
+  <p>Bland, J. M., &amp; Altman, D. G. (1986). Statistical methods for assessing agreement between two methods of clinical measurement. <i>The Lancet, 327</i>(8476), 307–310. https://doi.org/10.1016/S0140-6736(86)90837-8</p></div></div>
 <div class="wrap"><footer class="foot"><span>Files 檔案：W11_Jamovi_SOP_2026 · W11_TTE_Wide_2026.csv · W11_Jump_App_ForcePlate_2026.csv</span><span class="row" style="margin:0"><button class="btn ghost" type="button" id="prev">← Back</button><button class="btn" type="button" id="next">Next →</button></span></footer></div>
 
 <button type="button" id="stuckBtn" aria-controls="stuckDr" aria-expanded="false">Stuck? 卡住了 <span class="cnt" id="stuckCnt">0</span></button>
@@ -1000,7 +1000,7 @@ function selfShow(){var on=PANELS[cur]==='p4';el('selfBtn').hidden=!on;if(!on)se
 function selfReady(){if(UI.self.sent)return true;selfOpen();gate('Self-check: choose on every line, then Save.','自我評估：每一行都選好，再按儲存。');return false}
 
 /* ---------- stuck log ---------- */
-var WHERE=[['p0','00'],['dec2','Q1.1 Decide 決定'],['dec3','Q2.1 Decide 決定'],['n2_w','Q3.1 Wilcoxon'],['n3_r','Q3.2 Correlation 相關'],['gam','Q3.3 blandr install 安裝'],['n3_ba','Q3.3 Bland–Altman'],['icc','03 ICC'],['apa_B','Q4.1 Report 報告'],['apa_C','Q4.2 Report 報告'],['apply','Q4.3–Q4.5 Apply 應用'],['other','Other 其他']];
+var WHERE=[['p0','00'],['dec2','Q1.1 Decide 決定'],['dec3','Q2.1 Decide 決定'],['n2_w','Q3.1 Wilcoxon'],['n3_r','Q3.2 Correlation 相關'],['gam','Q3.3 blandr install 安裝'],['n3_ba','Q3.3 Bland–Altman'],['apa_B','Q4.1 Report 報告'],['apa_C','Q4.2 Report 報告'],['apply','Q4.3–Q4.5 Apply 應用'],['other','Other 其他']];
 var STYPE=[['lang','Language 語言'],['soft','Software 軟體'],['stat','Statistics 統計'],['other','Other 其他']];
 var SFIX=[['self','Myself 自己'],['page','Page 頁面'],['ai','AI'],['ta','TA 助教'],['peer','Classmate 同學'],['not','Not yet 還沒']];
 var SAI=[['right','Right 對'],['part','Partly 部分'],['wrong','Wrong 錯']];
