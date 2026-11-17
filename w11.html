@@ -656,7 +656,7 @@ var DEC=[
 
 /* ---------- number checks: the empty cells in each Jamovi window ---------- */
 var NUMS=[
- {id:'n2_w',page:'p3',f:[['W',1,'1.00'],['p',.015625,'.016',[.021]] /* 4th entry: other values marked right. Jamovi shows .021 (normal approximation); the exact p is .016 */,['rb',-.944444,'−0.944'],['m1',401,'401'],['m2',446,'446']],
+ {id:'n2_w',page:'p3',f:[['W',1,'1.00'],['p',0.020863,'.021',[.016]] /* Jamovi shows .021 (normal approximation with continuity correction). 4th entry: other values marked right; .016 is the exact p */,['rb',-.944444,'−0.944'],['m1',401,'401'],['m2',446,'446']],
   traps:[['W',35,.5,'That is Post − Pre. Put TTE_Pre first, as on the page.','那是 Post − Pre。照頁面，TTE_Pre 放前面。'],['W',-1.66,.05,'That is the Student’s t row. Read the Wilcoxon W row.','那是 Student’s t 那一列。讀 Wilcoxon W 那一列。'],['p',.141,.002,'That is the Student’s t row. Read the Wilcoxon W row.','那是 Student’s t 那一列。讀 Wilcoxon W 那一列。'],['rb',.944,.006,'Keep the sign Jamovi shows (Pre − Post).','照 Jamovi 顯示的正負號（Pre − Post）。'],['rb',-.586,.006,'That is Cohen’s d, on the Student’s t row.','那是 Cohen’s d，在 Student’s t 那一列。'],['m1',409,.6,'That is the Mean. Read the Median column.','那是 Mean。讀 Median 那一欄。'],['m2',450,.6,'That is the Mean. Read the Median column.','那是 Mean。讀 Median 那一欄。']]},
  {id:'n3_r',page:'p3',f:[['r',.985196,'0.985'],['rho',.986014,'0.986']],traps:[['r',10,.5,'That is the df row.','那是 df 那一列。']]},
  {id:'n3_ba',page:'p3',f:[['bias',3.066667,'3.07'],['lo',.919052,'0.919'],['hi',5.214281,'5.21']],
@@ -667,9 +667,9 @@ var NUMS=[
 var SIX=[['stat','Statistic','統計量'],['df','df','自由度'],['p','Exact p','精確 p'],['es','Effect size','效果量'],['ci','95% CI','95% CI'],['ph','Post hoc method','事後比較方法']];
 var APA={
  B:{page:'p4',ph:'A Wilcoxon signed-rank test showed …',
-  model:'A Wilcoxon signed-rank test showed longer time to exhaustion after training (<i>Mdn</i> = 446 s) than before (<i>Mdn</i> = 401 s), <span class="k"><i>W</i> = 1<sup>statistic</sup></span>, <span class="k"><i>p</i> = .016<sup>exact p</sup></span>, <span class="k">rank-biserial correlation = .94<sup>effect size</sup></span>.',
+  model:'A Wilcoxon signed-rank test showed longer time to exhaustion after training (<i>Mdn</i> = 446 s) than before (<i>Mdn</i> = 401 s), <span class="k"><i>W</i> = 1<sup>statistic</sup></span>, <span class="k"><i>p</i> = .021<sup>exact p</sup></span>, <span class="k">rank-biserial correlation = .94<sup>effect size</sup></span>.',
   note:['A rank test has no df. Report medians, not means.','等級檢定沒有自由度。報告中位數，不是平均數。'],
-  src:'<h5 style="margin-top:14px">Where each number comes from<span class="z">每個數字從哪裡來</span></h5><div class="tw"><table class="t src"><tbody><tr><td><i>Mdn</i> = 446 s, 401 s</td><td>Descriptives › Median column: TTE_Post, TTE_Pre.<span class="z">Descriptives › Median 那一欄：TTE_Post、TTE_Pre。</span></td></tr><tr><td><i>W</i> = 1</td><td>Paired Samples T-Test › Wilcoxon W row › statistic 1.00.<span class="z">Paired Samples T-Test › Wilcoxon W 那一列的 statistic。</span></td></tr><tr><td><i>p</i> = .016</td><td>Same row › p.<span class="z">同一列的 p。</span></td></tr><tr><td>.94</td><td>Same row › Rank biserial correlation −0.944. The minus sign comes from Pre − Post: write the direction in words.<span class="z">同一列的 Rank biserial correlation −0.944。負號來自 Pre − Post：方向用文字寫。</span></td></tr></tbody></table></div>'},
+  src:'<h5 style="margin-top:14px">Where each number comes from<span class="z">每個數字從哪裡來</span></h5><div class="tw"><table class="t src"><tbody><tr><td><i>Mdn</i> = 446 s, 401 s</td><td>Descriptives › Median column: TTE_Post, TTE_Pre.<span class="z">Descriptives › Median 那一欄：TTE_Post、TTE_Pre。</span></td></tr><tr><td><i>W</i> = 1</td><td>Paired Samples T-Test › Wilcoxon W row › statistic 1.00.<span class="z">Paired Samples T-Test › Wilcoxon W 那一列的 statistic。</span></td></tr><tr><td><i>p</i> = .021</td><td>Same row › p.<span class="z">同一列的 p。</span></td></tr><tr><td>.94</td><td>Same row › Rank biserial correlation −0.944. The minus sign comes from Pre − Post: write the direction in words.<span class="z">同一列的 Rank biserial correlation −0.944。負號來自 Pre − Post：方向用文字寫。</span></td></tr></tbody></table></div>'},
  C:{page:'p4',ph:'App and force-plate jump heights …',
   model:'App and force-plate jump heights were strongly correlated, <span class="k"><i>r</i>(10) = .99<sup>statistic · df</sup></span>, <span class="k"><i>p</i> &lt; .001<sup>p</sup></span>. A Bland–Altman analysis showed that the app read <span class="k">3.07 cm higher<sup>effect size</sup></span> than the force plate (bias), 95% limits of agreement [0.92, 5.21] cm, so the two methods are not interchangeable.',
   note:['Agreement is reported in the units of the outcome: cm.','一致性用結果變項的單位報告：公分。'],
@@ -779,7 +779,9 @@ function betacf(a,b,x){var qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap,h;if(Math.a
 function betai(a,b,x){if(x<=0)return 0;if(x>=1)return 1;var bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b}
 function tP(t,df){return betai(df/2,.5,df/(df+t*t))}
 function wilP(d){var n=d.length,o=d.map(function(v,i){return i}).sort(function(a,b){return Math.abs(d[a])-Math.abs(d[b])}),rk=[],W=0;o.forEach(function(i,r){rk[i]=r+1});d.forEach(function(v,i){if(v<0)W+=rk[i]});
-  var cnt=0;for(var m=0;m<(1<<n);m++){var s=0;for(var i=0;i<n;i++)if(m&(1<<i))s+=i+1;if(s<=W)cnt++}return{rk:rk,W:W,p:Math.min(1,2*cnt/(1<<n))}}
+  /* p as Jamovi shows it: normal approximation with continuity correction (the exact p for these data is .016) */
+  var mu=n*(n+1)/4,sd=Math.sqrt(n*(n+1)*(2*n+1)/24),z=Math.max(0,(Math.abs(W-mu)-.5)/sd);return{rk:rk,W:W,p:Math.min(1,erfc(z/Math.SQRT2))}}
+function erfc(x){var t=1/(1+.3275911*x),y=((((1.061405429*t-1.453152027)*t+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x);return y}
 function pf(p){return p<.001?'< .001':'= '+p.toFixed(3).replace(/^0/,'')}
 function rkDraw(){var X=+UI.demo.x,mode=UI.demo.m,d=RKB.concat([X]),n=d.length,mean=d.reduce(function(a,b){return a+b},0)/n,sd=Math.sqrt(d.reduce(function(a,b){return a+(b-mean)*(b-mean)},0)/(n-1)),t=mean/(sd/Math.sqrt(n)),pt=tP(t,n-1),w=wilP(d);
   var W=640,L=30,R=20,y=62;function sx(v){return L+(v+20)/440*(W-L-R)}function sr(r){return L+(r+2)/11*(W-L-R)}
@@ -908,15 +910,15 @@ function afterShow(){document.querySelectorAll('[data-after]').forEach(function(
 var REP={
  B:{page:'p4',n:'Q4.1',
   sk:'A <span class="slot" data-s="name"></span> test showed longer time to exhaustion after training (<i>Mdn</i> = <span class="slot sm" data-s="mdn"></span> s) than before (<i>Mdn</i> = <span class="slot sm" data-s="mdn"></span> s), <span class="slot" data-s="stat"></span>, <span class="slot" data-s="p"></span>, <span class="slot" data-s="es"></span>.',
-  out:{name:['Wilcoxon signed-rank'],mdn:['446','401'],stat:['<i>W</i> = 1'],p:['<i>p</i> = .016'],es:['rank-biserial correlation = .94']},
-  chips:[['name','Test name','檢定名稱','Wilcoxon signed-rank','n2_w'],['mdn','Medians','中位數','401 · 446','n2_w'],['stat','Statistic','統計量','W 1.00','n2_w'],['df','df','自由度','','n2_w'],['p','Exact p','精確 p','.016','n2_w'],['es','Effect size','效果量','−0.944','n2_w']],
+  out:{name:['Wilcoxon signed-rank'],mdn:['446','401'],stat:['<i>W</i> = 1'],p:['<i>p</i> = .021'],es:['rank-biserial correlation = .94']},
+  chips:[['name','Test name','檢定名稱','Wilcoxon signed-rank','n2_w'],['mdn','Medians','中位數','401 · 446','n2_w'],['stat','Statistic','統計量','W 1.00','n2_w'],['df','df','自由度','','n2_w'],['p','Exact p','精確 p','.021','n2_w'],['es','Effect size','效果量','−0.944','n2_w']],
   none:{df:['A rank test has no df.','等級檢定沒有自由度。']},
   wait:['The parts appear after you fill the Wilcoxon cells in 03.','03 的 Wilcoxon 空格填好後，這裡才會出現。'],
   cmp:'<h5 style="margin-top:18px">Step 2 · Compare 對比</h5><div class="tw"><table class="t src cmp"><thead><tr><th></th><th>Wilcoxon signed-rank</th><th>Paired t-test 成對樣本 t 檢定</th></tr></thead><tbody>'+
    '<tr><td>Centre 集中趨勢</td><td><i>Mdn</i> = 446 s, 401 s</td><td class="df"><i>M</i> = 450 s, 409 s</td></tr>'+
    '<tr><td>Statistic 統計量</td><td><i>W</i> = 1</td><td class="df"><i>t</i> = −1.66</td></tr>'+
    '<tr><td>df 自由度</td><td>none 沒有</td><td class="df">7</td></tr>'+
-   '<tr><td>Exact p 精確 p</td><td><i>p</i> = .016</td><td class="df"><i>p</i> = .141</td></tr>'+
+   '<tr><td>Exact p 精確 p</td><td><i>p</i> = .021</td><td class="df"><i>p</i> = .141</td></tr>'+
    '<tr><td>Effect size 效果量</td><td>rank-biserial correlation = .94</td><td class="df"><i>d</i> = −0.59</td></tr></tbody></table></div>'+
    '<div class="model">A paired <i>t</i>-test showed no significant change in time to exhaustion from before (<i>M</i> = 409 s) to after training (<i>M</i> = 450 s), <i>t</i>(7) = −1.66, <i>p</i> = .141, <i>d</i> = −0.59.</div>'+
    '<p class="sm">Paired t-test numbers: the Student’s t row and Descriptives › Mean, in the same Jamovi window. 成對 t 檢定的數字：同一個 Jamovi 視窗的 Student’s t 那一列，和 Descriptives › Mean。</p>'},
