@@ -533,6 +533,16 @@ details.gl table.t td:first-child{width:24%;font-weight:600}
 [data-gated]{margin-top:14px}
 .find{margin:0 0 10px;padding:8px 12px;border-left:4px solid var(--case);background:#fff;border-radius:0 var(--rs) var(--rs) 0;font-size:14.5px;line-height:1.4}
 .find b{display:block;font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+
+/* ---- 01, 02: the three numbers stay beside the sliders (between the figure and the controls) ---- */
+.board.live{grid-template-columns:repeat(3,minmax(0,1fr));gap:0 20px;margin-top:10px;border-bottom:1px solid var(--line)}
+.board.live>div{display:flex;flex-direction:column;gap:1px;padding:8px 10px 9px;border-bottom:0}
+.board.live>div b{font-size:14px}
+.board.live>div b .z{display:inline;margin-left:6px}
+.board.live>div em{order:2;font-size:clamp(20px,2.3vw,27px);line-height:1.15}
+.board.live>div span{order:3;font-size:12.5px;line-height:1.3}
+.board.live>div.mv{background:var(--case-soft);border-radius:var(--rs)}
+@media(max-width:600px){.board.live{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -571,10 +581,10 @@ details.gl table.t td:first-child{width:24%;font-weight:600}
   <div class="blk"><span class="tag">p and effect size p 與效果量</span>
     <p class="def"><b>Effect size</b>: how large the difference or the relationship is. <b>Cohen’s d</b>: the difference between two means, in SD units. <b>SD</b> (standard deviation): how far the players are from their group mean.<span class="z"><b>效果量</b>：差異或關係有多大。<b>Cohen’s d</b>：兩個平均數的差，以標準差（SD）為單位。<b>標準差（SD）</b>：球員離該組平均數有多遠。</span></p>
     <div class="fig"><svg id="esSvg" viewBox="0 0 640 260" role="img" aria-label="Change in jump height in the control group and the plyometric group"></svg><p class="cap">One dot = one player. Vertical line: the group mean. The SD stays 1.96 cm.<span class="z">一點 = 一位球員。直線：該組平均數。標準差固定為 1.96 公分。</span></p></div>
+    <div class="board three live" id="esOut"></div>
     <label class="sl"><span><b>Difference 差距</b> · between the two group means (cm)<span class="z">兩組平均數的差（公分）</span></span><input type="range" id="esD" min="0.5" max="5" step="0.5" value="3"><output id="esDo">3.0</output></label>
     <label class="sl"><span><b>People 人數</b> · in each group<span class="z">每組人數</span></span><input type="range" id="esN" min="4" max="200" step="1" value="8"><output id="esNo">8</output></label>
     <div class="row" style="margin-top:6px"><button class="btn ghost" type="button" data-es="8,3">8 per group · 3.0 cm</button><button class="btn ghost" type="button" data-es="5,3">5 per group · 3.0 cm</button><button class="btn ghost" type="button" data-es="200,0.5">200 per group · 0.5 cm</button></div>
-    <div class="board three" id="esOut"></div>
     <div class="calc" id="esCalc"></div>
     <p class="def core">A small p can come from a large effect, or only from many people. So after every p, report the effect size.<span class="z">p 小，可以是因為效果大，也可以只是因為人多。所以每個 p 後面都要報告效果量。</span></p>
   </div>
@@ -604,9 +614,9 @@ details.gl table.t td:first-child{width:24%;font-weight:600}
   <div class="blk"><span class="tag">Difference and its 95% CI 差距和它的 95% 信賴區間</span>
     <p class="def"><b>95% CI</b>: the range of differences that the data fit. The same study as in 01: difference 3.00 cm.<span class="z"><b>95% 信賴區間</b>：和這份資料相容的差距範圍。和 01 同一個研究：差 3.00 公分。</span></p>
     <div class="fig"><svg id="ciSvg" viewBox="0 0 640 170" role="img" aria-label="The difference between the groups and its 95 percent confidence interval"></svg><p class="cap">Dot: the difference, 3.00 cm. Bar: its 95% CI. Dashed line: 0 = no difference.<span class="z">點：差距 3.00 公分。橫條：它的 95% 信賴區間。虛線：0 = 沒有差異。</span></p></div>
+    <div class="board three live" id="ciOut"></div>
     <label class="sl"><span><b>People 人數</b> · in each group<span class="z">每組人數</span></span><input type="range" id="ciN" min="4" max="60" step="1" value="8"><output id="ciNo">8</output></label>
     <div class="row" style="margin-top:6px"><button class="btn ghost" type="button" data-ci="4">4 per group</button><button class="btn ghost" type="button" data-ci="8">8 per group</button><button class="btn ghost" type="button" data-ci="30">30 per group</button></div>
-    <div class="board three" id="ciOut"></div>
     <div class="calc" id="ciCalc"></div>
     <p class="sm" id="ciTerms"></p>
     <p class="def">With few people the interval is wide. Not significant means the interval includes 0. It does not mean the effect is 0.<span class="z">人數少，區間就寬。不顯著代表區間包含 0，不代表效果是 0。</span></p>
@@ -747,7 +757,12 @@ details.gl table.t td:first-child{width:24%;font-weight:600}
 
 <div class="wrap"><div class="refs"><b>References 參考文獻</b>
   <p>Cohen, J. (1988). <i>Statistical power analysis for the behavioral sciences</i> (2nd ed.). Lawrence Erlbaum Associates.</p>
-  <p>Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: A practical primer for t-tests and ANOVAs. <i>Frontiers in Psychology, 4</i>, 863. https://doi.org/10.3389/fpsyg.2013.00863</p></div></div>
+  <p>du Prel, J.-B., Röhrig, B., Hommel, G., &amp; Blettner, M. (2010). Choosing statistical tests: Part 12 of a series on evaluation of scientific publications. <i>Deutsches Ärzteblatt International, 107</i>(19), 343–348. https://doi.org/10.3238/arztebl.2010.0343</p>
+  <p>Field, A. (2024). <i>Discovering statistics using IBM SPSS Statistics</i> (6th ed.). Sage.</p>
+  <p>Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science: A practical primer for t-tests and ANOVAs. <i>Frontiers in Psychology, 4</i>, 863. https://doi.org/10.3389/fpsyg.2013.00863</p>
+  <p>Nayak, B. K., &amp; Hazra, A. (2011). How to choose the right statistical test? <i>Indian Journal of Ophthalmology, 59</i>(2), 85–86. https://doi.org/10.4103/0301-4738.77005</p>
+  <p>Tabachnick, B. G., &amp; Fidell, L. S. (2019). <i>Using multivariate statistics</i> (7th ed.). Pearson.</p>
+  <p>UCLA Office of Advanced Research Computing, Statistical Methods and Data Analytics. (n.d.). <i>Choosing the correct statistical test in SAS, Stata, SPSS and R</i>. Retrieved November 25, 2026, from https://stats.oarc.ucla.edu/other/mult-pkg/whatstat/</p></div></div>
 <div class="wrap"><footer class="foot"><span>Files 檔案：W12_Jamovi_SOP_2026 · W4_Burpee_Demo_Data_2026.csv · W7_WarmUp_Demo_Data_2026.csv · W12_Plyo_Change_2026.csv</span><span class="row" style="margin:0"><button class="btn ghost" type="button" id="prev">← Back</button><button class="btn" type="button" id="next">Next →</button></span></footer></div>
 
 <div id="fabs"><button type="button" id="ruleBtn" aria-controls="ruleDr" aria-expanded="false">Which test? 選檢定</button>
@@ -976,9 +991,9 @@ function esDraw(){var n=+UI.demo.n,D=+UI.demo.D,S=esStat(n,D);
   el('esSvg').innerHTML=h;
   el('esD').value=D;el('esN').value=n;el('esDo').textContent=D.toFixed(1);el('esNo').textContent=n;
   var dz=S.d<0.2?['below small (under 0.2)','比「小」還小（0.2 以下）']:S.d<0.5?['small (0.2 to 0.5)','小（0.2 到 0.5）']:S.d<0.8?['medium (0.5 to 0.8)','中（0.5 到 0.8）']:['large (0.8 or more)','大（0.8 以上）'];
-  el('esOut').innerHTML='<div><b>Mean difference<span class="z">平均差</span></b><span>in the unit of the DV<span class="z">依變項（DV）的單位</span></span><em>'+D.toFixed(2)+' cm</em></div>'+
-    '<div><b>Cohen’s d</b><span>The plyometric mean is '+S.d.toFixed(2)+' SD above the control mean: '+dz[0]+'. It does not move with the number of people.<span class="z">增強式組的平均數比對照組高 '+S.d.toFixed(2)+' 個標準差：'+dz[1]+'。它不隨人數改變。</span></span><em>'+S.d.toFixed(2)+'</em></div>'+
-    '<div><b><i>p</i></b><span>moves with the number of people<span class="z">隨人數改變</span></span><em>p '+pf(S.p)+'</em></div>';
+  el('esOut').innerHTML='<div><b>Mean difference<span class="z">平均差</span></b><span>in the unit of the DV · does not move with the number of people<span class="z">依變項（DV）的單位・不隨人數改變</span></span><em>'+D.toFixed(2)+' cm</em></div>'+
+    '<div><b>Cohen’s d</b><span>'+S.d.toFixed(2)+' SD above the control mean: '+dz[0]+' · does not move with the number of people<span class="z">比對照組高 '+S.d.toFixed(2)+' 個標準差：'+dz[1]+'・不隨人數改變</span></span><em>'+S.d.toFixed(2)+'</em></div>'+
+    '<div class="mv"><b><i>p</i></b><span>moves with the number of people<span class="z">隨人數改變</span></span><em>p '+pf(S.p)+'</em></div>';
   el('esCalc').innerHTML='d = mean difference ÷ SD = '+D.toFixed(2)+' ÷ 1.96 = '+S.d.toFixed(2)+'<span class="z">d = 平均差 ÷ 標準差</span>'}
 function esSet(n,D){UI.demo.n=n;UI.demo.D=D;esDraw()}
 function esLog(){log({page_id:'p1',item_id:'effect_slider',event_type:'widget_use',selected_option:'n='+UI.demo.n+';diff='+UI.demo.D});save()}
